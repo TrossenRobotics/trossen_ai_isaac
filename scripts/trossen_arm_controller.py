@@ -43,6 +43,8 @@ class TrossenArmController:
         self.cameras = cameras
         self.arm_path = arm_path
         self.arm = SingleArticulation(prim_path=arm_path, name=name)
+        self.lula_urdf_path = lula_urdf_path
+        self.lula_desc_path = lula_desc_path
         self.kinematics_solver = ArticulationKinematicsSolver(
             self.arm, LulaKinematicsSolver(lula_desc_path, lula_urdf_path), solver_frame
         )
@@ -179,3 +181,18 @@ class TrossenArmController:
         # Extract torques (last three columns)
         joint_torques = measured_forces[1:, 3:]
         return joint_torques
+
+    def get_specific_link_orientation(self, frame_name):
+        """
+        Get orientation of a specific frame.
+
+        Returns:
+            - fk_orientation (np.ndarray): Orientation of any link.
+        """
+        kinematics_solver = ArticulationKinematicsSolver(
+            self.arm, LulaKinematicsSolver(self.lula_desc_path, self.lula_urdf_path), frame_name
+        )
+        _, fk_rotation_matrix = kinematics_solver.compute_end_effector_pose()
+        rotation = R.from_matrix(fk_rotation_matrix)
+        fk_orientation = rotation.as_quat()
+        return fk_orientation

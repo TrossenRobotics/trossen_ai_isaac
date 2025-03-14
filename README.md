@@ -273,3 +273,13 @@ def get_current_joint_torques(self):
 
 - Retrieves the current joint torques along the X, Y, and Z axes.
 
+### **`get_specific_link_orientation(frame_name)`**
+
+```bash
+def get_specific_link_orientation(self, frame_name):
+```
+
+**Purpose**
+
+- Retrieves the specific link's orientation
+
