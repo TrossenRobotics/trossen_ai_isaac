@@ -28,7 +28,6 @@ CAMERA_PRIM_PATHS = [
     "/World/right_arm/link_6/camera_mount_d405/cam_right_arm"
 ]
 BOX_PRIM_PATH = "/World/aloha_scene_joint/box/box"
-
 video_writer = None
 
 # Initialize Simulation
@@ -39,6 +38,7 @@ world = World(stage_units_in_meters=1.0)
 world.reset()
 box_prim = XFormPrim(prim_path=BOX_PRIM_PATH)
 
+# Initialize camera and video writer
 if save_local:
     for camera in cameras:
         camera.initialize()
@@ -53,38 +53,39 @@ if save_local:
 left_arm = TrossenArmController(world, cameras, LEFT_ARM_PATH, "ee_gripper_link", "left_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH, video_writer)
 right_arm = TrossenArmController(world, cameras, RIGHT_ARM_PATH, "ee_gripper_link", "right_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH, video_writer)
 
-for _ in range(20):
-    world.step(render=True)
-
 left_arm.initialize()
 right_arm.initialize()
 
-arm_start_pos, _, _ = left_arm.get_current_pos_estimation()
-
-for _ in range(20):
-    world.step(render=True)
-
-left_arm.get_current_pos_estimation()
+# Randomize the location of the box
 box_pos, box_orient = randomize_box_pose(box_prim, position_range=0.2, z_height=0.02)
 box_yaw, _ = quaternion_to_yaw(box_orient)
 
-# Main execution logic
-perform_initial_steps(world)
+# Give arm and box sometime to relocate
+for _ in range(100):
+    world.step(render=True)
 
+# Decide which arm to act first based on their distance with the box 
 if box_pos[0] < 0:
+    # Closer to left arm
+    # Left arm will pick up the box and move to the center of the stage
     execute_pick_and_place(world, left_arm, box_pos[0], box_pos[1], box_yaw)
     box_position, _ = box_prim.get_world_pose()
+    # Right arm's end effector will rotate 90 degree, go and take box from the left arm
     handover_and_place(world, left_arm, right_arm, box_position, 0.044, 0.001)
 else:
+    # Right arm will pick up the box and move to the center of the stage
     execute_pick_and_place(world, right_arm, box_pos[0], box_pos[1], box_yaw, invert_y=True)
     box_position, _ = box_prim.get_world_pose()
+    # Left arm's end effector will rotate 90 degree, go and take box from the right arm
     handover_and_place(world, right_arm, left_arm, box_position, 0.044, 0.001)
 
 if save_local:
+    # If we save videos locally, the recording will stop when both arm go to the end position
     for _ in range(120):
         capture_and_save_frames(world, cameras, video_writer)
     simulation_app.close()
 else:
+    # Else keep rendering until user press any key or use ctrl-C
     try:
         while True:
             capture_and_save_frames(world, cameras)

@@ -11,7 +11,34 @@ from isaacsim.core.utils.types import ArticulationAction
 from trossen_arm_utils import *
 
 class TrossenArmController:
+    """
+    A controller class for a robotic arm in Isaac Sim, handling motion planning, trajectory execution,
+    and grasping operations.
+
+    Attributes:
+        world (object): The simulation world instance.
+        cameras (list): List of camera objects for capturing frames.
+        arm (SingleArticulation): The robotic arm articulation.
+        kinematics_solver (ArticulationKinematicsSolver): Inverse kinematics solver for the arm.
+        taskspace_generator (LulaTaskSpaceTrajectoryGenerator): Task-space motion planner.
+        video_writer (cv2.VideoWriter, optional): Video writer for saving captured frames.
+        arm_start_pos (list): Initial position of the robotic arm after initialization.
+    """
+
     def __init__(self, world, cameras, arm_path, solver_frame, name, lula_desc_path, lula_urdf_path, video_writer=None):
+        """
+        Initializes the robotic arm controller.
+
+        Args:
+            world (object): The simulation world instance.
+            cameras (list): List of camera objects for capturing video frames.
+            arm_path (str): The USD path of the arm in the simulation.
+            solver_frame (str): The reference frame for inverse kinematics calculations.
+            name (str): The name of the robotic arm.
+            lula_desc_path (str): Path to the Lula robot description YAML file.
+            lula_urdf_path (str): Path to the Lula robot URDF file.
+            video_writer (cv2.VideoWriter, optional): Video writer for saving frames.
+        """
         self.world = world
         self.cameras = cameras
         self.arm = SingleArticulation(prim_path=arm_path, name=name)
@@ -22,6 +49,12 @@ class TrossenArmController:
         self.video_writer = video_writer
 
     def initialize(self):
+        """
+        Initializes the robotic arm, adds it to the simulation, and moves it to the starting position.
+
+        Raises:
+            RuntimeError: If the arm is not found in the simulation scene.
+        """
         self.arm.initialize()
         self.world.scene.add(self.arm)
         if not self.arm.is_valid():
@@ -32,6 +65,17 @@ class TrossenArmController:
         self.arm_start_pos, _, _ = self.get_current_pos_estimation()
 
     def slerp(self, start_quat, end_quat, t_values):
+        """
+        Performs spherical linear interpolation (SLERP) between two quaternions.
+
+        Args:
+            start_quat (list): Starting quaternion (w, x, y, z).
+            end_quat (list): Target quaternion (w, x, y, z).
+            t_values (np.ndarray): Array of interpolation time steps (0 to 1).
+
+        Returns:
+            np.ndarray: Interpolated quaternion sequence.
+        """
         key_times = [0, 1]
         key_rots = R.from_quat([start_quat, end_quat])
         slerp_interpolator = Slerp(key_times, key_rots)
@@ -39,6 +83,19 @@ class TrossenArmController:
         return interpolated_rots.as_quat()
 
     def move_to_target(self, start_pos, goal_pos, start_orientation, goal_orientation, frame="ee_gripper_link"):
+        """
+        Moves the robotic arm from a start position to a goal position using task-space motion.
+
+        Args:
+            start_pos (list): Start position [x, y, z].
+            goal_pos (list): Goal position [x, y, z].
+            start_orientation (list): Start orientation (quaternion).
+            goal_orientation (list): Goal orientation (quaternion).
+            frame (str): The reference frame for the movement.
+
+        Raises:
+            RuntimeError: If trajectory computation fails.
+        """
         num_steps = 20
         positions = np.linspace(start_pos, goal_pos, num_steps, endpoint=True)
         t_values = np.linspace(0, 1, num_steps, endpoint=True)
@@ -54,11 +111,27 @@ class TrossenArmController:
             capture_and_save_frames(self.world, self.cameras, self.video_writer)
 
     def apply_grasp(self, grasp_state, delay_steps=100):
+        """
+        Applies a grasp action to control the gripper joints.
+
+        Args:
+            grasp_state (float): The joint position value for grasping (0 for open, 1 for closed).
+            delay_steps (int, optional): Number of simulation steps to wait after grasping.
+        """
         self.arm.apply_action(ArticulationAction(joint_positions=[grasp_state, grasp_state], joint_indices=[6, 7]))
         for _ in range(delay_steps):
             capture_and_save_frames(self.world, self.cameras, self.video_writer)
 
     def get_current_pos_estimation(self):
+        """
+        Computes the current end-effector position and orientation using forward kinematics.
+
+        Returns:
+            tuple: 
+                - fk_position (np.ndarray): The computed position [x, y, z].
+                - fk_orientation (np.ndarray): The computed orientation as a quaternion.
+                - yaw (float): Extracted yaw (Z-axis rotation) from the orientation.
+        """
         fk_position, fk_rotation_matrix = self.kinematics_solver.compute_end_effector_pose()
         rotation = R.from_matrix(fk_rotation_matrix)
         fk_orientation = rotation.as_quat()
