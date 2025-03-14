@@ -19,7 +19,7 @@ class TrossenArmController:
         world (object): The simulation world instance.
         cameras (list): List of camera objects for capturing frames.
         arm (SingleArticulation): The robotic arm articulation.
-        kinematics_solver (ArticulationKinematicsSolver): Inverse kinematics solver for the arm.
+        kinematics_solver (ArticulationKinematicsSolver): Forward kinematics solver for the arm.
         taskspace_generator (LulaTaskSpaceTrajectoryGenerator): Task-space motion planner.
         video_writer (cv2.VideoWriter, optional): Video writer for saving captured frames.
         arm_start_pos (list): Initial position of the robotic arm after initialization.
@@ -33,7 +33,7 @@ class TrossenArmController:
             world (object): The simulation world instance.
             cameras (list): List of camera objects for capturing video frames.
             arm_path (str): The USD path of the arm in the simulation.
-            solver_frame (str): The reference frame for inverse kinematics calculations.
+            solver_frame (str): The reference frame for Forward kinematics calculations.
             name (str): The name of the robotic arm.
             lula_desc_path (str): Path to the Lula robot description YAML file.
             lula_urdf_path (str): Path to the Lula robot URDF file.
@@ -62,7 +62,7 @@ class TrossenArmController:
         self.arm.apply_action(ArticulationAction(joint_positions=[0, np.pi/12, np.pi/12, 0, 0, 0, 0.044, 0.044]))
         for _ in range(60):
             capture_and_save_frames(self.world, self.cameras, self.video_writer)
-        self.arm_start_pos, _, _ = self.get_current_pos_estimation()
+        self.arm_start_pos = self.get_current_ee_position()
 
     def slerp(self, start_quat, end_quat, t_values):
         """
@@ -122,18 +122,24 @@ class TrossenArmController:
         for _ in range(delay_steps):
             capture_and_save_frames(self.world, self.cameras, self.video_writer)
 
-    def get_current_pos_estimation(self):
+    def get_current_ee_position(self):
         """
-        Computes the current end-effector position and orientation using forward kinematics.
+        Computes the current end-effector position using forward kinematics.
 
         Returns:
-            tuple: 
-                - fk_position (np.ndarray): The computed position [x, y, z].
-                - fk_orientation (np.ndarray): The computed orientation as a quaternion.
-                - yaw (float): Extracted yaw (Z-axis rotation) from the orientation.
+            - fk_position (np.ndarray): The computed position [x, y, z].
         """
-        fk_position, fk_rotation_matrix = self.kinematics_solver.compute_end_effector_pose()
+        fk_position, _ = self.kinematics_solver.compute_end_effector_pose()
+        return fk_position
+
+    def get_current_ee_orientation(self):
+        """
+        Computes the current end-effector orientation using forward kinematics.
+
+        Returns:
+            - fk_orientation (np.ndarray): The computed orientation as a quaternion.
+        """
+        _, fk_rotation_matrix = self.kinematics_solver.compute_end_effector_pose()
         rotation = R.from_matrix(fk_rotation_matrix)
         fk_orientation = rotation.as_quat()
-        yaw, _ = quaternion_to_yaw(fk_orientation)
-        return fk_position, fk_orientation, yaw
+        return fk_orientation

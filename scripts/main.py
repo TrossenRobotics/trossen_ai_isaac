@@ -39,7 +39,7 @@ world.reset()
 box_prim = XFormPrim(prim_path=BOX_PRIM_PATH)
 
 # Initialize camera and video writer
-if save_local:
+if recording:
     for camera in cameras:
         camera.initialize()
         camera.add_motion_vectors_to_frame()
@@ -52,6 +52,9 @@ if save_local:
 # Initialize Arms
 left_arm = TrossenArmController(world, cameras, LEFT_ARM_PATH, "ee_gripper_link", "left_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH, video_writer)
 right_arm = TrossenArmController(world, cameras, RIGHT_ARM_PATH, "ee_gripper_link", "right_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH, video_writer)
+
+for _ in range(100):
+    world.step(render=True)
 
 left_arm.initialize()
 right_arm.initialize()
@@ -79,7 +82,7 @@ else:
     # Left arm's end effector will rotate 90 degree, go and take box from the right arm
     handover_and_place(world, right_arm, left_arm, box_position, 0.044, 0.001)
 
-if save_local:
+if recording:
     # If we save videos locally, the recording will stop when both arm go to the end position
     for _ in range(120):
         capture_and_save_frames(world, cameras, video_writer)
@@ -91,6 +94,6 @@ else:
             capture_and_save_frames(world, cameras)
     except KeyboardInterrupt:
         print("Simulation ended. Closing video writer.")
-        if save_local:
+        if recording:
             video_writer.release()
             simulation_app.close()

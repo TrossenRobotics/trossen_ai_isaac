@@ -3,7 +3,7 @@ from scipy.spatial.transform import Rotation as R
 import random
 import cv2
 
-save_local = True
+recording = True
 on_screen_render = False
 
 def euler_to_quaternion(roll, pitch, yaw):
@@ -53,8 +53,10 @@ def randomize_box_pose(box, position_range=0.1, z_height=0.02):
         box_position = np.array([random_x, random_y, z_height])
         random_yaw = random.uniform(0, 90)
         box_orientation = euler_to_quaternion(0, 0, random_yaw)
-        if np.linalg.norm(box_position - (0.469, 0, 0)) <= 0.469:
+        if np.linalg.norm(box_position - (0.469, 0, 0)) <= 0.469 or np.linalg.norm(box_position - (-0.469, 0, 0)) <= 0.469:
             break
+    print("Box position: ")
+    print(box_position)
     box.set_world_pose(box_position, box_orientation)
     return box_position, box_orientation
 
@@ -167,7 +169,7 @@ def capture_and_save_frames(world, cameras, video_writer=None):
         video_writer (cv2.VideoWriter, optional): Video writer object for saving frames.
     """
     world.step(render=True)
-    if save_local:
+    if recording:
         combined_frame = np.zeros((960, 1280, 3), dtype=np.uint8)  # 2x2 grid (640x480 each)
         
         for idx, cam in enumerate(cameras):
