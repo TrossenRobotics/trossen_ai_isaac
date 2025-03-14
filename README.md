@@ -224,7 +224,7 @@ def apply_grasp(self, grasp_state, delay_steps=100):
 ### **`get_current_ee_position()`**
 
 ```bash
-def get_current_ee_position(self)
+def get_current_ee_position(self):
 ```
 
 **Purpose**
@@ -236,10 +236,40 @@ def get_current_ee_position(self)
 ### **`get_current_ee_orientation()`**
 
 ```bash
-get_current_ee_orientation()
+def get_current_ee_orientation(self):
 ```
 
 **Purpose**
 
 - Computes the current end-effector orientation using forward kinematics (FK).
+
+### **`get_current_joint_velocities()`**
+
+```bash
+def get_current_joint_velocities(self):
+```
+
+**Purpose**
+
+- Retrieves the current joints' velocity.
+
+### **`get_current_joint_positions()`**
+
+```bash
+def get_current_joint_positions(self):
+```
+
+**Purpose**
+
+- Retrieves the current joints' position.
+
+### **`get_current_joint_torques()`**
+
+```bash
+def get_current_joint_torques(self):
+```
+
+**Purpose**
+
+- Retrieves the current joint torques along the X, Y, and Z axes.
 

@@ -3,7 +3,7 @@ from scipy.spatial.transform import Rotation as R
 import random
 import cv2
 
-recording = True
+recording = False
 on_screen_render = False
 
 def euler_to_quaternion(roll, pitch, yaw):

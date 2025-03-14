@@ -41,6 +41,7 @@ class TrossenArmController:
         """
         self.world = world
         self.cameras = cameras
+        self.arm_path = arm_path
         self.arm = SingleArticulation(prim_path=arm_path, name=name)
         self.kinematics_solver = ArticulationKinematicsSolver(
             self.arm, LulaKinematicsSolver(lula_desc_path, lula_urdf_path), solver_frame
@@ -109,7 +110,7 @@ class TrossenArmController:
         for action in ArticulationTrajectory(self.arm, trajectory, physics_dt=1/60).get_action_sequence():
             self.arm.apply_action(action)
             capture_and_save_frames(self.world, self.cameras, self.video_writer)
-
+    
     def apply_grasp(self, grasp_state, delay_steps=100):
         """
         Applies a grasp action to control the gripper joints.
@@ -143,3 +144,38 @@ class TrossenArmController:
         rotation = R.from_matrix(fk_rotation_matrix)
         fk_orientation = rotation.as_quat()
         return fk_orientation
+
+    def get_current_joint_velocities(self):
+        """
+        Get current joints' velocities.
+
+        Returns:
+            - joint_velocities (np.ndarray): Velocity of each joint.
+        """
+        # Get the joint velocities
+        joint_velocities = self.arm.get_joint_velocities()
+        return joint_velocities
+
+    def get_current_joint_positions(self):
+        """
+        Get current joints' positions.
+
+        Returns:
+            - joint_positions (np.ndarray): Position of each joint.
+        """
+        joint_positions = self.arm.get_joint_positions()
+        return joint_positions
+
+    
+    def get_current_joint_torques(self):
+        """
+        Get current joints' torque.
+
+        Returns:
+            - joint_positions (np.ndarray): Position of each joint.
+        """
+        measured_forces = self.arm.get_measured_joint_forces()
+
+        # Extract torques (last three columns)
+        joint_torques = measured_forces[1:, 3:]
+        return joint_torques
