@@ -170,11 +170,36 @@ def capture_and_save_frames():
     """
     global_var.shared_world.step(render=True)
     if global_var.shared_recording:
-        combined_frame = np.zeros((960, 1280, 3), dtype=np.uint8)  # 2x2 grid (640x480 each)
+        left_arm = global_var.shared_left_arm
+        right_arm = global_var.shared_right_arm
+
+        # Get robot data
+        qpos_left = left_arm.get_current_joint_positions()
+        qpos_right = right_arm.get_current_joint_positions()
+        qvel_left = left_arm.get_current_joint_velocities()
+        qvel_right = right_arm.get_current_joint_velocities()
+        qtorque_left = left_arm.get_current_joint_torques()
+        qtorque_right = right_arm.get_current_joint_torques()
+
+        # Update HDF5 datasets
+        def append_to_dataset(dataset, data):
+            dataset.resize((dataset.shape[0] + 1, *dataset.shape[1:]))
+            dataset[-1] = data
         
+        # Append data to hdf5
+        append_to_dataset(global_var.shared_obs_grp[f'left_arm/qpos'], qpos_left)
+        append_to_dataset(global_var.shared_obs_grp[f'right_arm/qpos'], qpos_right)
+        append_to_dataset(global_var.shared_obs_grp[f'left_arm/qvel'], qvel_left)
+        append_to_dataset(global_var.shared_obs_grp[f'right_arm/qvel'], qvel_right)
+        append_to_dataset(global_var.shared_obs_grp[f'left_arm/qtorque'], qtorque_left)
+        append_to_dataset(global_var.shared_obs_grp[f'right_arm/qtorque'], qtorque_right)
+
+        # Process the images
+        combined_frame = np.zeros((960, 1280, 3), dtype=np.uint8)  # 2x2 grid (640x480 each)
         for idx, cam in enumerate(global_var.shared_cameras):
             rgba_frame = cam.get_rgba()
-            bgr_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2BGR)
+            bgr_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2RGB)
+            append_to_dataset(global_var.shared_image_grp[global_var.shared_camera_list[idx]], bgr_frame)
 
             row, col = divmod(idx, 2)
             start_y, start_x = row * 480, col * 640
@@ -193,3 +218,6 @@ def capture_and_save_frames():
                 ax.axis('off')
             plt.draw()
             plt.pause(0.01) 
+
+
+

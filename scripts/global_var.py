@@ -5,9 +5,12 @@ shared_recording = None
 shared_on_screen_render = None
 shared_left_arm = None
 shared_right_arm = None
+shared_obs_grp = None
+shared_image_grp = None
+shared_camera_list = None
 
-def set_shared_value(world, cameras, video_writer, recording, on_screen_render, left_arm, right_arm):
-    global shared_world, shared_cameras, shared_video_writer, shared_recording, shared_on_screen_render
+def set_shared_value(world, cameras, video_writer, recording, on_screen_render, left_arm, right_arm, obs_grp, image_grp, camera_list):
+    global shared_world, shared_cameras, shared_video_writer, shared_recording, shared_on_screen_render, shared_left_arm, shared_right_arm, shared_obs_grp, shared_image_grp, shared_camera_list
     shared_world = world
     shared_cameras = cameras
     shared_video_writer = video_writer
@@ -15,3 +18,6 @@ def set_shared_value(world, cameras, video_writer, recording, on_screen_render, 
     shared_on_screen_render = on_screen_render
     shared_left_arm = left_arm
     shared_right_arm = right_arm
+    shared_obs_grp = obs_grp
+    shared_image_grp = image_grp
+    shared_camera_list = camera_list

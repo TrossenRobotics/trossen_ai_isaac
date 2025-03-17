@@ -1,1 +1,3 @@
 *.avi
+output_dataset/
+extracted_data/

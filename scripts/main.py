@@ -15,6 +15,8 @@ from pathlib import Path
 import global_var
 folder_dir = str(Path(__file__).parent.parent.resolve())
 print(folder_dir)
+import os
+import h5py
 
 # Configuration Paths
 USD_PATH = folder_dir + "/trossen_ai_scene/trossen_ai_scene.usd"
@@ -52,11 +54,32 @@ if recording:
         camera.initialize()
         camera.add_motion_vectors_to_frame()
 
+# Create directory for HDF5 storage
+os.makedirs("output_dataset", exist_ok=True)
+dataset_path = os.path.join("output_dataset", "episode_1.hdf5")
+
+# Open HDF5 file
+hdf5_file = h5py.File(dataset_path, 'w', rdcc_nbytes=1024 ** 2 * 2)
+hdf5_file.attrs['sim'] = True
+
+# Create HDF5 groups
+obs_grp = hdf5_file.create_group('observations')
+image_grp = obs_grp.create_group('images')
+
+for cam_name in CAMERA_PRIM_PATHS:
+    image_grp.create_dataset(cam_name, shape=(0, 480, 640, 3), maxshape=(None, 480, 640, 3), dtype='uint8')
+
+# Create datasets for robot states
+for arm in ['left_arm', 'right_arm']:
+    obs_grp.create_dataset(f"{arm}/qpos", shape=(0, 8), maxshape=(None, 8), dtype='float64')
+    obs_grp.create_dataset(f"{arm}/qvel", shape=(0, 8), maxshape=(None, 8), dtype='float64')
+    obs_grp.create_dataset(f"{arm}/qtorque", shape=(0, 8, 3), maxshape=(None, 8, 3), dtype='float64')
+
 # Initialize Arms
 left_arm = TrossenArmController(LEFT_ARM_PATH, "ee_gripper_link", "left_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH)
 right_arm = TrossenArmController(RIGHT_ARM_PATH, "ee_gripper_link", "right_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH)
 
-global_var.set_shared_value(world, cameras, video_writer, recording, on_screen_render, left_arm, right_arm)
+global_var.set_shared_value(world, cameras, video_writer, recording, on_screen_render, left_arm, right_arm, obs_grp, image_grp, CAMERA_PRIM_PATHS)
 
 for _ in range(100):
     world.step(render=True)
@@ -87,6 +110,12 @@ if recording:
     # If we save videos locally, the recording will stop when both arm go to the end position
     for _ in range(120):
         capture_and_save_frames()
+    if hdf5_file:
+        hdf5_file.flush()  # Ensures all data is written before closing
+        hdf5_file.close()
+        print("HDF5 file properly closed.")
+    else:
+        print("Failed")
     simulation_app.close()
 else:
     # Else keep rendering until user press any key or use ctrl-C
