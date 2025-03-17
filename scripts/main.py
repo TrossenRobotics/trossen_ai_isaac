@@ -46,8 +46,6 @@ fps = 30
 output_filename = "output_video.avi"
 video_writer = cv2.VideoWriter(output_filename, cv2.VideoWriter_fourcc(*"XVID"), fps, (frame_width, frame_height))
 
-global_var.set_shared_value(world, cameras, video_writer, recording, on_screen_render)
-
 # Initialize camera and video writer
 if recording:
     for camera in cameras:
@@ -58,6 +56,8 @@ if recording:
 left_arm = TrossenArmController(LEFT_ARM_PATH, "ee_gripper_link", "left_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH)
 right_arm = TrossenArmController(RIGHT_ARM_PATH, "ee_gripper_link", "right_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH)
 
+global_var.set_shared_value(world, cameras, video_writer, recording, on_screen_render, left_arm, right_arm)
+
 for _ in range(100):
     world.step(render=True)
 
@@ -67,10 +67,6 @@ right_arm.initialize()
 # Randomize the location of the box
 box_pos, box_orient = randomize_box_pose(box_prim, position_range=0.2, z_height=0.02)
 box_yaw, _ = quaternion_to_yaw(box_orient)
-
-# Give arm and box sometime to relocate
-for _ in range(100):
-    world.step(render=True)
 
 # Decide which arm to act first based on their distance with the box 
 if box_pos[0] < 0:

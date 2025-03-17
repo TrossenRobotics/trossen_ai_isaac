@@ -56,6 +56,8 @@ def randomize_box_pose(box, position_range=0.1, z_height=0.02):
     print("Box position: ")
     print(box_position)
     box.set_world_pose(box_position, box_orientation)
+    for _ in range(100):
+        capture_and_save_frames()
     return box_position, box_orientation
 
 def execute_pick_and_place(arm, box_x, box_y, box_yaw, invert_y=False):
