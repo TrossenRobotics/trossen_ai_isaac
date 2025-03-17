@@ -2,9 +2,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 import random
 import cv2
-
-recording = False
-on_screen_render = False
+import global_var
 
 def euler_to_quaternion(roll, pitch, yaw):
     """
@@ -60,7 +58,7 @@ def randomize_box_pose(box, position_range=0.1, z_height=0.02):
     box.set_world_pose(box_position, box_orientation)
     return box_position, box_orientation
 
-def execute_pick_and_place(world, arm, box_x, box_y, box_yaw, invert_y=False):
+def execute_pick_and_place(arm, box_x, box_y, box_yaw, invert_y=False):
     """
     Executes a pick-and-place operation for an arm to grasp and relocate a box.
 
@@ -113,7 +111,7 @@ def execute_pick_and_place(world, arm, box_x, box_y, box_yaw, invert_y=False):
         frame = "ee_gripper_link"
     )
 
-def handover_and_place(world, first_arm, second_arm, box_position, first_arm_grasp, second_arm_grasp):
+def handover_and_place(first_arm, second_arm, box_position, first_arm_grasp, second_arm_grasp):
     """
     Handles object handover between two robotic arms and places it in the final location.
 
@@ -159,7 +157,7 @@ def handover_and_place(world, first_arm, second_arm, box_position, first_arm_gra
         frame="ee_gripper_link"
     )
 
-def capture_and_save_frames(world, cameras, video_writer=None):
+def capture_and_save_frames():
     """
     Captures frames from multiple cameras and saves them to a video file.
 
@@ -168,11 +166,11 @@ def capture_and_save_frames(world, cameras, video_writer=None):
         cameras (list): List of camera objects.
         video_writer (cv2.VideoWriter, optional): Video writer object for saving frames.
     """
-    world.step(render=True)
-    if recording:
+    global_var.shared_world.step(render=True)
+    if global_var.shared_recording:
         combined_frame = np.zeros((960, 1280, 3), dtype=np.uint8)  # 2x2 grid (640x480 each)
         
-        for idx, cam in enumerate(cameras):
+        for idx, cam in enumerate(global_var.shared_cameras):
             rgba_frame = cam.get_rgba()
             bgr_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2BGR)
 
@@ -180,9 +178,9 @@ def capture_and_save_frames(world, cameras, video_writer=None):
             start_y, start_x = row * 480, col * 640
             combined_frame[start_y:start_y+480, start_x:start_x+640] = bgr_frame
 
-        video_writer.write(combined_frame)
+        global_var.shared_video_writer.write(combined_frame)
         
-        if on_screen_render:
+        if global_var.shared_on_screen_render:
             for ax in axs.flatten():
                 ax.clear()
             axs[0, 0].imshow(combined_frame[:480, :640, ::-1])  # Top-left

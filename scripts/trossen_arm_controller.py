@@ -9,6 +9,7 @@ from isaacsim.robot_motion.motion_generation import (
 )
 from isaacsim.core.utils.types import ArticulationAction
 from trossen_arm_utils import *
+import global_var
 
 class TrossenArmController:
     """
@@ -25,7 +26,7 @@ class TrossenArmController:
         arm_start_pos (list): Initial position of the robotic arm after initialization.
     """
 
-    def __init__(self, world, cameras, arm_path, solver_frame, name, lula_desc_path, lula_urdf_path, video_writer=None):
+    def __init__(self, arm_path, solver_frame, name, lula_desc_path, lula_urdf_path):
         """
         Initializes the robotic arm controller.
 
@@ -39,8 +40,6 @@ class TrossenArmController:
             lula_urdf_path (str): Path to the Lula robot URDF file.
             video_writer (cv2.VideoWriter, optional): Video writer for saving frames.
         """
-        self.world = world
-        self.cameras = cameras
         self.arm_path = arm_path
         self.arm = SingleArticulation(prim_path=arm_path, name=name)
         self.lula_urdf_path = lula_urdf_path
@@ -49,7 +48,6 @@ class TrossenArmController:
             self.arm, LulaKinematicsSolver(lula_desc_path, lula_urdf_path), solver_frame
         )
         self.taskspace_generator = LulaTaskSpaceTrajectoryGenerator(lula_desc_path, lula_urdf_path)
-        self.video_writer = video_writer
 
     def initialize(self):
         """
@@ -59,12 +57,12 @@ class TrossenArmController:
             RuntimeError: If the arm is not found in the simulation scene.
         """
         self.arm.initialize()
-        self.world.scene.add(self.arm)
+        global_var.shared_world.scene.add(self.arm)
         if not self.arm.is_valid():
             raise RuntimeError(f"Failed to find articulation at {self.arm.prim_path}")
         self.arm.apply_action(ArticulationAction(joint_positions=[0, np.pi/12, np.pi/12, 0, 0, 0, 0.044, 0.044]))
         for _ in range(60):
-            capture_and_save_frames(self.world, self.cameras, self.video_writer)
+            capture_and_save_frames()
         self.arm_start_pos = self.get_current_ee_position()
 
     def slerp(self, start_quat, end_quat, t_values):
@@ -111,7 +109,7 @@ class TrossenArmController:
 
         for action in ArticulationTrajectory(self.arm, trajectory, physics_dt=1/60).get_action_sequence():
             self.arm.apply_action(action)
-            capture_and_save_frames(self.world, self.cameras, self.video_writer)
+            capture_and_save_frames()
     
     def apply_grasp(self, grasp_state, delay_steps=100):
         """
@@ -123,7 +121,7 @@ class TrossenArmController:
         """
         self.arm.apply_action(ArticulationAction(joint_positions=[grasp_state, grasp_state], joint_indices=[6, 7]))
         for _ in range(delay_steps):
-            capture_and_save_frames(self.world, self.cameras, self.video_writer)
+            capture_and_save_frames()
 
     def get_current_ee_position(self):
         """
