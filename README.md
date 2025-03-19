@@ -10,60 +10,15 @@ Python scripts provided enable two robotic arms to **pick, transfer, and place**
 
 ## Installation
 
-First, download the [latest release](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/download.html#isaac-sim-latest-release) of Isaac Sim to the default Downloads folder.
+To set up the Isaac Sim workspace, follow the instructions [here](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_workstation.html)
 
-Unzip the package to the recommended Isaac Sim root folder and Run the Isaac Sim App Selector.
-- Run the commands below in Terminal for Ubuntu.
-
-```bash
-mkdir ~/isaacsim
-cd ~/Downloads
-unzip "isaac-sim-standalone@4.5.0-rc.36+release.19112.f59b3005.gl.linux-x86_64.release.zip" -d ~/isaacsim
-cd ~/isaacsim
-./post_install.sh
-```
-
-You can run Isaac Sim app with
-
-```bash
-./isaac-sim.selector.sh
-```
-
-The Isaac Sim App Selector is a mini-windowed app that helps run Isaac Sim in different modes. 
-Click **START** to run the Isaac Sim main app.
-
-**Note:** The first run of the Isaac Sim app takes some time to warm up the shader cache.
-
-Then, let's setup the python environment for Isaac Sim
-
-Create and activate the virtual environment (optional, but highly recommended):
-
-```bash
-conda create -n env_isaacsim python=3.10
-conda activate env_isaacsim
-```
-
-Install Isaac Sim - Python packages
-
-```bash
-pip install isaacsim[all]==4.5.0 --extra-index-url https://pypi.nvidia.com
-```
-
-Install Isaac Sim - Python packages cached extension dependencies
-
-```bash
-pip install isaacsim[extscache]==4.5.0 --extra-index-url https://pypi.nvidia.com
-```
+To install Isaac Sim python packages, follow the instructions [here](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_python.html)
 
 Please also ensure that you have installed additional package as shown below:
 
 ```bash
 pip install numpy scipy opencv-python matplotlib
 ```
-
-To run the demo, please move to the cloned repository, source the required conda env and use commands below
-
-
 
 ---
 
