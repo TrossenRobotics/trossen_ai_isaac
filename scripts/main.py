@@ -37,7 +37,7 @@ import random
 import h5py
 
 from omni.isaac.kit import SimulationApp
-simulation_app = SimulationApp({"headless": True})
+simulation_app = SimulationApp({"headless": False})
 
 from omni.isaac.core import World
 from isaacsim.sensors.camera import Camera
@@ -139,13 +139,13 @@ def main(args):
         execute_pick_and_place(left_arm, box_pos[0], box_pos[1], box_yaw)
         box_position, _ = box_prim.get_world_pose()
         # Right arm's end effector will rotate 90 degree, go and take box from the left arm
-        handover_and_place(left_arm, right_arm, box_position, 0.044, 0.001)
+        handover_and_place(left_arm, right_arm, box_position)
     else:
         # Right arm will pick up the box and move to the center of the stage
         execute_pick_and_place(right_arm, box_pos[0], box_pos[1], box_yaw, invert_y=True)
         box_position, _ = box_prim.get_world_pose()
         # Left arm's end effector will rotate 90 degree, go and take box from the right arm
-        handover_and_place(right_arm, left_arm, box_position, 0.044, 0.001)
+        handover_and_place(right_arm, left_arm, box_position)
 
     if recording or on_screen_render:
         # If we save videos locally, the recording will stop when both arm go to the end position
