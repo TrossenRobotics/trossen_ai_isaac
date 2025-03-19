@@ -83,7 +83,7 @@ The class relies on the Isaac Sim framework, specifically:
 ### **`__init__()`**
 
 ```bash
-def __init__(self, world, cameras, arm_path, solver_frame, name, lula_desc_path, lula_urdf_path, video_writer=None):
+def __init__(self, arm_path, solver_frame, name, lula_desc_path, lula_urdf_path):
 ```
 
 **Purpose**
@@ -95,14 +95,11 @@ Setting up kinematics solvers for forward kinematics (FK).
 
 | Input parameter | Description |
 |-------------------|---------------|
-| world | The Isaac Sim world object |
-| cameras | List of camera objects for recording |
 | arm_path | The USD path to the robotic arm in the scene |
 | solver_frame | The reference frame used for inverse kinematics |
 | arm_name | The name of the robotic arm |
 | lula_desc_path | Path to the robot description YAML file |
 | lula_urdf_path | Path to the robot's URDF file |
-| video_writer | OpenCV video writer (optional) |
 
 ---
 
@@ -117,26 +114,6 @@ def initialize(self):
 - Adds the robotic arm to the scene and initializes it.
 - Moves the arm to an initial position (slightly bent).
 - Records initial frames for debugging.
-
----
-
-### **`slerp(start_quat, end_quat, t_values)`**
-
-```bash
-def slerp(self, start_quat, end_quat, t_values):
-```
-
-**Purpose**
-
-- Performs Spherical Linear Interpolation (SLERP) between two quaternions for smooth rotation.
-Returns a list of **interpolated** quaternions.
-
-| Input parameter | Description |
-|-------------------|---------------|
-| start_quat | Starting quaternion (w, x, y, z) |
-| end_quat | Target quaternion (w, x, y, z) |
-| t_values | Interpolation time steps between 0 and 1 |
-
 
 ---
 
@@ -173,6 +150,36 @@ def apply_grasp(self, grasp_state, delay_steps=100):
 |-------------------|---------------|
 | grasp_state | Gripper joint position (0: Fully closed, 0.044: Fully open) |
 | delay_steps | Number of simulation steps to hold the grasp |
+
+---
+
+### **`grasp(delay_steps)`**
+
+```bash
+def grasp(self, delay_steps=100):
+```
+
+**Purpose**
+- Controls the robotic gripper joints to close for grasping.
+
+| Input parameter | Description |
+|-------------------|---------------|
+| delay_steps | Number of simulation steps to hold the grasp |
+
+---
+
+### **`release(delay_steps)`**
+
+```bash
+def release(self, delay_steps=100):
+```
+
+**Purpose**
+- Controls the robotic gripper joints to open for releasing.
+
+| Input parameter | Description |
+|-------------------|---------------|
+| delay_steps | Number of simulation steps to release the grasp |
 
 ---
 
