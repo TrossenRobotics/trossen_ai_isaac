@@ -2,9 +2,9 @@
 
 ## **Overview**
 
-The **Trossen Arm Issac Sim** provides the necessary assets and scripts for simulating robotic policies using the **Trossen AI** system in **Isaacsim**.
-It includes **URDFs, mesh models, and Isaac Sim USD files** for the robot configuration, as well as Python scripts for policy execution.
-Python scripts provided enable two robotic arms to **pick, handover, and place** an object while capturing video frames.
+This repository provides the necessary assets and scripts for simulating robotic policies using **Trossen AI** platforms in **NVIDIA Isaac Sim**.
+It includes **URDFs, mesh models, and Isaac Sim USD files** for the robot configuration, as well as Python scripts for policy execution and data collection.
+Python scripts provided enable two robotic arms to **pick, transfer, and place** an object while capturing video frames and collecting robot states.
 
 ---
 

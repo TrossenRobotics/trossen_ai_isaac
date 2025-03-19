@@ -1,3 +1,5 @@
 *.avi
 output_dataset/
 extracted_data/
+scripts/__pycache__/
+*.pyc

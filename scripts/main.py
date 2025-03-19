@@ -1,5 +1,5 @@
 from omni.isaac.kit import SimulationApp
-simulation_app = SimulationApp({"headless": False})
+simulation_app = SimulationApp({"headless": True})
 
 from omni.isaac.core import World
 from isaacsim.sensors.camera import Camera
@@ -32,7 +32,7 @@ CAMERA_PRIM_PATHS = [
 ]
 BOX_PRIM_PATH = "/World/aloha_scene_joint/box/box"
 
-recording = True
+recording = False
 on_screen_render = False
 
 # Initialize Simulation

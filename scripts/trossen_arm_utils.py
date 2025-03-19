@@ -4,7 +4,7 @@ import random
 import cv2
 import global_var
 
-def euler_to_quaternion(roll, pitch, yaw):
+def euler_to_quaternion(roll: float, pitch: float, yaw: float):
     """
     Converts Euler angles (roll, pitch, yaw) to a quaternion.
 
@@ -19,7 +19,7 @@ def euler_to_quaternion(roll, pitch, yaw):
     rotation = R.from_euler('xyz', [np.radians(roll), np.radians(pitch), np.radians(yaw)])
     return np.roll(rotation.as_quat(), shift=1)
 
-def quaternion_to_yaw(quat):
+def quaternion_to_yaw(quat: np.ndarray) -> tuple[float, np.ndarray]:
     """
     Extracts the yaw (rotation around the Z-axis) from a quaternion.
 
@@ -33,7 +33,7 @@ def quaternion_to_yaw(quat):
     euler = rotation.as_euler('xyz', degrees=True)
     return euler[2], euler
 
-def randomize_box_pose(box, position_range=0.1, z_height=0.02):
+def randomize_box_pose(box, position_range: float = 0.1, z_height: float = 0.02) -> tuple[np.ndarray, np.ndarray]:
     """
     Randomizes the position and orientation of a box within a given range.
 
@@ -55,12 +55,14 @@ def randomize_box_pose(box, position_range=0.1, z_height=0.02):
             break
     print("Box position: ")
     print(box_position)
+    print("Box yaw: ")
+    print(random_yaw)
     box.set_world_pose(box_position, box_orientation)
     for _ in range(100):
         capture_and_save_frames()
     return box_position, box_orientation
 
-def execute_pick_and_place(arm, box_x, box_y, box_yaw, invert_y=False):
+def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, invert_y: bool = False) -> None:
     """
     Executes a pick-and-place operation for an arm to grasp and relocate a box.
 
@@ -113,7 +115,7 @@ def execute_pick_and_place(arm, box_x, box_y, box_yaw, invert_y=False):
         frame = "ee_gripper_link"
     )
 
-def handover_and_place(first_arm, second_arm, box_position, first_arm_grasp, second_arm_grasp):
+def handover_and_place(first_arm, second_arm, box_position: np.ndarray, first_arm_grasp: float, second_arm_grasp: float) -> None:
     """
     Handles object handover between two robotic arms and places it in the final location.
 
@@ -159,7 +161,7 @@ def handover_and_place(first_arm, second_arm, box_position, first_arm_grasp, sec
         frame="ee_gripper_link"
     )
 
-def capture_and_save_frames():
+def capture_and_save_frames() -> None:
     """
     Captures frames from multiple cameras and saves them to a video file.
 

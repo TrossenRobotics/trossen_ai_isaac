@@ -26,7 +26,7 @@ class TrossenArmController:
         arm_start_pos (list): Initial position of the robotic arm after initialization.
     """
 
-    def __init__(self, arm_path, solver_frame, name, lula_desc_path, lula_urdf_path):
+    def __init__(self, arm_path: str, solver_frame: str, name: str, lula_desc_path: str, lula_urdf_path: str) -> None:
         """
         Initializes the robotic arm controller.
 
@@ -49,7 +49,7 @@ class TrossenArmController:
         )
         self.taskspace_generator = LulaTaskSpaceTrajectoryGenerator(lula_desc_path, lula_urdf_path)
 
-    def initialize(self):
+    def initialize(self) -> None:
         """
         Initializes the robotic arm, adds it to the simulation, and moves it to the starting position.
 
@@ -65,7 +65,7 @@ class TrossenArmController:
             capture_and_save_frames()
         self.arm_start_pos = self.get_current_ee_position()
 
-    def slerp(self, start_quat, end_quat, t_values):
+    def slerp(self, start_quat: list[float], end_quat: list[float], t_values: np.ndarray) -> np.ndarray:
         """
         Performs spherical linear interpolation (SLERP) between two quaternions.
 
@@ -83,7 +83,7 @@ class TrossenArmController:
         interpolated_rots = slerp_interpolator(t_values)
         return interpolated_rots.as_quat()
 
-    def move_to_target(self, start_pos, goal_pos, start_orientation, goal_orientation, frame="ee_gripper_link"):
+    def move_to_target(self, start_pos: list[float], goal_pos: list[float], start_orientation: list[float], goal_orientation: list[float], frame: str = "ee_gripper_link") -> None:
         """
         Moves the robotic arm from a start position to a goal position using task-space motion.
 
@@ -111,7 +111,7 @@ class TrossenArmController:
             self.arm.apply_action(action)
             capture_and_save_frames()
     
-    def apply_grasp(self, grasp_state, delay_steps=100):
+    def apply_grasp(self, grasp_state: float, delay_steps: int = 100) -> None:
         """
         Applies a grasp action to control the gripper joints.
 
@@ -123,7 +123,7 @@ class TrossenArmController:
         for _ in range(delay_steps):
             capture_and_save_frames()
 
-    def get_current_ee_position(self):
+    def get_current_ee_position(self) -> np.ndarray:
         """
         Computes the current end-effector position using forward kinematics.
 
@@ -133,7 +133,7 @@ class TrossenArmController:
         fk_position, _ = self.kinematics_solver.compute_end_effector_pose()
         return fk_position
 
-    def get_current_ee_orientation(self):
+    def get_current_ee_orientation(self) -> np.ndarray:
         """
         Computes the current end-effector orientation using forward kinematics.
 
@@ -145,7 +145,7 @@ class TrossenArmController:
         fk_orientation = rotation.as_quat()
         return fk_orientation
 
-    def get_current_joint_velocities(self):
+    def get_current_joint_velocities(self) -> np.ndarray:
         """
         Get current joints' velocities.
 
@@ -156,7 +156,7 @@ class TrossenArmController:
         joint_velocities = self.arm.get_joint_velocities()
         return joint_velocities
 
-    def get_current_joint_positions(self):
+    def get_current_joint_positions(self) -> np.ndarray:
         """
         Get current joints' positions.
 
@@ -167,7 +167,7 @@ class TrossenArmController:
         return joint_positions
 
     
-    def get_current_joint_torques(self):
+    def get_current_joint_torques(self) -> np.ndarray:
         """
         Get current joints' torque.
 
@@ -180,7 +180,7 @@ class TrossenArmController:
         joint_torques = measured_forces[1:, 3:]
         return joint_torques
 
-    def get_specific_link_orientation(self, frame_name):
+    def get_specific_link_orientation(self, frame_name: str) -> np.ndarray:
         """
         Get orientation of a specific frame.
 
