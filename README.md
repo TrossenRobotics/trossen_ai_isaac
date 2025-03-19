@@ -205,6 +205,8 @@ def get_current_ee_orientation(self):
 
 - Computes the current end-effector orientation using forward kinematics (FK).
 
+---
+
 ### **`get_current_joint_velocities()`**
 
 ```bash
@@ -214,6 +216,8 @@ def get_current_joint_velocities(self):
 **Purpose**
 
 - Retrieves the current joints' velocity.
+
+---
 
 ### **`get_current_joint_positions()`**
 
@@ -225,6 +229,8 @@ def get_current_joint_positions(self):
 
 - Retrieves the current joints' position.
 
+---
+
 ### **`get_current_joint_torques()`**
 
 ```bash
@@ -234,6 +240,8 @@ def get_current_joint_torques(self):
 **Purpose**
 
 - Retrieves the current joint torques along the X, Y, and Z axes.
+
+---
 
 ### **`get_specific_link_orientation(frame_name)`**
 
@@ -245,3 +253,26 @@ def get_specific_link_orientation(self, frame_name):
 
 - Retrieves the specific link's orientation
 
+---
+
+## **Generating USD Files from URDFs in Isaac Sim**
+
+**Steps:**
+1. Launch Isaac Sim
+    - Run ./isaac-sim.sh to open the Isaac Sim GUI.
+2. Import URDF
+    - In the Menu Bar, navigate to *File > Import*.
+    - Select the XML scene file and URDF file you want to import.
+    - Keep default settings except for Collider Type, where you should select **Convex Decomposition** instead of the default **Convex Hull**.
+3. Adjust Robot Settings
+    - In the Stage window, select the robotic arm you want to operate.
+    - Modify its position or other properties in the Property tab as needed.
+4. Save as USD
+    - To save the setup, go to *File > Save* Flattened As...
+    - Choose the destination folder and save the USD file.
+5. Load a USD Stage
+    - To open an existing USD file, go to *File > Open* in the Menu Bar.
+    This allows you to edit the USD stage directly.
+
+## **Generating Yaml Files from URDFs**
+For instructions on generating a YAML file for LulaTaskSpaceTrajectoryGenerator, please refer to the instruction [here](https://docs.isaacsim.omniverse.nvidia.com/4.5.0/manipulators/manipulators_robot_description_editor.html#getting-started)
