@@ -24,6 +24,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 import random
 import cv2
+import matplotlib.pyplot as plt
 
 import global_var
 
@@ -218,29 +219,33 @@ def capture_and_save_frames() -> None:
         append_to_dataset(global_var.shared_obs_grp[f'right_arm/qvel'], qvel_right)
         append_to_dataset(global_var.shared_obs_grp[f'left_arm/qtorque'], qtorque_left)
         append_to_dataset(global_var.shared_obs_grp[f'right_arm/qtorque'], qtorque_right)
-
+    
+    if global_var.shared_recording or global_var.shared_on_screen_render:
         # Process the images
         combined_frame = np.zeros((960, 1280, 3), dtype=np.uint8)  # 2x2 grid (640x480 each)
         for idx, cam in enumerate(global_var.shared_cameras):
             rgba_frame = cam.get_rgba()
             rgb_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2RGB)
             bgr_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2BGR)
-            append_to_dataset(global_var.shared_image_grp[global_var.shared_camera_list[idx]], rgb_frame)
+
+            if global_var.shared_recording:
+                append_to_dataset(global_var.shared_image_grp[global_var.shared_camera_list[idx]], rgb_frame)
 
             row, col = divmod(idx, 2)
             start_y, start_x = row * 480, col * 640
             combined_frame[start_y:start_y+480, start_x:start_x+640] = bgr_frame
-
-        global_var.shared_video_writer.write(combined_frame)
+        
+        if global_var.shared_recording:
+            global_var.shared_video_writer.write(combined_frame)
         
         if global_var.shared_on_screen_render:
-            for ax in axs.flatten():
+            for ax in global_var.shared_axs.flatten():
                 ax.clear()
-            axs[0, 0].imshow(combined_frame[:480, :640, ::-1])  # Top-left
-            axs[0, 1].imshow(combined_frame[:480, 640:, ::-1])  # Top-right
-            axs[1, 0].imshow(combined_frame[480:, :640, ::-1])  # Bottom-left
-            axs[1, 1].imshow(combined_frame[480:, 640:, ::-1])  # Bottom-right
-            for ax in axs.flatten():
+            global_var.shared_axs[0, 0].imshow(combined_frame[:480, :640, ::-1])  # Top-left
+            global_var.shared_axs[0, 1].imshow(combined_frame[:480, 640:, ::-1])  # Top-right
+            global_var.shared_axs[1, 0].imshow(combined_frame[480:, :640, ::-1])  # Bottom-left
+            global_var.shared_axs[1, 1].imshow(combined_frame[480:, 640:, ::-1])  # Bottom-right
+            for ax in global_var.shared_axs.flatten():
                 ax.axis('off')
             plt.draw()
             plt.pause(0.01) 
