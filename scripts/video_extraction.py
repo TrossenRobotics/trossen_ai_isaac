@@ -1,3 +1,20 @@
+"""
+HDF5 to Video Converter
+
+This script reads image datasets from an HDF5 file and combines them into a 2x2 grid to generate a video.
+It extracts frames from four camera datasets and saves them as an AVI video.
+
+Usage:
+    python scripts/video_extraction.py
+
+Requirements:
+    - OpenCV (`cv2`)
+    - h5py
+    - NumPy (`numpy`)
+
+Make sure the HDF5 file exists and contains the expected datasets before running the script.
+"""
+
 import os
 
 import h5py

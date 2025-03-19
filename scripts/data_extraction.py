@@ -1,3 +1,19 @@
+"""
+HDF5 Data Extractor
+
+This script extracts specific datasets (joint positions, velocities, and torques) from an HDF5 file,
+converts them into pandas DataFrames, and saves them as CSV files.
+
+Usage:
+    python scripts/data_extraction.py
+
+Requirements:
+    - h5py
+    - pandas
+
+Ensure the HDF5 file exists and contains the expected datasets before running the script.
+"""
+
 import os
 
 import h5py

@@ -1,3 +1,13 @@
+"""
+Global Shared Variables for Simulation
+
+This module maintains shared global variables used in the simulation, including world state, cameras, 
+video recording settings, robotic arms, and observation data groups. 
+
+Usage:
+    Call `set_shared_value()` to initialize these variables before running the simulation.
+"""
+
 shared_world = None
 shared_cameras = None
 shared_video_writer = None

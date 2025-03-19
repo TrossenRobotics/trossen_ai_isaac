@@ -1,5 +1,33 @@
 import os
 from pathlib import Path
+"""
+Isaac Sim Dual-Arm Transfer Simulation
+
+This script sets up a simulated environment in Isaac Sim where two robotic arms collaborate to pick up 
+and transfer a box. The simulation records camera feeds and robot states, saving them in an HDF5 file 
+and an AVI video.
+
+Usage:
+    source ~/isaacsim/setup_conda_env.sh (If use conda)
+    source ~/isaacsim/setup_python_env.sh  (If use system python)
+    python scripts/main.py
+
+Requirements:
+    - NVIDIA Isaac Sim
+    - OpenCV (`cv2`)
+    - NumPy (`numpy`)
+    - h5py
+    - Matplotlib (`matplotlib`)
+
+Key Features:
+    - Initializes a simulation world with two robotic arms.
+    - Captures and records multiple camera views.
+    - Saves robot states (joint positions, velocities, torques) in an HDF5 file.
+    - Performs a pick-and-place task with dynamic box placement.
+    - Handles a robotic handover between two arms.
+
+Ensure Isaac Sim is installed and all dependencies are available before running the script.
+"""
 
 import numpy as np
 import cv2

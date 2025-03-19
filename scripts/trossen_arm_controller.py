@@ -1,3 +1,38 @@
+"""
+Trossen Arm Controller
+
+This module defines the `TrossenArmController` class, which manages a robotic arm in Isaac Sim. It handles 
+motion planning, trajectory execution, and grasping operations.
+
+Classes:
+    - TrossenArmController: Provides methods for arm initialization, motion execution, grasping, and state retrieval.
+
+Methods:
+    - __init__(self, arm_path: str, solver_frame: str, name: str, lula_desc_path: str, lula_urdf_path: str) -> None
+        Initializes the robotic arm controller.
+    - initialize(self) -> None
+        Initializes the arm in the simulation and moves it to the start position.
+    - slerp(self, start_quat: list[float], end_quat: list[float], t_values: np.ndarray) -> np.ndarray
+        Performs spherical linear interpolation (SLERP) between two quaternions.
+    - move_to_target(self, start_pos: list[float], goal_pos: list[float], start_orientation: list[float], goal_orientation: list[float], frame: str = "ee_gripper_link") -> None
+        Moves the arm from a start position to a goal position using task-space motion.
+    - apply_grasp(self, grasp_state: float, delay_steps: int = 100) -> None
+        Controls the gripper joints to perform a grasp action.
+    - get_current_ee_position(self) -> np.ndarray
+        Retrieves the current end-effector position using forward kinematics.
+    - get_current_ee_orientation(self) -> np.ndarray
+        Retrieves the current end-effector orientation as a quaternion.
+    - get_current_joint_velocities(self) -> np.ndarray
+        Returns the current joint velocities of the arm.
+    - get_current_joint_positions(self) -> np.ndarray
+        Returns the current joint positions of the arm.
+    - get_current_joint_torques(self) -> np.ndarray
+        Returns the torque values applied to each joint.
+    - get_specific_link_orientation(self, frame_name: str) -> np.ndarray
+        Retrieves the orientation of a specific link in the robotic arm.
+"""
+
+
 import numpy as np
 from scipy.spatial.transform import Rotation as R, Slerp
 

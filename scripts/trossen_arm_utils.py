@@ -1,3 +1,25 @@
+"""
+Robotic Arm Task Execution and Data Capture
+
+This module provides functions for robotic arm operations in Isaac Sim, including motion planning, 
+grasping, and handover between two arms. It also handles data recording, capturing images, and 
+saving robot states for further analysis.
+
+Functions:
+    - euler_to_quaternion(roll: float, pitch: float, yaw: float) -> np.ndarray
+        Converts Euler angles (roll, pitch, yaw) to a quaternion.
+    - quaternion_to_yaw(quat: np.ndarray) -> tuple[float, np.ndarray]
+        Extracts the yaw angle from a quaternion.
+    - randomize_box_pose(box, position_range: float = 0.1, z_height: float = 0.02) -> tuple[np.ndarray, np.ndarray]
+        Randomizes the position and orientation of a box within a defined range.
+    - execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, invert_y: bool = False) -> None
+        Executes a pick-and-place operation with a robotic arm.
+    - handover_and_place(first_arm, second_arm, box_position: np.ndarray, first_arm_grasp: float, second_arm_grasp: float) -> None
+        Handles object handover between two robotic arms and places it in a final location.
+    - capture_and_save_frames() -> None
+        Captures frames from multiple cameras and saves robot state data to an HDF5 file.
+"""
+
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import random
