@@ -17,7 +17,7 @@ To install Isaac Sim python packages, follow the instructions [here](https://doc
 Please also ensure that you have installed additional package as shown below:
 
 ```bash
-pip install numpy scipy opencv-python matplotlib
+pip install numpy scipy opencv-python matplotlib h5py
 ```
 
 ---

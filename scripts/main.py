@@ -62,7 +62,7 @@ CAMERA_PRIM_PATHS = [
     "/World/left_arm/link_6/camera_mount_d405/cam_left_arm",
     "/World/right_arm/link_6/camera_mount_d405/cam_right_arm"
 ]
-BOX_PRIM_PATH = "/World/aloha_scene_joint/box/box"
+BOX_PRIM_PATH = "/World/trossen_ai_scene_joint/box/box"
 
 def main(args):
     on_screen_render = args.onscreen_render if args.onscreen_render else False
