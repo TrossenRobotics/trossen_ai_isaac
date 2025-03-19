@@ -157,7 +157,7 @@ class TrossenArmController:
         """
         Compute the current end-effector position using forward kinematics.
 
-        :return: The computed position [x, y, z].
+        :return: The computed position [x, y, z] in meters.
         :rtype: np.ndarray
         """
         fk_position, _ = self.kinematics_solver.compute_end_effector_pose()
@@ -179,7 +179,7 @@ class TrossenArmController:
         """
         Get the current joint velocities.
 
-        :return: Velocity of each joint.
+        :return: Velocity of each joint in rad/s.
         :rtype: np.ndarray
         """
         # Get the joint velocities
@@ -190,18 +190,17 @@ class TrossenArmController:
         """
         Get the current joint positions.
 
-        :return: Position of each joint.
+        :return: Position of each joint in rad.
         :rtype: np.ndarray
         """
         joint_positions = self.arm.get_joint_positions()
         return joint_positions
 
-    
     def get_current_joint_torques(self) -> np.ndarray:
         """
         Get the current joint torques.
 
-        :return: Torque values applied to each joint.
+        :return: Torque values applied to each joint in Nm.
         :rtype: np.ndarray
         """
         measured_forces = self.arm.get_measured_joint_forces()
