@@ -2,6 +2,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 import random
 import cv2
+
 import global_var
 
 def euler_to_quaternion(roll: float, pitch: float, yaw: float):
@@ -200,8 +201,9 @@ def capture_and_save_frames() -> None:
         combined_frame = np.zeros((960, 1280, 3), dtype=np.uint8)  # 2x2 grid (640x480 each)
         for idx, cam in enumerate(global_var.shared_cameras):
             rgba_frame = cam.get_rgba()
-            bgr_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2RGB)
-            append_to_dataset(global_var.shared_image_grp[global_var.shared_camera_list[idx]], bgr_frame)
+            rgb_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2RGB)
+            bgr_frame = cv2.cvtColor(rgba_frame, cv2.COLOR_RGBA2BGR)
+            append_to_dataset(global_var.shared_image_grp[global_var.shared_camera_list[idx]], rgb_frame)
 
             row, col = divmod(idx, 2)
             start_y, start_x = row * 480, col * 640

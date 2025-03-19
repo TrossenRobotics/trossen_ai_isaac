@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R, Slerp
+
 from isaacsim.core.prims import SingleArticulation
 from isaacsim.robot_motion.motion_generation import (
     LulaTaskSpaceTrajectoryGenerator, 
@@ -8,6 +9,7 @@ from isaacsim.robot_motion.motion_generation import (
     LulaKinematicsSolver
 )
 from isaacsim.core.utils.types import ArticulationAction
+
 from trossen_arm_utils import *
 import global_var
 

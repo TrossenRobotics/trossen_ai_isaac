@@ -1,6 +1,7 @@
+import os
+
 import h5py
 import pandas as pd
-import os
 
 # Path to the HDF5 file
 hdf5_path = "output_dataset/episode_1.hdf5"

@@ -1,22 +1,25 @@
+import os
+from pathlib import Path
+
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+import random
+import h5py
+
 from omni.isaac.kit import SimulationApp
 simulation_app = SimulationApp({"headless": True})
 
 from omni.isaac.core import World
 from isaacsim.sensors.camera import Camera
+from omni.isaac.core.prims import XFormPrim
 import omni.usd
-import numpy as np
-import cv2
-import matplotlib.pyplot as plt
-import random
+
 from trossen_arm_controller import TrossenArmController
 from trossen_arm_utils import *
-from omni.isaac.core.prims import XFormPrim
-from pathlib import Path
 import global_var
+
 folder_dir = str(Path(__file__).parent.parent.resolve())
-print(folder_dir)
-import os
-import h5py
 
 # Configuration Paths
 USD_PATH = folder_dir + "/trossen_ai_scene/trossen_ai_scene.usd"
@@ -32,7 +35,7 @@ CAMERA_PRIM_PATHS = [
 ]
 BOX_PRIM_PATH = "/World/aloha_scene_joint/box/box"
 
-recording = False
+recording = True
 on_screen_render = False
 
 # Initialize Simulation
