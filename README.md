@@ -4,7 +4,7 @@
 
 This repository provides the necessary assets and scripts for simulating robotic policies using **Trossen AI** platforms in **NVIDIA Isaac Sim**.
 It includes **URDFs, mesh models, and Isaac Sim USD files** for the robot configuration, as well as Python scripts for policy execution and data collection.
-Python scripts provided enable two robotic arms to **pick, transfer, and place** an object while capturing video frames and collecting robot states.
+Python scripts provided enable two robotic arms to **pick and transfer** an object while capturing video frames and collecting robot states.
 
 ---
 
@@ -36,7 +36,7 @@ python scripts/main.py
 By default, it:
 - Loads the Isaac Sim environment
 - Randomizes the box position
-- Performs pick-and-place with a handover
+- Performs pick-and-transfer
 - Saves video footage of the simulation
 
 2. **Modify configuration**
