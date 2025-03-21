@@ -71,7 +71,7 @@ def randomize_box_pose(box, position_range: float = 0.1, z_height: float = 0.02)
     :rtype: tuple[np.ndarray, np.ndarray]
     """
     while True:
-        random_x = random.uniform(-position_range, position_range)
+        random_x = -1 * abs(random.uniform(-position_range, position_range))
         random_y = random.uniform(-position_range, position_range)
         box_position = np.array([random_x, random_y, z_height])
         random_yaw = random.uniform(0, 90)
@@ -125,7 +125,7 @@ def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, inve
     # arm 1 moves down
     arm.set_ee_pos(
         start_pos = [0.469 + sign * box_x, sign * box_y, 0.10],
-        goal_pos = [0.469 + sign * box_x, sign * box_y, 0.04],
+        goal_pos = [0.469 + sign * box_x, sign * box_y, 0.02],
         start_orientation = euler_to_quaternion(0, 90, box_yaw),
         goal_orientation = euler_to_quaternion(0, 90, box_yaw),
         frame = "ee_gripper_link"
@@ -136,7 +136,7 @@ def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, inve
 
     # arm 1 lifts the box and move to the center of the stage
     arm.set_ee_pos(
-        start_pos = [0.469 + sign * box_x, sign * box_y, 0.04],
+        start_pos = [0.469 + sign * box_x, sign * box_y, 0.02],
         goal_pos = [0.469, 0, 0.25],
         start_orientation = euler_to_quaternion(0, 90, box_yaw),
         goal_orientation = euler_to_quaternion(0, 0, 0),
@@ -158,7 +158,7 @@ def handover_and_place(first_arm, second_arm, box_position: np.ndarray) -> None:
     # arm 2 moves to the center of the statge and at the same time rotate 90 degree
     second_arm.set_ee_pos(
         start_pos = second_arm.arm_start_pos,
-        goal_pos = [0.469, 0, box_position[2] + 0.02],
+        goal_pos = [0.469, 0, box_position[2]],
         start_orientation = euler_to_quaternion(0, 0, 0),
         goal_orientation = euler_to_quaternion(90, 0, 0),
         frame="ee_gripper_link"
@@ -172,7 +172,7 @@ def handover_and_place(first_arm, second_arm, box_position: np.ndarray) -> None:
 
     # arm 2 takes the box to the final position
     second_arm.set_ee_pos(
-        start_pos = [0.469, 0, box_position[2] + 0.02],
+        start_pos = [0.469, 0, box_position[2]],
         goal_pos = second_arm.arm_start_pos,
         start_orientation = euler_to_quaternion(90, 0, 0),
         goal_orientation = euler_to_quaternion(0, 0, 0),
