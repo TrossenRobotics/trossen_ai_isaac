@@ -74,9 +74,10 @@ def randomize_box_pose(box, position_range: float = 0.1, z_height: float = 0.02)
         random_x = -1 * abs(random.uniform(-position_range, position_range))
         random_y = random.uniform(-position_range, position_range)
         box_position = np.array([random_x, random_y, z_height])
+        # box_position = np.array([0.1, 0, z_height])  # Set Y to 0 for simplicity
         random_yaw = random.uniform(0, 90)
         box_orientation = euler_to_quaternion(0, 0, random_yaw)
-        if np.linalg.norm(box_position - (0.469, 0, 0)) <= 0.469 or np.linalg.norm(box_position - (-0.469, 0, 0)) <= 0.469:
+        if np.linalg.norm(box_position - (0.4575, -0.019, 0.02)) <= 0.4575 or np.linalg.norm(box_position - (-0.4575, -0.019, 0.02)) <= 0.4575:
             break
     print("Box position: ")
     print(box_position)
@@ -103,11 +104,12 @@ def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, inve
     :type invert_y: bool
     """
     sign = -1 if invert_y else 1
+    offset = global_var.shared_offset
 
     # arm 1 will move to the top of the box
     arm.set_ee_pos(
         start_pos = arm.arm_start_pos,
-        goal_pos = [0.469 + sign * box_x, sign * box_y, 0.10],
+        goal_pos = [offset[0] + sign * box_x, sign * (box_y - offset[1]), 0.10 - offset[2]],
         start_orientation = euler_to_quaternion(0, 0, 0),
         goal_orientation = euler_to_quaternion(0, 90, 0),
         frame = "ee_gripper_link"
@@ -115,8 +117,8 @@ def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, inve
 
     # arm 1 rotate to have the same orientation as the box
     arm.set_ee_pos(
-        start_pos = [0.469 + sign * box_x, sign * box_y, 0.10],
-        goal_pos = [0.469 + sign * box_x, sign * box_y, 0.10],
+        start_pos = [offset[0] + sign * box_x, sign * (box_y - offset[1]), 0.10 - offset[2]],
+        goal_pos = [offset[0] + sign * box_x, sign * (box_y - offset[1]), 0.10 - offset[2]],
         start_orientation = euler_to_quaternion(0, 90, 0),
         goal_orientation = euler_to_quaternion(0, 90, box_yaw),
         frame = "ee_gripper_link"
@@ -124,8 +126,8 @@ def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, inve
     
     # arm 1 moves down
     arm.set_ee_pos(
-        start_pos = [0.469 + sign * box_x, sign * box_y, 0.10],
-        goal_pos = [0.469 + sign * box_x, sign * box_y, 0.02],
+        start_pos = [offset[0] + sign * box_x, sign * (box_y - offset[1]), 0.10 - offset[2]],
+        goal_pos = [offset[0] + sign * box_x, sign * (box_y - offset[1]), 0.02 - offset[2]],
         start_orientation = euler_to_quaternion(0, 90, box_yaw),
         goal_orientation = euler_to_quaternion(0, 90, box_yaw),
         frame = "ee_gripper_link"
@@ -136,14 +138,14 @@ def execute_pick_and_place(arm, box_x: float, box_y: float, box_yaw: float, inve
 
     # arm 1 lifts the box and move to the center of the stage
     arm.set_ee_pos(
-        start_pos = [0.469 + sign * box_x, sign * box_y, 0.02],
-        goal_pos = [0.469, 0, 0.25],
+        start_pos = [offset[0] + sign * box_x, sign * (box_y - offset[1]), 0.02 - offset[2]],
+        goal_pos = [offset[0], sign * (-offset[1]), 0.25 - offset[2]],
         start_orientation = euler_to_quaternion(0, 90, box_yaw),
         goal_orientation = euler_to_quaternion(0, 0, 0),
         frame = "ee_gripper_link"
     )
 
-def handover_and_place(first_arm, second_arm, box_position: np.ndarray) -> None:
+def handover_and_place(first_arm, second_arm, box_position: np.ndarray, invert_y: bool = False) -> None:
     """
     Handles object handover between two robotic arms and places it in the final location.
 
@@ -154,11 +156,12 @@ def handover_and_place(first_arm, second_arm, box_position: np.ndarray) -> None:
     :param box_position: Final position of the box [x, y, z].
     :type box_position: np.ndarray
     """
-
+    offset = global_var.shared_offset
+    sign = 1 if invert_y else -1
     # arm 2 moves to the center of the statge and at the same time rotate 90 degree
     second_arm.set_ee_pos(
         start_pos = second_arm.arm_start_pos,
-        goal_pos = [0.469, 0, box_position[2]],
+        goal_pos = [offset[0], sign * (-offset[1]), box_position[2] - offset[2]],
         start_orientation = euler_to_quaternion(0, 0, 0),
         goal_orientation = euler_to_quaternion(90, 0, 0),
         frame="ee_gripper_link"
@@ -172,7 +175,7 @@ def handover_and_place(first_arm, second_arm, box_position: np.ndarray) -> None:
 
     # arm 2 takes the box to the final position
     second_arm.set_ee_pos(
-        start_pos = [0.469, 0, box_position[2]],
+        start_pos = [offset[0], sign * (-offset[1]), box_position[2] - offset[2]],
         goal_pos = second_arm.arm_start_pos,
         start_orientation = euler_to_quaternion(90, 0, 0),
         goal_orientation = euler_to_quaternion(0, 0, 0),
@@ -181,7 +184,7 @@ def handover_and_place(first_arm, second_arm, box_position: np.ndarray) -> None:
 
     # arm 1 moves to the final position
     first_arm.set_ee_pos(
-        start_pos = [0.469, 0, 0.25],
+        start_pos = [offset[0], sign * (-offset[1]), 0.25 - offset[2]],
         goal_pos = first_arm.arm_start_pos,
         start_orientation = euler_to_quaternion(0, 0, 0),
         goal_orientation = euler_to_quaternion(0, 0, 0),

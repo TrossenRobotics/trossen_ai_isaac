@@ -72,6 +72,10 @@ def main(args):
     omni.usd.get_context().open_stage(USD_PATH, None)
     cameras = [Camera(prim_path=path, resolution=(640, 480)) for path in CAMERA_PRIM_PATHS]
 
+    # Set up the arm offset for the left and right arms
+    # Absolute base position of the arms in the world
+    arm_offset = [0.4575, -0.019, 0.02]
+
     world = World(stage_units_in_meters=1.0)
     world.reset()
     box_prim = XFormPrim(prim_path=BOX_PRIM_PATH)
@@ -120,7 +124,7 @@ def main(args):
     left_arm = TrossenArmController(LEFT_ARM_PATH, "ee_gripper_link", "left_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH)
     right_arm = TrossenArmController(RIGHT_ARM_PATH, "ee_gripper_link", "right_arm_robot", LULA_DESC_PATH, LULA_URDF_PATH)
 
-    global_var.set_shared_value(world, cameras, video_writer, recording, axs, on_screen_render, left_arm, right_arm, obs_grp, image_grp, CAMERA_PRIM_PATHS)
+    global_var.set_shared_value(world, cameras, video_writer, recording, axs, on_screen_render, left_arm, right_arm, obs_grp, image_grp, arm_offset, CAMERA_PRIM_PATHS)
 
     for _ in range(100):
         world.step(render=True)
@@ -141,11 +145,12 @@ def main(args):
         # Right arm's end effector will rotate 90 degree, go and take box from the left arm
         handover_and_place(left_arm, right_arm, box_position)
     else:
+        print("Right arm's turn")
         # Right arm will pick up the box and move to the center of the stage
         execute_pick_and_place(right_arm, box_pos[0], box_pos[1], box_yaw, invert_y=True)
         box_position, _ = box_prim.get_world_pose()
         # Left arm's end effector will rotate 90 degree, go and take box from the right arm
-        handover_and_place(right_arm, left_arm, box_position)
+        handover_and_place(right_arm, left_arm, box_position, invert_y=True)
 
     if recording or on_screen_render:
         # If we save videos locally, the recording will stop when both arm go to the end position

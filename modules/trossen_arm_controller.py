@@ -86,7 +86,7 @@ class TrossenArmController:
         global_var.shared_world.scene.add(self.arm)
         if not self.arm.is_valid():
             raise RuntimeError(f"Failed to find articulation at {self.arm.prim_path}")
-        self.arm.apply_action(ArticulationAction(joint_positions=[0, np.pi/12, np.pi/12, 0, 0, 0, 0.044], joint_indices=[0, 1, 2, 3, 4, 5, 6]))
+        self.arm.apply_action(ArticulationAction(joint_positions=[0, np.pi/12, np.pi/12, 0, 0, 0, 0.044, 0.044], joint_indices=[0, 1, 2, 3, 4, 5, 6, 7]))
         for _ in range(60):
             capture_and_save_frames()
         self.arm_start_pos = self.get_current_ee_position()
@@ -131,7 +131,7 @@ class TrossenArmController:
         :param delay_steps: Number of simulation steps to wait after grasping (default: 100).
         :type delay_steps: int
         """
-        self.arm.apply_action(ArticulationAction(joint_positions=[grasp_state], joint_indices=[6]))
+        self.arm.apply_action(ArticulationAction(joint_positions=[grasp_state, grasp_state], joint_indices=[6, 7]))
         for _ in range(delay_steps):
             capture_and_save_frames()
 
