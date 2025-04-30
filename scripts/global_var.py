@@ -19,10 +19,9 @@ shared_obs_grp = None
 shared_image_grp = None
 shared_camera_list = None
 shared_axs = None
-shared_offset = None
 
-def set_shared_value(world, cameras, video_writer, recording, axs, on_screen_render, left_arm, right_arm, obs_grp, image_grp, offset, camera_list):
-    global shared_world, shared_cameras, shared_video_writer, shared_recording, shared_on_screen_render, shared_left_arm, shared_right_arm, shared_obs_grp, shared_image_grp, shared_camera_list, shared_axs, shared_offset
+def set_shared_value(world, cameras, video_writer, recording, axs, on_screen_render, left_arm, right_arm, obs_grp, image_grp, camera_list):
+    global shared_world, shared_cameras, shared_video_writer, shared_recording, shared_on_screen_render, shared_left_arm, shared_right_arm, shared_obs_grp, shared_image_grp, shared_camera_list, shared_axs
     shared_world = world
     shared_cameras = cameras
     shared_video_writer = video_writer
@@ -34,4 +33,3 @@ def set_shared_value(world, cameras, video_writer, recording, axs, on_screen_ren
     shared_image_grp = image_grp
     shared_camera_list = camera_list
     shared_axs = axs
-    shared_offset = offset
