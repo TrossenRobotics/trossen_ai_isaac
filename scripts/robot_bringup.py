@@ -81,7 +81,7 @@ if robot_name not in available_robots:
     carb.log_error(f"Invalid robot name: '{robot_name}'")
     carb.log_error(f"Available robots: {', '.join(available_robots)}")
     simulation_app.close()
-    exit()
+    sys.exit()
 
 asset_path = f"./assets/robots/{robot_name}.usd"
 prim_path = f"/{robot_name}"
@@ -92,7 +92,7 @@ carb.log_warn(f"Loading robot: {robot_name}")
 if not os.path.exists(asset_path):
     carb.log_error(f"Could not find USD file at: {asset_path}")
     simulation_app.close()
-    exit()
+    sys.exit()
 
 # Create the simulation world
 my_world = World(stage_units_in_meters=1.0)
