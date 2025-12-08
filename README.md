@@ -1,2 +1,1 @@
-# Trossen Arm MuJoCo
-
+# Trossen Arm Isaac Sim
