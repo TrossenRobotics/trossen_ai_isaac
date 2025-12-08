@@ -35,16 +35,16 @@ Usage:
     ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py [robot_name]
 
 Examples:
-    ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py widowx_ai_base
+    ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py wxai_base
     ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py stationary_ai
 
 Available Robots:
     - mobile_ai: Dual-arm mobile manipulator
     - stationary_ai: Dual-arm stationary platform
-    - widowx_ai_base: Single arm base configuration
-    - widowx_ai_follower: Single arm follower configuration
-    - widowx_ai_leader_left: Left leader arm
-    - widowx_ai_leader_right: Right leader arm
+    - wxai_base: Single arm base configuration
+    - wxai_follower: Single arm follower configuration
+    - wxai_leader_left: Left leader arm
+    - wxai_leader_right: Right leader arm
 """
 
 import os
@@ -63,13 +63,13 @@ from isaacsim.core.utils.stage import add_reference_to_stage  # noqa: E402
 AVAILABLE_ROBOTS = [
     "mobile_ai",
     "stationary_ai",
-    "widowx_ai_base",
-    "widowx_ai_follower",
-    "widowx_ai_leader_left",
-    "widowx_ai_leader_right",
+    "wxai_base",
+    "wxai_follower",
+    "wxai_leader_left",
+    "wxai_leader_right",
 ]
 
-DEFAULT_ROBOT = "widowx_ai_base"
+DEFAULT_ROBOT = "wxai_base"
 if len(sys.argv) > 1:
     robot_name = sys.argv[1]
 else:
