@@ -35,17 +35,16 @@ Usage:
     ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py [robot_name]
 
 Examples:
-    ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py mobile_ai
+    ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py widowx_ai_base
     ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py stationary_ai
-    ~/isaacsim5.1/isaac-sim.sh scripts/robot_bringup.py wxai_base
 
 Available Robots:
     - mobile_ai: Dual-arm mobile manipulator
     - stationary_ai: Dual-arm stationary platform
-    - wxai_base: Single arm base configuration
-    - wxai_follower: Single arm follower configuration
-    - wxai_leader_left: Left leader arm
-    - wxai_leader_right: Right leader arm
+    - widowx_ai_base: Single arm base configuration
+    - widowx_ai_follower: Single arm follower configuration
+    - widowx_ai_leader_left: Left leader arm
+    - widowx_ai_leader_right: Right leader arm
 """
 
 import os
@@ -56,34 +55,38 @@ from isaacsim import SimulationApp
 # Must initialize SimulationApp before importing other Isaac Sim modules
 simulation_app = SimulationApp({"headless": False})
 
-import carb
-from isaacsim.core.api import World
-from isaacsim.core.utils.stage import add_reference_to_stage
+import carb  # noqa: E402
+from isaacsim.core.api import World  # noqa: E402
+from isaacsim.core.utils.stage import add_reference_to_stage  # noqa: E402
 
 # List of available robot models
-available_robots = [
+AVAILABLE_ROBOTS = [
     "mobile_ai",
     "stationary_ai",
-    "wxai_base",
-    "wxai_follower",
-    "wxai_leader_left",
-    "wxai_leader_right",
+    "widowx_ai_base",
+    "widowx_ai_follower",
+    "widowx_ai_leader_left",
+    "widowx_ai_leader_right",
 ]
 
-default_robot = "mobile_ai"
+DEFAULT_ROBOT = "widowx_ai_base"
 if len(sys.argv) > 1:
     robot_name = sys.argv[1]
 else:
-    robot_name = default_robot
+    robot_name = DEFAULT_ROBOT
     carb.log_warn(f"No robot specified. Using default: {robot_name}")
 
-if robot_name not in available_robots:
+if robot_name not in AVAILABLE_ROBOTS:
     carb.log_error(f"Invalid robot name: '{robot_name}'")
-    carb.log_error(f"Available robots: {', '.join(available_robots)}")
+    carb.log_error(f"Available robots: {', '.join(AVAILABLE_ROBOTS)}")
     simulation_app.close()
     sys.exit()
 
-asset_path = f"./assets/robots/{robot_name}.usd"
+if robot_name in ["mobile_ai", "stationary_ai"]:
+    asset_path = f"./assets/robots/{robot_name}/{robot_name}.usd"
+else:
+    asset_path = f"./assets/robots/wxai/{robot_name}.usd"
+
 prim_path = f"/{robot_name}"
 
 carb.log_warn(f"Loading robot: {robot_name}")
@@ -95,15 +98,15 @@ if not os.path.exists(asset_path):
     sys.exit()
 
 # Create the simulation world
-my_world = World(stage_units_in_meters=1.0)
+world = World(stage_units_in_meters=1.0)
 
-my_world.scene.add_default_ground_plane()
+world.scene.add_default_ground_plane()
 
 add_reference_to_stage(usd_path=asset_path, prim_path=prim_path)
 
-my_world.reset()
+world.reset()
 
 while simulation_app.is_running():
-    my_world.step(render=True)
+    world.step(render=True)
 
 simulation_app.close()
