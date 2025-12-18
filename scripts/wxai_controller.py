@@ -137,11 +137,11 @@ class WXAIController(Articulation):
         )
 
         transpose = np.swapaxes(jacobian_end_effector, 1, 2)
-        lmbda = np.eye(jacobian_end_effector.shape[1]) * (self.ik_damping**2)
+        damping_matrix = np.eye(jacobian_end_effector.shape[1]) * (self.ik_damping**2)
         return (
             self.ik_scale
             * transpose
-            @ np.linalg.inv(jacobian_end_effector @ transpose + lmbda)
+            @ np.linalg.inv(jacobian_end_effector @ transpose + damping_matrix)
             @ error
         ).squeeze(-1)
 
