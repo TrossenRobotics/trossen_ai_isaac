@@ -58,9 +58,24 @@ from isaacsim.storage.native import get_assets_root_path  # noqa: E402
 sys.path.append(os.path.dirname(__file__))
 from wxai_controller import WXAIController  # noqa: E402
 
+# Default target configuration
+DEFAULT_TARGET_POSITION = np.array([0.3, 0.0, 0.2])
+DEFAULT_TARGET_ORIENTATION = np.array([1, 0, 0, 0])
+DEFAULT_TARGET_SIZE = np.array([0.0515, 0.0515, 0.0515])
+
+# Scene configuration
+ROBOT_USD_PATH = "./assets/robots/wxai/wxai_base.usd"
+ROBOT_SCENE_PATH = "/World/wxai_robot"
+GROUND_SCENE_PATH = "/World/ground"
+TARGET_SCENE_PATH = "/World/TargetCube"
+
 
 class WXAIFollowTarget:
-    """Continuous target tracking task."""
+    """Real-time target tracking demonstration.
+
+    Continuously tracks a movable target cube's pose, commanding the robot's
+    end effector to match the target's position and orientation.
+    """
 
     def __init__(
         self,
@@ -68,44 +83,47 @@ class WXAIFollowTarget:
         target_initial_orientation: np.ndarray | None = None,
         target_size: np.ndarray | None = None,
     ):
-        """Initialize task.
+        """Initialize target tracking task."""
+        self.target_initial_position = (
+            target_initial_position
+            if target_initial_position is not None
+            else DEFAULT_TARGET_POSITION
+        )
+        self.target_initial_orientation = (
+            target_initial_orientation
+            if target_initial_orientation is not None
+            else DEFAULT_TARGET_ORIENTATION
+        )
+        self.target_size = (
+            target_size if target_size is not None else DEFAULT_TARGET_SIZE
+        )
 
-        Args:
-            target_initial_position: Initial target position
-            target_initial_orientation: Initial target orientation
-            target_size: Target cube dimensions
-        """
         self.target = None
         self.robot = None
-        self.target_initial_position = target_initial_position
-        self.target_initial_orientation = target_initial_orientation
-        self.target_size = target_size
-
-        if self.target_initial_position is None:
-            self.target_initial_position = np.array([0.3, 0.0, 0.2])
-        if self.target_initial_orientation is None:
-            self.target_initial_orientation = np.array([1, 0, 0, 0])
-        if self.target_size is None:
-            self.target_size = np.array([0.0515, 0.0515, 0.0515])
 
     def setup_scene(self) -> None:
-        """Setup scene with robot, target cube, and environment."""
+        """Initialize simulation scene with robot, target cube, and environment."""
         stage_utils.create_new_stage(template="sunlight")
 
-        self.robot = WXAIController(robot_path="/World/wxai_robot", create_robot=True)
-        self.end_effector_link = self.robot.end_effector_link
+        # Spawn robot in scene
+        stage_utils.add_reference_to_stage(
+            usd_path=ROBOT_USD_PATH,
+            path=ROBOT_SCENE_PATH,
+        )
+
+        self.robot = WXAIController(robot_path=ROBOT_SCENE_PATH)
 
         stage_utils.add_reference_to_stage(
             usd_path=get_assets_root_path()
             + "/Isaac/Environments/Grid/default_environment.usd",
-            path="/World/ground",
+            path=GROUND_SCENE_PATH,
         )
 
         visual_material = PreviewSurfaceMaterial("/Visual_materials/blue")
         visual_material.set_input_values("diffuseColor", [0.0, 0.0, 1.0])
 
         target_shape = Cube(
-            paths="/World/TargetCube",
+            paths=TARGET_SCENE_PATH,
             positions=self.target_initial_position,
             orientations=self.target_initial_orientation,
             sizes=[1.0],
@@ -116,10 +134,8 @@ class WXAIFollowTarget:
         self.target = GeomPrim(paths=target_shape.paths)
         target_shape.apply_visual_materials(visual_material)
 
-        print("Scene ready - move target cube to control robot")
-
     def forward(self) -> None:
-        """Track target cube position and orientation."""
+        """Execute one tracking step by commanding end effector to current target pose."""
         target_position, target_orientation = self.target.get_world_poses()
         target_position = target_position.numpy()
         target_orientation = target_orientation.numpy()
@@ -133,7 +149,7 @@ class WXAIFollowTarget:
         target_position: np.ndarray | None = None,
         target_orientation: np.ndarray | None = None,
     ) -> None:
-        """Reset task to initial state."""
+        """Reset robot and target to initial state."""
         if self.robot is not None:
             self.robot.reset_to_default_pose()
 
@@ -155,8 +171,6 @@ class WXAIFollowTarget:
 
 
 def main():
-    """Run follow target demonstration."""
-    print("WidowX AI Follow Target Demo")
     simulation_app.update()
 
     follow_target = WXAIFollowTarget()

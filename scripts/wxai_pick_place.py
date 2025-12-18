@@ -29,11 +29,10 @@
 """
 WidowX AI Pick-and-Place Demonstration.
 
-This script demonstrates a complete pick-and-place task using the WidowX AI
-manipulator with a 9-phase state machine.
+This script demonstrates pick-and-place manipulation task using the WidowX AI robot.
 
 Usage:
-    ~/isaacsim5.1/isaac-sim.sh scripts/wxai_pick_place.py
+    ~/isaacsim/python.sh scripts/wxai_pick_place.py
 """
 
 from __future__ import annotations
@@ -58,78 +57,89 @@ from isaacsim.storage.native import get_assets_root_path  # noqa: E402
 sys.path.append(os.path.dirname(__file__))
 from wxai_controller import WXAIController  # noqa: E402
 
+# Default configuration constants
+DEFAULT_CUBE_SIZE = np.array([0.05, 0.05, 0.05])
+DEFAULT_CUBE_POSITION = np.array([0.35, -0.15, 0.03])
+DEFAULT_CUBE_ORIENTATION = np.array([1, 0, 0, 0])
+DEFAULT_TARGET_POSITION = np.array([0.35, 0.15, 0.03])
+DEFAULT_HOME_POSITION = np.array([0.2, 0.0, 0.3])
+DEFAULT_EVENTS_DT = [80, 50, 10, 50, 80, 50, 10, 50, 80]
+
+# Trajectory parameters
+CLEARANCE_HEIGHT = 0.15  # Height clearance above objects in meters
+APPROACH_OFFSET = np.array([0.0, 0.0, 0.03])  # Vertical offset for approach in meters
+DOWNWARD_ORIENTATION = np.array(
+    [[0.7071068, 0.0, 0.7071068, 0.0]]
+)  # Downward-facing quaternion [w, x, y, z]
+
+# Scene configuration
+ROBOT_USD_PATH = "./assets/robots/wxai/wxai_base.usd"
+ROBOT_SCENE_PATH = "/World/wxai_robot"
+GROUND_SCENE_PATH = "/World/ground"
+CUBE_SCENE_PATH = "/World/Cube"
+
 
 class WXAIPickPlace:
-    """Pick-and-place task with 9-phase state machine."""
+    """Pick-and-place task with trajectory-based motion control."""
 
-    def __init__(self, events_dt: list[float] | None = None):
-        """Initialize task.
-
-        Args:
-            events_dt: Duration in steps for each of the 9 phases
-        """
-        self.cube = None
-        self.robot = None
-
-        self.events_dt = events_dt
-        if self.events_dt is None:
-            self.events_dt = [
-                80,  # Pre-pick: above cube
-                50,  # Pick approach
-                30,  # Grasp
-                10,  # Post-pick lift
-                50,  # Pre-place: above target
-                50,  # Place approach
-                30,  # Release
-                40,  # Post-place retreat
-                80,  # Return home
-            ]
-        self._event = 0
-        self._step = 0
-
-    def setup_scene(
+    def __init__(
         self,
+        events_dt: list[int] | None = None,
         cube_initial_position: np.ndarray | None = None,
         cube_initial_orientation: np.ndarray | None = None,
         cube_size: np.ndarray | None = None,
         target_position: np.ndarray | None = None,
-        offset: np.ndarray | None = None,
-    ) -> None:
-        """Setup scene with robot, cube, and environment."""
-        self.cube_initial_position = cube_initial_position
-        self.cube_initial_orientation = cube_initial_orientation
-        self.target_position = target_position
-        self.cube_size = cube_size
-        self.offset = offset
+    ):
+        """Initialize pick-and-place task."""
+        self.cube_size = cube_size if cube_size is not None else DEFAULT_CUBE_SIZE
+        self.cube_initial_position = (
+            cube_initial_position
+            if cube_initial_position is not None
+            else DEFAULT_CUBE_POSITION
+        )
+        self.cube_initial_orientation = (
+            cube_initial_orientation
+            if cube_initial_orientation is not None
+            else DEFAULT_CUBE_ORIENTATION
+        )
+        self.target_position = (
+            target_position if target_position is not None else DEFAULT_TARGET_POSITION
+        )
 
-        if self.cube_size is None:
-            self.cube_size = np.array([0.0515, 0.0515, 0.0515])
-        if self.cube_initial_position is None:
-            self.cube_initial_position = np.array([0.35, -0.15, 0.05])
-        if self.cube_initial_orientation is None:
-            self.cube_initial_orientation = np.array([1, 0, 0, 0])
-        if self.target_position is None:
-            self.target_position = np.array([0.35, 0.25, 0.05])
-        if self.offset is None:
-            self.offset = np.array([0.0, 0.0, 0.0])
-        self.target_position = self.target_position + self.offset
+        self.events_dt = events_dt if events_dt is not None else DEFAULT_EVENTS_DT
 
+        self.clearance_height = CLEARANCE_HEIGHT
+        self.approach_offset = APPROACH_OFFSET
+        self.home_position = DEFAULT_HOME_POSITION
+
+        self.cube = None
+        self.robot = None
+        self.trajectory = None
+        self.trajectory_index = 0
+
+    def setup_scene(self) -> None:
+        """Initialize simulation scene with robot, cube, and environment."""
         stage_utils.create_new_stage(template="sunlight")
 
-        self.robot = WXAIController(robot_path="/World/wxai_robot", create_robot=True)
-        self.end_effector_link = self.robot.end_effector_link
+        # Spawn robot in scene
+        stage_utils.add_reference_to_stage(
+            usd_path=ROBOT_USD_PATH,
+            path=ROBOT_SCENE_PATH,
+        )
+
+        self.robot = WXAIController(robot_path=ROBOT_SCENE_PATH)
 
         stage_utils.add_reference_to_stage(
             usd_path=get_assets_root_path()
             + "/Isaac/Environments/Grid/default_environment.usd",
-            path="/World/ground",
+            path=GROUND_SCENE_PATH,
         )
 
         visual_material = PreviewSurfaceMaterial("/Visual_materials/blue")
         visual_material.set_input_values("diffuseColor", [0.0, 0.0, 1.0])
 
         cube_shape = Cube(
-            paths="/World/Cube",
+            paths=CUBE_SCENE_PATH,
             positions=self.cube_initial_position,
             orientations=self.cube_initial_orientation,
             sizes=[1.0],
@@ -142,184 +152,70 @@ class WXAIPickPlace:
         cube_shape.apply_visual_materials(visual_material)
 
     def forward(self) -> bool:
-        """Execute one step of the pick-and-place state machine."""
+        """Execute one simulation step of the pick-and-place trajectory.
+
+        Returns:
+            bool: True if trajectory is in progress, False if complete.
+        """
         if self.is_done():
             return False
 
-        goal_orientation = self.robot.get_downward_orientation()
+        if self.trajectory is None:
+            self.generate_pick_place_trajectory()
 
-        # Phase 0: Pre-pick (above cube)
-        if self._event == 0:
-            if self._step == 0:
-                print("Phase 0: Moving to pre-pick position...")
+        if self.trajectory_index < len(self.trajectory):
+            goal_position, goal_orientation, _ = self.trajectory[self.trajectory_index]
 
-            cube_pos = self.cube.get_world_poses()[0].numpy()
-            z_offset = 0.10
-            goal_position = np.array(
-                [cube_pos[0, 0], cube_pos[0, 1], cube_pos[0, 2] + z_offset]
-            )
             self.robot.set_end_effector_pose(
-                position=goal_position, orientation=goal_orientation
+                position=goal_position.reshape(1, -1),
+                orientation=goal_orientation.reshape(1, -1),
             )
 
-            self._step += 1
-            if self._step >= self.events_dt[0]:
-                self._event += 1
-                self._step = 0
+            self.trajectory_index += 1
 
-        # Phase 1: Pick approach
-        elif self._event == 1:
-            if self._step == 0:
-                print("Phase 1: Approaching pick position...")
+            phase_boundaries = [0]
+            cumulative = 0
+            for duration in self.events_dt:
+                cumulative += duration
+                phase_boundaries.append(cumulative)
 
-            cube_pos = self.cube.get_world_poses()[0].numpy()
-            goal_position = cube_pos + np.array([0.0, 0.0, 0.04])
-            self.robot.set_end_effector_pose(
-                position=goal_position, orientation=goal_orientation
-            )
-
-            self._step += 1
-            if self._step >= self.events_dt[1]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 2: Grasp
-        elif self._event == 2:
-            if self._step == 0:
-                print("Phase 2: Grasping cube...")
-
-            self.robot.close_gripper()
-
-            self._step += 1
-            if self._step >= self.events_dt[2]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 3: Post-pick lift
-        elif self._event == 3:
-            if self._step == 0:
-                print("Phase 3: Lifting cube...")
-
-            cube_pos = self.cube.get_world_poses()[0].numpy()
-            z_offset = 0.25
-            goal_position = cube_pos + np.array([0.0, 0.0, z_offset])
-            self.robot.set_end_effector_pose(
-                position=goal_position, orientation=goal_orientation
-            )
-
-            self._step += 1
-            if self._step >= self.events_dt[3]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 4: Pre-place (above target)
-        elif self._event == 4:
-            if self._step == 0:
-                print("Phase 4: Moving to pre-place position...")
-
-            z_offset = 0.25
-            goal_position = np.array(
-                [
-                    self.target_position[0],
-                    self.target_position[1],
-                    self.target_position[2] + z_offset,
-                ]
-            )
-            self.robot.set_end_effector_pose(
-                position=goal_position, orientation=goal_orientation
-            )
-
-            self._step += 1
-            if self._step >= self.events_dt[4]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 5: Place approach
-        elif self._event == 5:
-            if self._step == 0:
-                print("Phase 5: Approaching place position...")
-
-            target_pos = self.target_position + np.array([0.0, 0.0, 0.03])
-            self.robot.set_end_effector_pose(
-                position=target_pos, orientation=goal_orientation
-            )
-
-            self._step += 1
-            if self._step >= self.events_dt[5]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 6: Release
-        elif self._event == 6:
-            if self._step == 0:
-                print("Phase 6: Releasing cube...")
-
-            self.robot.open_gripper()
-
-            self._step += 1
-            if self._step >= self.events_dt[6]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 7: Post-place retreat
-        elif self._event == 7:
-            if self._step == 0:
-                print("Phase 7: Retreating...")
-
-            z_offset = 0.15
-            goal_position = self.target_position + np.array([0.0, 0.0, z_offset])
-            self.robot.set_end_effector_pose(
-                position=goal_position, orientation=goal_orientation
-            )
-
-            self._step += 1
-            if self._step >= self.events_dt[7]:
-                self._event += 1
-                self._step = 0
-
-        # Phase 8: Return home
-        elif self._event == 8:
-            if self._step == 0:
-                print("Phase 8: Returning home...")
-
-            home_position = np.array([0.2, 0.0, 0.3])
-            self.robot.set_end_effector_pose(
-                position=home_position, orientation=goal_orientation
-            )
-
-            self._step += 1
-            if self._step >= self.events_dt[8]:
-                self._event += 1
-                self._step = 0
+            if phase_boundaries[2] <= self.trajectory_index < phase_boundaries[3]:
+                self.robot.close_gripper()
+            elif phase_boundaries[6] <= self.trajectory_index < phase_boundaries[7]:
+                self.robot.open_gripper()
 
         return True
 
     def is_done(self) -> bool:
-        """Returns True if all phases complete."""
-        return self._event >= len(self.events_dt)
+        """Check if pick-and-place task is complete.
+
+        Returns:
+            bool: True if all trajectory waypoints have been executed.
+        """
+        return self.trajectory is not None and self.trajectory_index >= len(
+            self.trajectory
+        )
 
     def reset(
         self,
         cube_position: np.ndarray | None = None,
         cube_orientation: np.ndarray | None = None,
-    ):
+    ) -> None:
         """Reset task to initial state."""
-        print("Resetting pick-and-place...")
         self.reset_robot()
         self.reset_cube(position=cube_position, orientation=cube_orientation)
-        print("Reset complete")
 
-    def reset_robot(self):
-        """Reset robot and state machine."""
+    def reset_robot(self) -> None:
+        """Reset robot to default pose and clear trajectory."""
         if self.robot is not None:
             self.robot.reset_to_default_pose()
-            self._event = 0
-            self._step = 0
+            self.trajectory = None
+            self.trajectory_index = 0
 
     def reset_cube(
         self, position: np.ndarray | None = None, orientation: np.ndarray | None = None
-    ):
-        """Reset cube to initial pose."""
+    ) -> None:
+        """Reset cube to specified or initial pose."""
         if self.cube is not None:
             reset_position = (
                 position if position is not None else self.cube_initial_position
@@ -334,9 +230,95 @@ class WXAIPickPlace:
                 orientations=reset_orientation.reshape(1, -1),
             )
 
+    def make_trajectory(
+        self,
+        key_frames: list[np.ndarray],
+        orientations: list[np.ndarray],
+        dt: list[int],
+    ) -> list[tuple[np.ndarray, np.ndarray, int]]:
+        """Generate smooth trajectory via linear interpolation between keyframes.
+
+        Args:
+            key_frames: Position waypoints [x, y, z] in meters. Length must be len(dt) + 1.
+            orientations: Orientation quaternions [w, x, y, z] for each keyframe.
+            dt: Duration in steps for each trajectory segment.
+
+        Returns:
+            List of (position, orientation, cumulative_step) tuples.
+
+        Raises:
+            ValueError: If array lengths are incompatible.
+        """
+        if len(key_frames) != len(dt) + 1:
+            raise ValueError(f"Expected {len(dt) + 1} keyframes for {len(dt)} segments")
+        if len(orientations) != len(key_frames):
+            raise ValueError("Orientations must match keyframe count")
+
+        trajectory = []
+        cumulative_step = 0
+
+        for i in range(len(dt)):
+            start_pos = np.array(key_frames[i], dtype=np.float64)
+            end_pos = np.array(key_frames[i + 1], dtype=np.float64)
+            start_ori = np.array(orientations[i], dtype=np.float64)
+            n_steps = dt[i]
+
+            # Linear interpolation for each step in this segment
+            for step in range(n_steps):
+                alpha = step / n_steps if n_steps > 0 else 0.0
+                interpolated_pos = start_pos + alpha * (end_pos - start_pos)
+                trajectory.append((interpolated_pos, start_ori, cumulative_step + step))
+
+            cumulative_step += n_steps
+
+        trajectory.append(
+            (
+                np.array(key_frames[-1], dtype=np.float64),
+                np.array(orientations[-1], dtype=np.float64),
+                cumulative_step,
+            )
+        )
+
+        return trajectory
+
+    def generate_pick_place_trajectory(self) -> None:
+        """Generate complete pick-and-place trajectory from current state.
+
+        Creates a 9-phase trajectory with smooth linear interpolation:
+        1. Move to pre-pick position above cube
+        2. Descend to pick approach height
+        3. Close gripper
+        4. Lift cube with clearance
+        5. Move to pre-place position above target
+        6. Descend to place approach height
+        7. Open gripper
+        8. Retreat with clearance
+        9. Return to home position
+        """
+        cube_pos = self.cube.get_world_poses()[0].numpy().flatten()
+        _, current_ee_pos, _ = self.robot.get_current_state()
+        current_ee_pos = current_ee_pos[0]
+        key_frames = [
+            current_ee_pos,
+            cube_pos + np.array([0.0, 0.0, self.clearance_height]),
+            cube_pos + self.approach_offset,
+            cube_pos + self.approach_offset,
+            cube_pos + np.array([0.0, 0.0, self.clearance_height]),
+            self.target_position + np.array([0.0, 0.0, self.clearance_height]),
+            self.target_position + self.approach_offset,
+            self.target_position + self.approach_offset,
+            self.target_position + np.array([0.0, 0.0, self.clearance_height]),
+            self.home_position,
+        ]
+
+        goal_orientation = DOWNWARD_ORIENTATION[0]
+        orientations = [goal_orientation for _ in key_frames]
+
+        self.trajectory = self.make_trajectory(key_frames, orientations, self.events_dt)
+        self.trajectory_index = 0
+
 
 def main():
-    """Run pick-and-place demonstration."""
     print("WidowX AI Pick-and-Place Demo")
     simulation_app.update()
 
@@ -367,7 +349,12 @@ def main():
 if __name__ == "__main__":
     try:
         main()
+    except KeyboardInterrupt:
+        print("\nStopping pick and place demo...")
     except Exception as e:
         print(f"Error: {e}")
+        import traceback
+
+        traceback.print_exc()
     finally:
         simulation_app.close()
