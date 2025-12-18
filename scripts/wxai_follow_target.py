@@ -33,7 +33,7 @@ This script demonstrates continuous target tracking where the robot's end
 effector follows a manually movable target cube.
 
 Usage:
-    ~/isaacsim5.1/python.sh scripts/wxai_follow_target.py
+    ~/isaacsim/python.sh scripts/wxai_follow_target.py
 """
 
 from __future__ import annotations
