@@ -185,8 +185,8 @@ class WXAIController(Articulation):
         """Command end effector to target Cartesian pose using differential IK.
 
         Args:
-            position: Target position [x, y, z] in meters. Shape: (3,) or (batch_size, 3).
-            orientation: Target orientation quaternion [w, x, y, z]. Shape: (4,) or (batch_size, 4).
+            position: Target position [x, y, z] in meters. Shape: (3,).
+            orientation: Target orientation quaternion [w, x, y, z]. Shape: (4,).
         """
 
         (
@@ -195,8 +195,8 @@ class WXAIController(Articulation):
             _,
         ) = self.get_current_state()
 
-        if position.ndim == 1:
-            position = position.reshape(1, -1)
+        position = position.reshape(1, -1)
+        orientation = orientation.reshape(1, -1)
 
         goal_wrist_position = self._transform_ee_to_wrist_frame(position, orientation)
 

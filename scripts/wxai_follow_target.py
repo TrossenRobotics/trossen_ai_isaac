@@ -137,8 +137,8 @@ class WXAIFollowTarget:
     def forward(self) -> None:
         """Execute one tracking step by commanding end effector to current target pose."""
         target_position, target_orientation = self.target.get_world_poses()
-        target_position = target_position.numpy()
-        target_orientation = target_orientation.numpy()
+        target_position = target_position.numpy().flatten()
+        target_orientation = target_orientation.numpy().flatten()
 
         self.robot.set_end_effector_pose(
             position=target_position, orientation=target_orientation
