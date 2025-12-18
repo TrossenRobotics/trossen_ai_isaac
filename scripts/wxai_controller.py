@@ -33,9 +33,6 @@ This module provides a controller for the WidowX AI manipulator with
 differential inverse kinematics and gripper control.
 """
 
-from typing import Optional
-
-import isaacsim.core.experimental.utils.stage as stage_utils
 import numpy as np
 import warp as wp
 from isaacsim.core.experimental.prims import Articulation, RigidPrim
@@ -45,51 +42,61 @@ from isaacsim.core.experimental.utils.impl.transform import (
 )
 from scipy.spatial.transform import Rotation
 
+# Robot configuration constants
+DEFAULT_ROBOT_PATH = "/World/wxai_robot"
+END_EFFECTOR_LINK_NAME = "link_6"
+
+# End effector offset from link_6 in meters [x, y, z]
+EE_OFFSET = np.array([0.1055, 0.0, 0.0])
+
+# Inverse kinematics parameters
+DEFAULT_IK_SCALE = 0.5  # Scaling factor for joint velocity commands
+DEFAULT_IK_DAMPING = 0.03  # Damping for singularity robustness
+
+# Gripper position limits in meters
+GRIPPER_OPEN_POSITION = 0.044
+GRIPPER_CLOSED_POSITION = 0.022
+
+# Default joint configuration (all zeros with gripper open)
+DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+
 
 class WXAIController(Articulation):
     """Controller for WidowX AI manipulator with differential IK and gripper control."""
 
     def __init__(
         self,
-        robot_path: str = "/World/wxai_robot",
-        usd_path: str = None,
-        create_robot: bool = True,
-        end_effector_link: Optional[RigidPrim] = None,
+        robot_path: str = DEFAULT_ROBOT_PATH,
+        end_effector_link: RigidPrim | None = None,
+        ik_scale: float = DEFAULT_IK_SCALE,
+        ik_damping: float = DEFAULT_IK_DAMPING,
     ):
-        """Initialize controller.
+        """Initialize WidowX AI controller.
 
         Args:
-            robot_path: Scene path for robot
-            usd_path: Path to robot USD file (default: ./assets/robots/wxai/wxai_base.usd)
-            create_robot: Whether to create robot or use existing
-            end_effector_link: Custom end effector link (default: link_6)
+            robot_path: USD scene path for the robot that already exists in the scene.
+            end_effector_link: Custom end effector link. Defaults to 'link_6'.
+            ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0).
+                Lower values provide smoother, more stable motion. Default: 0.5
+            ik_damping: Damping factor for singularity robustness (0.0-0.1).
+                Higher values improve stability near singularities. Default: 0.03
         """
-        if create_robot:
-            if usd_path is None:
-                usd_path = "./assets/robots/wxai/wxai_base.usd"
-
-            stage_utils.add_reference_to_stage(
-                usd_path=usd_path,
-                path=robot_path,
-            )
-
         super().__init__(robot_path)
 
-        if end_effector_link is None:
-            self.end_effector_link = RigidPrim(f"{robot_path}/link_6")
-        else:
-            self.end_effector_link = end_effector_link
+        self.end_effector_link = (
+            end_effector_link
+            if end_effector_link is not None
+            else RigidPrim(f"{robot_path}/{END_EFFECTOR_LINK_NAME}")
+        )
+        self.end_effector_link_index = self.get_link_indices(
+            END_EFFECTOR_LINK_NAME
+        ).list()[0]
+        self.ee_offset = EE_OFFSET
 
-        self.ee_offset = self.get_gripper_center_offset()
+        self.ik_scale = ik_scale
+        self.ik_damping = ik_damping
 
-        if create_robot:
-            self.set_default_state(
-                dof_positions=[0.0, 1.2, 1.0, 0.0, 0.0, 0.0, 0.044, 0.044]
-            )
-
-        self.end_effector_link_index = self.get_link_indices("link_6").list()[0]
-        self.gripper_open_position = 0.044
-        self.gripper_closed_position = 0.015
+        self.set_default_state(dof_positions=DEFAULT_DOF_POSITIONS)
 
     def differential_inverse_kinematics(
         self,
@@ -97,12 +104,20 @@ class WXAIController(Articulation):
         current_position: np.ndarray,
         current_orientation: np.ndarray,
         goal_position: np.ndarray,
-        goal_orientation: Optional[np.ndarray] = None,
+        goal_orientation: np.ndarray | None = None,
     ) -> np.ndarray:
-        """Compute joint delta using damped least-squares IK."""
-        scale = 1.0
-        damping = 0.05
+        """Compute joint velocity commands using damped least-squares IK.
 
+        Args:
+            jacobian_end_effector: End effector Jacobian matrix (batch_size, 6, num_joints).
+            current_position: Current end effector position (batch_size, 3).
+            current_orientation: Current orientation quaternion (batch_size, 4) [w, x, y, z].
+            goal_position: Target position (batch_size, 3).
+            goal_orientation: Target orientation quaternion (batch_size, 4). Uses current if None.
+
+        Returns:
+            Joint position deltas (batch_size, num_joints).
+        """
         goal_orientation = (
             current_orientation if goal_orientation is None else goal_orientation
         )
@@ -122,25 +137,30 @@ class WXAIController(Articulation):
         )
 
         transpose = np.swapaxes(jacobian_end_effector, 1, 2)
-        lmbda = np.eye(jacobian_end_effector.shape[1]) * (damping**2)
+        lmbda = np.eye(jacobian_end_effector.shape[1]) * (self.ik_damping**2)
         return (
-            scale
+            self.ik_scale
             * transpose
             @ np.linalg.inv(jacobian_end_effector @ transpose + lmbda)
             @ error
         ).squeeze(-1)
 
     def get_current_state(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Returns (joint_positions, ee_position, ee_orientation)."""
+        """Get current robot state.
+
+        Returns:
+            Tuple of (joint_positions, end_effector_position, end_effector_orientation).
+            Shapes: (batch_size, 8), (batch_size, 3), (batch_size, 4)
+        """
         current_dof_positions = self.get_dof_positions().numpy()
-        link6_position, link6_orientation = self.end_effector_link.get_world_poses()
-        link6_position = link6_position.numpy()
-        link6_orientation = link6_orientation.numpy()
+        wrist_position, wrist_orientation = self.end_effector_link.get_world_poses()
+        wrist_position = wrist_position.numpy()
+        wrist_orientation = wrist_orientation.numpy()
 
         current_end_effector_position = self._transform_offset_to_world(
-            link6_position, link6_orientation, self.ee_offset
+            wrist_position, wrist_orientation, self.ee_offset
         )
-        current_end_effector_orientation = link6_orientation
+        current_end_effector_orientation = wrist_orientation
 
         return (
             current_dof_positions,
@@ -152,98 +172,80 @@ class WXAIController(Articulation):
         self, position: np.ndarray, orientation: np.ndarray, offset: np.ndarray
     ) -> np.ndarray:
         """Transform local offset to world coordinates."""
-        result_positions = []
-        for i in range(position.shape[0]):
-            quat = orientation[i]
-            quat_scipy = np.array([quat[1], quat[2], quat[3], quat[0]])
-            rotation = Rotation.from_quat(quat_scipy)
-            offset_world = rotation.apply(offset)
-            result_positions.append(position[i] + offset_world)
-
-        return np.array(result_positions)
+        quat_scipy = orientation[:, [1, 2, 3, 0]]
+        rotation = Rotation.from_quat(quat_scipy)
+        offset_world = rotation.apply(np.tile(offset, (position.shape[0], 1)))
+        return position + offset_world
 
     def set_end_effector_pose(
         self,
         position: np.ndarray,
         orientation: np.ndarray,
     ) -> None:
-        """Command end effector to target pose using differential IK.
+        """Command end effector to target Cartesian pose using differential IK.
 
         Args:
-            position: Target position [x, y, z]
-            orientation: Target quaternion [w, x, y, z]
+            position: Target position [x, y, z] in meters. Shape: (3,) or (batch_size, 3).
+            orientation: Target orientation quaternion [w, x, y, z]. Shape: (4,) or (batch_size, 4).
         """
 
         (
             current_dof_positions,
-            current_end_effector_position,
-            current_end_effector_orientation,
+            _,
+            _,
         ) = self.get_current_state()
 
         if position.ndim == 1:
             position = position.reshape(1, -1)
 
-        goal_link6_position = self._transform_ee_goal_to_link6(position, orientation)
+        goal_wrist_position = self._transform_ee_to_wrist_frame(position, orientation)
 
         jacobian_matrices = self.get_jacobian_matrices().numpy()
         jacobian_end_effector = jacobian_matrices[
             :, self.end_effector_link_index - 1, :, :6
         ]
 
-        link6_position, link6_orientation = self.end_effector_link.get_world_poses()
-        link6_position = link6_position.numpy()
-        link6_orientation = link6_orientation.numpy()
+        wrist_position, wrist_orientation = self.end_effector_link.get_world_poses()
+        wrist_position = wrist_position.numpy()
+        wrist_orientation = wrist_orientation.numpy()
 
         delta_dof_positions = self.differential_inverse_kinematics(
             jacobian_end_effector=jacobian_end_effector,
-            current_position=link6_position,
-            current_orientation=link6_orientation,
-            goal_position=goal_link6_position,
+            current_position=wrist_position,
+            current_orientation=wrist_orientation,
+            goal_position=goal_wrist_position,
             goal_orientation=orientation,
         )
 
         dof_position_targets = current_dof_positions[:, :6] + delta_dof_positions
         self.set_dof_position_targets(dof_position_targets, dof_indices=list(range(6)))
 
-    def _transform_ee_goal_to_link6(
+    def _transform_ee_to_wrist_frame(
         self, ee_position: np.ndarray, ee_orientation: np.ndarray
     ) -> np.ndarray:
-        """Convert end effector goal to link_6 frame."""
-        result_positions = []
-        for i in range(ee_position.shape[0]):
-            quat = ee_orientation[i]
-            quat_scipy = np.array([quat[1], quat[2], quat[3], quat[0]])
-            rotation = Rotation.from_quat(quat_scipy)
-            offset_world = rotation.apply(self.ee_offset)
-            result_positions.append(ee_position[i] - offset_world)
-
-        return np.array(result_positions)
+        """Convert end effector goal to wrist (link_6) frame."""
+        quat_scipy = ee_orientation[:, [1, 2, 3, 0]]
+        rotation = Rotation.from_quat(quat_scipy)
+        offset_world = rotation.apply(
+            np.tile(self.ee_offset, (ee_position.shape[0], 1))
+        )
+        return ee_position - offset_world
 
     def open_gripper(self) -> None:
-        """Open gripper."""
-        position = np.array([[self.gripper_open_position]])
-        self.set_dof_position_targets(position, dof_indices=[6])
+        self.set_gripper_position(GRIPPER_OPEN_POSITION)
 
     def close_gripper(self) -> None:
-        """Close gripper."""
-        position = np.array([[self.gripper_closed_position]])
-        self.set_dof_position_targets(position, dof_indices=[6])
+        self.set_gripper_position(GRIPPER_CLOSED_POSITION)
 
     def set_gripper_position(self, position: float) -> None:
-        """Set gripper opening (0.015 = closed, 0.044 = open)."""
-        position_array = np.array([[position]])
-        self.set_dof_position_targets(position_array, dof_indices=[6])
+        """Set gripper opening width.
 
-    def get_downward_orientation(self) -> np.ndarray:
-        """Returns downward-facing orientation quaternion."""
-        return np.array([[0.7071068, 0.0, 0.7071068, 0.0]])
-
-    def get_gripper_center_offset(self) -> np.ndarray:
-        """Returns gripper center offset from link_6 in meters."""
-        return np.array([0.1055, 0.0, 0.0])
+        Args:
+            position: Gripper width in meters (0.022 = closed, 0.044 = open).
+        """
+        self.set_dof_position_targets(np.array([[position]]), dof_indices=[6])
 
     def reset_to_default_pose(self) -> None:
-        """Reset to default pose."""
-        default_positions = np.array([[0.0, 1.2, 1.0, 0.0, 0.0, 0.0, 0.044, 0.044]])
+        default_positions = np.array([DEFAULT_DOF_POSITIONS])
         self.set_dof_positions(default_positions)
         self.set_dof_position_targets(default_positions)
