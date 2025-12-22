@@ -56,7 +56,7 @@ from isaacsim.core.simulation_manager import SimulationManager  # noqa: E402
 from isaacsim.storage.native import get_assets_root_path  # noqa: E402
 
 sys.path.append(os.path.dirname(__file__))
-from controller import TrossenAIController  # noqa: E402
+from controller import RobotType, TrossenAIController  # noqa: E402
 
 # Default target configuration
 DEFAULT_TARGET_POSITION = np.array([0.3, 0.0, 0.2])
@@ -118,7 +118,7 @@ class WXAIFollowTarget:
 
         self.robot = TrossenAIController(
             robot_path=ROBOT_SCENE_PATH,
-            robot_type="wxai",
+            robot_type=RobotType.WXAI,
             arm_dof_indices=WXAI_ARM_DOF_INDICES,
             gripper_dof_index=WXAI_GRIPPER_DOF_INDEX,
             default_dof_positions=WXAI_DEFAULT_DOF_POSITIONS,
