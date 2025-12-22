@@ -56,7 +56,7 @@ from isaacsim.core.simulation_manager import SimulationManager  # noqa: E402
 from isaacsim.storage.native import get_assets_root_path  # noqa: E402
 
 sys.path.append(os.path.dirname(__file__))
-from wxai_controller import WXAIController  # noqa: E402
+from scripts.controller import WXAIController  # noqa: E402
 
 # Default target configuration
 DEFAULT_TARGET_POSITION = np.array([0.3, 0.0, 0.2])
