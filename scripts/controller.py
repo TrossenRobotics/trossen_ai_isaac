@@ -261,15 +261,12 @@ class TrossenAIController(Articulation):
         goal_wrist_position = self._transform_ee_to_wrist_frame(position, orientation)
 
         jacobian_matrices = self.get_jacobian_matrices().numpy()
+        jacobian_full = jacobian_matrices[:, self.end_effector_link_index - 1, :, :]
 
         if self.robot_type == "wxai":
-            jacobian_end_effector = jacobian_matrices[
-                :, self.end_effector_link_index - 1, :, :6
-            ]
+            jacobian_end_effector = jacobian_full[:, :, :6]
         else:
-            jacobian_end_effector = jacobian_matrices[
-                :, self.end_effector_link_index - 1, :, :
-            ][:, :, self.arm_dof_indices]
+            jacobian_end_effector = jacobian_full[:, :, self.arm_dof_indices]
 
         wrist_position, wrist_orientation = self.end_effector_link.get_world_poses()
         wrist_position = wrist_position.numpy()
