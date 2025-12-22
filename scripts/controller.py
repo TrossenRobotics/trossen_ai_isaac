@@ -36,6 +36,8 @@ Supports:
 - Stationary AI
 """
 
+from enum import Enum
+
 import numpy as np
 import warp as wp
 from isaacsim.core.experimental.prims import Articulation, RigidPrim
@@ -45,9 +47,20 @@ from isaacsim.core.experimental.utils.impl.transform import (
 )
 from scipy.spatial.transform import Rotation
 
+
+class RobotType(Enum):
+    """Supported robot types."""
+
+    WXAI = "wxai"
+    STATIONARY_AI = "stationary_ai"
+
+
 # Robot configuration constants
 DEFAULT_ROBOT_PATH = "/World/wxai_robot"
 END_EFFECTOR_LINK_NAME = "link_6"
+
+# Number of arm joints (excludes gripper)
+NUM_ARM_JOINTS_WXAI = 6
 
 # End effector offset from link_6 in meters [x, y, z]
 EE_OFFSET = np.array([0.1055, 0.0, 0.0])
@@ -95,7 +108,7 @@ class TrossenAIController(Articulation):
     def __init__(
         self,
         robot_path: str = DEFAULT_ROBOT_PATH,
-        robot_type: str = "wxai",
+        robot_type: RobotType = RobotType.WXAI,
         end_effector_link: RigidPrim | None = None,
         ik_scale: float = DEFAULT_IK_SCALE,
         ik_damping: float = DEFAULT_IK_DAMPING,
@@ -107,7 +120,7 @@ class TrossenAIController(Articulation):
 
         Args:
             robot_path: USD scene path for the robot that already exists in the scene.
-            robot_type: Type of robot (e.g., "wxai", "stationary_ai"). Default: "wxai"
+            robot_type: Type of robot (RobotType.WXAI or RobotType.STATIONARY_AI). Default: RobotType.WXAI
             end_effector_link: End effector link. If None, defaults to 'link_6'.
             ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0). Default: 0.5
             ik_damping: Damping factor for singularity robustness (0.0-0.1). Default: 0.03
@@ -263,8 +276,8 @@ class TrossenAIController(Articulation):
         jacobian_matrices = self.get_jacobian_matrices().numpy()
         jacobian_full = jacobian_matrices[:, self.end_effector_link_index - 1, :, :]
 
-        if self.robot_type == "wxai":
-            jacobian_end_effector = jacobian_full[:, :, :6]
+        if self.robot_type == RobotType.WXAI:
+            jacobian_end_effector = jacobian_full[:, :, :NUM_ARM_JOINTS_WXAI]
         else:
             jacobian_end_effector = jacobian_full[:, :, self.arm_dof_indices]
 
@@ -280,10 +293,12 @@ class TrossenAIController(Articulation):
             goal_orientation=orientation,
         )
 
-        if self.robot_type == "wxai":
-            dof_position_targets = current_dof_positions[:, :6] + delta_dof_positions
+        if self.robot_type == RobotType.WXAI:
+            dof_position_targets = (
+                current_dof_positions[:, :NUM_ARM_JOINTS_WXAI] + delta_dof_positions
+            )
             self.set_dof_position_targets(
-                dof_position_targets, dof_indices=list(range(6))
+                dof_position_targets, dof_indices=list(range(NUM_ARM_JOINTS_WXAI))
             )
         else:
             dof_position_targets = (
