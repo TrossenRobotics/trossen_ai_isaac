@@ -56,7 +56,7 @@ from isaacsim.core.simulation_manager import SimulationManager  # noqa: E402
 from isaacsim.storage.native import get_assets_root_path  # noqa: E402
 
 sys.path.append(os.path.dirname(__file__))
-from scripts.controller import WXAIController  # noqa: E402
+from controller import TrossenAIController  # noqa: E402
 
 # Default target configuration
 DEFAULT_TARGET_POSITION = np.array([0.3, 0.0, 0.2])
@@ -68,6 +68,11 @@ ROBOT_USD_PATH = "./assets/robots/wxai/wxai_base.usd"
 ROBOT_SCENE_PATH = "/World/wxai_robot"
 GROUND_SCENE_PATH = "/World/ground"
 TARGET_SCENE_PATH = "/World/TargetCube"
+
+# Robot controller configuration
+WXAI_ARM_DOF_INDICES = [0, 1, 2, 3, 4, 5]
+WXAI_GRIPPER_DOF_INDEX = 6
+WXAI_DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
 
 
 class WXAIFollowTarget:
@@ -111,7 +116,13 @@ class WXAIFollowTarget:
             path=ROBOT_SCENE_PATH,
         )
 
-        self.robot = WXAIController(robot_path=ROBOT_SCENE_PATH)
+        self.robot = TrossenAIController(
+            robot_path=ROBOT_SCENE_PATH,
+            robot_type="wxai",
+            arm_dof_indices=WXAI_ARM_DOF_INDICES,
+            gripper_dof_index=WXAI_GRIPPER_DOF_INDEX,
+            default_dof_positions=WXAI_DEFAULT_DOF_POSITIONS,
+        )
 
         stage_utils.add_reference_to_stage(
             usd_path=get_assets_root_path()
