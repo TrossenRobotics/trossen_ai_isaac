@@ -27,10 +27,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 """
-WidowX AI Robot Controller.
+Trossen AI Robot Controller.
 
-This module provides a controller for the WidowX AI manipulator with
+This module provides a controller for Trossen AI robots with
 differential inverse kinematics and gripper control.
+Supports:
+- WidowX AI
+- Stationary AI
 """
 
 import numpy as np
@@ -57,46 +60,94 @@ DEFAULT_IK_DAMPING = 0.03  # Damping for singularity robustness
 GRIPPER_OPEN_POSITION = 0.044
 GRIPPER_CLOSED_POSITION = 0.022  # Gripper closed around the cube
 
-# Default joint configuration (all zeros with gripper open)
-DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+# Default joint configuration for WidowX AI (8 DOFs: 6 arm joints + 2 gripper fingers)
+DEFAULT_DOF_POSITIONS_WXAI = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+
+# Default joint configuration for Stationary AI (16 DOFs: 2 arms interleaved + 4 gripper fingers)
+DEFAULT_DOF_POSITIONS_STATIONARY_AI = [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.044,
+    0.044,
+    0.044,
+    0.044,
+]
 
 
-class WXAIController(Articulation):
-    """Controller for WidowX AI manipulator with differential IK and gripper control."""
+class TrossenAIController(Articulation):
+    """Controller for Trossen AI robots with differential IK and gripper control.
+
+    Supported robots:
+    - WidowX AI: 8 DOFs (6 arm joints + 2 gripper fingers)
+    - Stationary AI: 16 DOFs (6 + 6 left and right arm joints, 2 + 2 left and right gripper fingers)
+    """
 
     def __init__(
         self,
         robot_path: str = DEFAULT_ROBOT_PATH,
+        robot_type: str = "wxai",
         end_effector_link: RigidPrim | None = None,
         ik_scale: float = DEFAULT_IK_SCALE,
         ik_damping: float = DEFAULT_IK_DAMPING,
+        arm_dof_indices: list[int] | None = None,
+        gripper_dof_index: int | None = None,
+        default_dof_positions: list[float] | None = None,
     ):
-        """Initialize WidowX AI controller.
+        """Initialize Trossen AI robot controller.
 
         Args:
             robot_path: USD scene path for the robot that already exists in the scene.
-            end_effector_link: Custom end effector link. Defaults to 'link_6'.
-            ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0).
-                Lower values provide smoother, more stable motion. Default: 0.5
-            ik_damping: Damping factor for singularity robustness (0.0-0.1).
-                Higher values improve stability near singularities. Default: 0.03
+            robot_type: Type of robot (e.g., "wxai", "stationary_ai"). Default: "wxai"
+            end_effector_link: End effector link. If None, defaults to 'link_6'.
+            ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0). Default: 0.5
+            ik_damping: Damping factor for singularity robustness (0.0-0.1). Default: 0.03
+            arm_dof_indices: DOF indices for the arm joints. Required.
+            gripper_dof_index: DOF index for the gripper. Required.
+            default_dof_positions: Default joint configuration for reset. Required.
         """
         super().__init__(robot_path)
 
-        self.end_effector_link = (
-            end_effector_link
-            if end_effector_link is not None
-            else RigidPrim(f"{robot_path}/{END_EFFECTOR_LINK_NAME}")
-        )
-        self.end_effector_link_index = self.get_link_indices(
-            END_EFFECTOR_LINK_NAME
-        ).list()[0]
+        self.robot_type = robot_type
+
+        if arm_dof_indices is not None:
+            self.arm_dof_indices = arm_dof_indices
+        else:
+            raise ValueError("arm_dof_indices must be provided")
+
+        if gripper_dof_index is not None:
+            self.gripper_dof_index = gripper_dof_index
+        else:
+            raise ValueError("gripper_dof_index must be provided")
+
+        if default_dof_positions is not None:
+            self.default_dof_positions = default_dof_positions
+        else:
+            raise ValueError("default_dof_positions must be provided")
+
+        if end_effector_link is not None:
+            self.end_effector_link = end_effector_link
+            link_name = end_effector_link.paths[0].split("/")[-1]
+        else:
+            self.end_effector_link = RigidPrim(f"{robot_path}/{END_EFFECTOR_LINK_NAME}")
+            link_name = END_EFFECTOR_LINK_NAME
+
+        self.end_effector_link_index = self.get_link_indices(link_name).list()[0]
         self.ee_offset = EE_OFFSET
 
         self.ik_scale = ik_scale
         self.ik_damping = ik_damping
 
-        self.set_default_state(dof_positions=DEFAULT_DOF_POSITIONS)
+        self.set_default_state(dof_positions=self.default_dof_positions)
 
     def differential_inverse_kinematics(
         self,
@@ -150,7 +201,7 @@ class WXAIController(Articulation):
 
         Returns:
             Tuple of (joint_positions, end_effector_position, end_effector_orientation).
-            Shapes: (batch_size, 8), (batch_size, 3), (batch_size, 4)
+            Shapes: (batch_size, num_dofs), (batch_size, 3), (batch_size, 4)
         """
         current_dof_positions = self.get_dof_positions().numpy()
         wrist_position, wrist_orientation = self.end_effector_link.get_world_poses()
@@ -171,7 +222,16 @@ class WXAIController(Articulation):
     def _transform_offset_to_world(
         self, position: np.ndarray, orientation: np.ndarray, offset: np.ndarray
     ) -> np.ndarray:
-        """Transform local offset to world coordinates."""
+        """Transform local offset to world coordinates.
+
+        Args:
+            position: Position in world frame (batch_size, 3).
+            orientation: Orientation quaternion [w, x, y, z] (batch_size, 4).
+            offset: Local offset vector [x, y, z].
+
+        Returns:
+            World position with offset applied (batch_size, 3).
+        """
         quat_scipy = orientation[:, [1, 2, 3, 0]]
         rotation = Rotation.from_quat(quat_scipy)
         offset_world = rotation.apply(np.tile(offset, (position.shape[0], 1)))
@@ -185,8 +245,8 @@ class WXAIController(Articulation):
         """Command end effector to target Cartesian pose using differential IK.
 
         Args:
-            position: Target position [x, y, z] in meters. Shape: (3,).
-            orientation: Target orientation quaternion [w, x, y, z]. Shape: (4,).
+            position: Target position [x, y, z] in meters. Shape: (3,) or (1, 3).
+            orientation: Target orientation quaternion [w, x, y, z]. Shape: (4,) or (1, 4).
         """
 
         (
@@ -201,9 +261,15 @@ class WXAIController(Articulation):
         goal_wrist_position = self._transform_ee_to_wrist_frame(position, orientation)
 
         jacobian_matrices = self.get_jacobian_matrices().numpy()
-        jacobian_end_effector = jacobian_matrices[
-            :, self.end_effector_link_index - 1, :, :6
-        ]
+
+        if self.robot_type == "wxai":
+            jacobian_end_effector = jacobian_matrices[
+                :, self.end_effector_link_index - 1, :, :6
+            ]
+        else:
+            jacobian_end_effector = jacobian_matrices[
+                :, self.end_effector_link_index - 1, :, :
+            ][:, :, self.arm_dof_indices]
 
         wrist_position, wrist_orientation = self.end_effector_link.get_world_poses()
         wrist_position = wrist_position.numpy()
@@ -217,13 +283,31 @@ class WXAIController(Articulation):
             goal_orientation=orientation,
         )
 
-        dof_position_targets = current_dof_positions[:, :6] + delta_dof_positions
-        self.set_dof_position_targets(dof_position_targets, dof_indices=list(range(6)))
+        if self.robot_type == "wxai":
+            dof_position_targets = current_dof_positions[:, :6] + delta_dof_positions
+            self.set_dof_position_targets(
+                dof_position_targets, dof_indices=list(range(6))
+            )
+        else:
+            dof_position_targets = (
+                current_dof_positions[:, self.arm_dof_indices] + delta_dof_positions
+            )
+            self.set_dof_position_targets(
+                dof_position_targets, dof_indices=self.arm_dof_indices
+            )
 
     def _transform_ee_to_wrist_frame(
         self, ee_position: np.ndarray, ee_orientation: np.ndarray
     ) -> np.ndarray:
-        """Convert end effector goal to wrist (link_6) frame."""
+        """Convert end effector goal to wrist (link_6) frame.
+
+        Args:
+            ee_position: End effector position (batch_size, 3).
+            ee_orientation: End effector orientation quaternion [w, x, y, z] (batch_size, 4).
+
+        Returns:
+            Wrist position in world frame (batch_size, 3).
+        """
         quat_scipy = ee_orientation[:, [1, 2, 3, 0]]
         rotation = Rotation.from_quat(quat_scipy)
         offset_world = rotation.apply(
@@ -232,9 +316,11 @@ class WXAIController(Articulation):
         return ee_position - offset_world
 
     def open_gripper(self) -> None:
+        """Open the gripper to maximum width (0.044 meters)."""
         self.set_gripper_position(GRIPPER_OPEN_POSITION)
 
     def close_gripper(self) -> None:
+        """Close the gripper around object (0.022 meters)."""
         self.set_gripper_position(GRIPPER_CLOSED_POSITION)
 
     def set_gripper_position(self, position: float) -> None:
@@ -243,9 +329,12 @@ class WXAIController(Articulation):
         Args:
             position: Gripper width in meters (0.022 = closed, 0.044 = open).
         """
-        self.set_dof_position_targets(np.array([[position]]), dof_indices=[6])
+        self.set_dof_position_targets(
+            np.array([[position]]), dof_indices=[self.gripper_dof_index]
+        )
 
     def reset_to_default_pose(self) -> None:
-        default_positions = np.array([DEFAULT_DOF_POSITIONS])
+        """Reset robot to default configuration with all joints at zero and gripper open."""
+        default_positions = np.array([self.default_dof_positions])
         self.set_dof_positions(default_positions)
         self.set_dof_position_targets(default_positions)
