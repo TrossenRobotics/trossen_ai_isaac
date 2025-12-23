@@ -278,8 +278,10 @@ class TrossenAIController(Articulation):
 
         if self.robot_type == RobotType.WXAI:
             jacobian_end_effector = jacobian_full[:, :, :NUM_ARM_JOINTS_WXAI]
-        else:
+        elif self.robot_type == RobotType.STATIONARY_AI:
             jacobian_end_effector = jacobian_full[:, :, self.arm_dof_indices]
+        else:
+            raise ValueError(f"Unsupported robot_type: {self.robot_type}")
 
         wrist_position, wrist_orientation = self.end_effector_link.get_world_poses()
         wrist_position = wrist_position.numpy()
@@ -300,13 +302,15 @@ class TrossenAIController(Articulation):
             self.set_dof_position_targets(
                 dof_position_targets, dof_indices=list(range(NUM_ARM_JOINTS_WXAI))
             )
-        else:
+        elif self.robot_type == RobotType.STATIONARY_AI:
             dof_position_targets = (
                 current_dof_positions[:, self.arm_dof_indices] + delta_dof_positions
             )
             self.set_dof_position_targets(
                 dof_position_targets, dof_indices=self.arm_dof_indices
             )
+        else:
+            raise ValueError(f"Unsupported robot_type: {self.robot_type}")
 
     def _transform_ee_to_wrist_frame(
         self, ee_position: np.ndarray, ee_orientation: np.ndarray
