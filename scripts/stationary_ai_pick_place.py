@@ -103,24 +103,7 @@ LEFT_ARM_DOF_INDICES = [0, 2, 4, 6, 8, 10]
 LEFT_GRIPPER_DOF_INDEX = 12
 RIGHT_ARM_DOF_INDICES = [1, 3, 5, 7, 9, 11]
 RIGHT_GRIPPER_DOF_INDEX = 14
-STATIONARY_AI_DEFAULT_DOF_POSITIONS = [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.044,
-    0.044,
-    0.044,
-    0.044,
-]
+STATIONARY_AI_DEFAULT_DOF_POSITIONS = [0.0] * 12 + [0.044] * 4
 
 
 class StationaryAIPickPlace:
