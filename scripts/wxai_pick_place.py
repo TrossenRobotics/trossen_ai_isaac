@@ -226,28 +226,30 @@ class WXAIPickPlace:
 
     def reset_robot(self) -> None:
         """Reset robot to default pose and clear trajectory."""
-        if self.robot is not None:
-            self.robot.reset_to_default_pose()
-            self.trajectory = None
-            self.trajectory_index = 0
+        if self.robot is None:
+            raise RuntimeError("Cannot reset robot: robot not initialized.")
+
+        self.robot.reset_to_default_pose()
+        self.trajectory = None
+        self.trajectory_index = 0
 
     def reset_cube(
         self, position: np.ndarray | None = None, orientation: np.ndarray | None = None
     ) -> None:
         """Reset cube to specified or initial pose."""
-        if self.cube is not None:
-            reset_position = (
-                position if position is not None else self.cube_initial_position
-            )
-            reset_orientation = (
-                orientation
-                if orientation is not None
-                else self.cube_initial_orientation
-            )
-            self.cube.set_world_poses(
-                positions=reset_position.reshape(1, -1),
-                orientations=reset_orientation.reshape(1, -1),
-            )
+        if self.cube is None:
+            raise RuntimeError("Cannot reset cube: cube not initialized.")
+
+        reset_position = (
+            position if position is not None else self.cube_initial_position
+        )
+        reset_orientation = (
+            orientation if orientation is not None else self.cube_initial_orientation
+        )
+        self.cube.set_world_poses(
+            positions=reset_position.reshape(1, -1),
+            orientations=reset_orientation.reshape(1, -1),
+        )
 
     def make_trajectory(
         self,

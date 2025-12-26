@@ -161,24 +161,27 @@ class WXAIFollowTarget:
         target_orientation: np.ndarray | None = None,
     ) -> None:
         """Reset robot and target to initial state."""
-        if self.robot is not None:
-            self.robot.reset_to_default_pose()
+        if self.robot is None:
+            raise RuntimeError("Cannot reset robot: robot not initialized.")
+        if self.target is None:
+            raise RuntimeError("Cannot reset target: target not initialized.")
 
-        if self.target is not None:
-            reset_position = (
-                target_position
-                if target_position is not None
-                else self.target_initial_position
-            )
-            reset_orientation = (
-                target_orientation
-                if target_orientation is not None
-                else self.target_initial_orientation
-            )
-            self.target.set_world_poses(
-                positions=reset_position.reshape(1, -1),
-                orientations=reset_orientation.reshape(1, -1),
-            )
+        self.robot.reset_to_default_pose()
+
+        reset_position = (
+            target_position
+            if target_position is not None
+            else self.target_initial_position
+        )
+        reset_orientation = (
+            target_orientation
+            if target_orientation is not None
+            else self.target_initial_orientation
+        )
+        self.target.set_world_poses(
+            positions=reset_position.reshape(1, -1),
+            orientations=reset_orientation.reshape(1, -1),
+        )
 
 
 def main():
