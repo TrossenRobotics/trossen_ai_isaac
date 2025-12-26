@@ -469,12 +469,15 @@ class MobileAIPickPlace:
 
     def reset_robot(self) -> None:
         """Reset both arms to default pose and clear trajectories."""
-        if self.robot_left is not None:
-            self.robot_left.reset_to_default_pose()
-            self.robot_left.open_gripper()
-        if self.robot_right is not None:
-            self.robot_right.reset_to_default_pose()
-            self.robot_right.open_gripper()
+        if self.robot_left is None:
+            raise RuntimeError("Cannot reset robot: left arm not initialized.")
+        if self.robot_right is None:
+            raise RuntimeError("Cannot reset robot: right arm not initialized.")
+
+        self.robot_left.reset_to_default_pose()
+        self.robot_left.open_gripper()
+        self.robot_right.reset_to_default_pose()
+        self.robot_right.open_gripper()
         self.left_trajectory = None
         self.right_trajectory = None
         self.trajectory_index = 0
@@ -485,19 +488,19 @@ class MobileAIPickPlace:
         self, position: np.ndarray | None = None, orientation: np.ndarray | None = None
     ) -> None:
         """Reset cube to specified or initial pose."""
-        if self.cube is not None:
-            reset_position = (
-                position if position is not None else self.cube_initial_position
-            )
-            reset_orientation = (
-                orientation
-                if orientation is not None
-                else self.cube_initial_orientation
-            )
-            self.cube.set_world_poses(
-                positions=reset_position.reshape(1, -1),
-                orientations=reset_orientation.reshape(1, -1),
-            )
+        if self.cube is None:
+            raise RuntimeError("Cannot reset cube: cube not initialized.")
+
+        reset_position = (
+            position if position is not None else self.cube_initial_position
+        )
+        reset_orientation = (
+            orientation if orientation is not None else self.cube_initial_orientation
+        )
+        self.cube.set_world_poses(
+            positions=reset_position.reshape(1, -1),
+            orientations=reset_orientation.reshape(1, -1),
+        )
 
 
 def main():
