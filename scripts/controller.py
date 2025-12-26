@@ -82,7 +82,7 @@ class TrossenAIController(Articulation):
     Supported robots:
     - WidowX AI: 8 DOFs (6 arm joints + 2 gripper fingers)
     - Stationary AI: 16 DOFs (6 + 6 left and right arm joints, 2 + 2 left and right gripper fingers)
-    - Mobile AI: 26 DOFs (8 caster wheels + caster swivel, 2 left right wheels joints, 6 + 6 left and right arm joints, 2 + 2 gripper fingers)
+    - Mobile AI: 26 DOFs (4 + 4 caster wheels + caster swivel, 1 + 1 left and right wheels joints, 6 + 6 left and right arm joints, 2 + 2 gripper fingers)
     """
 
     def __init__(
