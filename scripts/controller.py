@@ -34,6 +34,7 @@ differential inverse kinematics and gripper control.
 Supports:
 - WidowX AI
 - Stationary AI
+- Mobile AI
 """
 
 from enum import Enum
@@ -53,11 +54,12 @@ class RobotType(Enum):
 
     WXAI = "wxai"
     STATIONARY_AI = "stationary_ai"
+    MOBILE_AI = "mobile_ai"
 
 
-# Robot configuration constants
+# Robot configuration constants (WXAI defaults)
 DEFAULT_ROBOT_PATH = "/World/wxai_robot"
-END_EFFECTOR_LINK_NAME = "link_6"
+END_EFFECTOR_LINK_NAME = "link_6"  # Common to all robot types
 
 # Number of arm joints (excludes gripper)
 NUM_ARM_JOINTS_WXAI = 6
@@ -73,29 +75,6 @@ DEFAULT_IK_DAMPING = 0.03  # Damping for singularity robustness
 GRIPPER_OPEN_POSITION = 0.044
 GRIPPER_CLOSED_POSITION = 0.022  # Gripper closed around the cube
 
-# Default joint configuration for WidowX AI (8 DOFs: 6 arm joints + 2 gripper fingers)
-DEFAULT_DOF_POSITIONS_WXAI = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
-
-# Default joint configuration for Stationary AI (16 DOFs: 2 arms interleaved + 4 gripper fingers)
-DEFAULT_DOF_POSITIONS_STATIONARY_AI = [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.044,
-    0.044,
-    0.044,
-    0.044,
-]
-
 
 class TrossenAIController(Articulation):
     """Controller for Trossen AI robots with differential IK and gripper control.
@@ -103,6 +82,7 @@ class TrossenAIController(Articulation):
     Supported robots:
     - WidowX AI: 8 DOFs (6 arm joints + 2 gripper fingers)
     - Stationary AI: 16 DOFs (6 + 6 left and right arm joints, 2 + 2 left and right gripper fingers)
+    - Mobile AI: 26 DOFs (4 + 4 caster wheels + caster swivel, 1 + 1 left and right wheels joints, 6 + 6 left and right arm joints, 2 + 2 gripper fingers)
     """
 
     def __init__(
@@ -120,7 +100,7 @@ class TrossenAIController(Articulation):
 
         Args:
             robot_path: USD scene path for the robot that already exists in the scene.
-            robot_type: Type of robot (RobotType.WXAI or RobotType.STATIONARY_AI). Default: RobotType.WXAI
+            robot_type: Type of robot (WXAI, STATIONARY_AI, or MOBILE_AI). Default: RobotType.WXAI
             end_effector_link: End effector link. If None, defaults to 'link_6'.
             ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0). Default: 0.5
             ik_damping: Damping factor for singularity robustness (0.0-0.1). Default: 0.03
@@ -274,12 +254,23 @@ class TrossenAIController(Articulation):
         goal_wrist_position = self._transform_ee_to_wrist_frame(position, orientation)
 
         jacobian_matrices = self.get_jacobian_matrices().numpy()
-        jacobian_full = jacobian_matrices[:, self.end_effector_link_index - 1, :, :]
+
+        # Mobile base robots use direct link indices; fixed-base robots need -1 offset
+        link_idx = (
+            self.end_effector_link_index
+            if self.robot_type == RobotType.MOBILE_AI
+            else self.end_effector_link_index - 1
+        )
+        jacobian_full = jacobian_matrices[:, link_idx, :, :]
 
         if self.robot_type == RobotType.WXAI:
             jacobian_end_effector = jacobian_full[:, :, :NUM_ARM_JOINTS_WXAI]
         elif self.robot_type == RobotType.STATIONARY_AI:
             jacobian_end_effector = jacobian_full[:, :, self.arm_dof_indices]
+        elif self.robot_type == RobotType.MOBILE_AI:
+            # Mobile base adds 6 floating base DOFs before arm joints in Jacobian
+            jacobian_indices = [idx + 6 for idx in self.arm_dof_indices]
+            jacobian_end_effector = jacobian_full[:, :, jacobian_indices]
         else:
             raise ValueError(f"Unsupported robot_type: {self.robot_type}")
 
@@ -302,7 +293,7 @@ class TrossenAIController(Articulation):
             self.set_dof_position_targets(
                 dof_position_targets, dof_indices=list(range(NUM_ARM_JOINTS_WXAI))
             )
-        elif self.robot_type == RobotType.STATIONARY_AI:
+        elif self.robot_type in (RobotType.STATIONARY_AI, RobotType.MOBILE_AI):
             dof_position_targets = (
                 current_dof_positions[:, self.arm_dof_indices] + delta_dof_positions
             )

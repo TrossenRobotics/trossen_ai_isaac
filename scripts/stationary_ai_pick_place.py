@@ -103,24 +103,7 @@ LEFT_ARM_DOF_INDICES = [0, 2, 4, 6, 8, 10]
 LEFT_GRIPPER_DOF_INDEX = 12
 RIGHT_ARM_DOF_INDICES = [1, 3, 5, 7, 9, 11]
 RIGHT_GRIPPER_DOF_INDEX = 14
-STATIONARY_AI_DEFAULT_DOF_POSITIONS = [
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    0.044,
-    0.044,
-    0.044,
-    0.044,
-]
+STATIONARY_AI_DEFAULT_DOF_POSITIONS = [0.0] * 12 + [0.044] * 4
 
 
 class StationaryAIPickPlace:
@@ -488,12 +471,15 @@ class StationaryAIPickPlace:
 
     def reset_robot(self) -> None:
         """Reset both arms to default pose and clear phase tracking."""
-        if self.robot_left is not None:
-            self.robot_left.reset_to_default_pose()
-            self.robot_left.open_gripper()
-        if self.robot_right is not None:
-            self.robot_right.reset_to_default_pose()
-            self.robot_right.open_gripper()
+        if self.robot_left is None:
+            raise RuntimeError("Cannot reset robot: left arm not initialized.")
+        if self.robot_right is None:
+            raise RuntimeError("Cannot reset robot: right arm not initialized.")
+
+        self.robot_left.reset_to_default_pose()
+        self.robot_left.open_gripper()
+        self.robot_right.reset_to_default_pose()
+        self.robot_right.open_gripper()
         self.trajectory_left = None
         self.trajectory_right = None
         self.trajectory_index = 0
@@ -502,19 +488,19 @@ class StationaryAIPickPlace:
         self, position: np.ndarray | None = None, orientation: np.ndarray | None = None
     ) -> None:
         """Reset cube to specified or initial pose."""
-        if self.cube is not None:
-            reset_position = (
-                position if position is not None else self.cube_initial_position
-            )
-            reset_orientation = (
-                orientation
-                if orientation is not None
-                else self.cube_initial_orientation
-            )
-            self.cube.set_world_poses(
-                positions=reset_position.reshape(1, -1),
-                orientations=reset_orientation.reshape(1, -1),
-            )
+        if self.cube is None:
+            raise RuntimeError("Cannot reset cube: cube not initialized.")
+
+        reset_position = (
+            position if position is not None else self.cube_initial_position
+        )
+        reset_orientation = (
+            orientation if orientation is not None else self.cube_initial_orientation
+        )
+        self.cube.set_world_poses(
+            positions=reset_position.reshape(1, -1),
+            orientations=reset_orientation.reshape(1, -1),
+        )
 
 
 def main():
@@ -527,15 +513,11 @@ def main():
     omni.timeline.get_timeline_interface().play()
     simulation_app.update()
 
-    reset_needed = True
     task_completed = False
+    pick_place.reset()
 
     while simulation_app.is_running():
         if SimulationManager.is_simulating() and not task_completed:
-            if reset_needed:
-                pick_place.reset()
-                reset_needed = False
-
             pick_place.forward()
 
         if pick_place.is_done() and not task_completed:
