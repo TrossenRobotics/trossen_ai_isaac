@@ -519,15 +519,11 @@ def main():
     omni.timeline.get_timeline_interface().play()
     simulation_app.update()
 
-    reset_needed = True
     task_completed = False
+    pick_place.reset()
 
     while simulation_app.is_running():
         if SimulationManager.is_simulating() and not task_completed:
-            if reset_needed:
-                pick_place.reset()
-                reset_needed = False
-
             pick_place.forward()
 
         if pick_place.is_done() and not task_completed:

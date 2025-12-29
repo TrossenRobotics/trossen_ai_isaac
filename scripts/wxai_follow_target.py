@@ -193,14 +193,10 @@ def main():
     omni.timeline.get_timeline_interface().play()
     simulation_app.update()
 
-    reset_needed = True
+    follow_target.reset()
 
     while simulation_app.is_running():
         if SimulationManager.is_simulating():
-            if reset_needed:
-                follow_target.reset()
-                reset_needed = False
-
             follow_target.forward()
 
         simulation_app.update()
