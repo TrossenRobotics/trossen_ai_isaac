@@ -76,7 +76,7 @@ cd ~/trossen_ai_isaac/robots
    - Textures: Add textures and materials for realistic appearance
    - Sensors: Add camera at camera-specific frame with appropriate parameters
    - Paths: Ensure all mesh paths are relative
-   - End Effector link: Update ee_gripper_link, add tiny mass, change parent link from link_6 to robot_root for Isaaclab support
+   - End Effector link: Update ee_gripper_link, add tiny mass, change parent link from link_6 to robot_root for IsaacLab support
 
 5. Save USD:
 
