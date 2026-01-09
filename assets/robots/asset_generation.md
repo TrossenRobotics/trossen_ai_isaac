@@ -71,10 +71,12 @@ cd ~/trossen_ai_isaac/robots
 
    - Visuals: Check mesh rendering, tree structure, and all links/joints
    - Collision: Inspect and refine collision meshes if needed
+     - For `mobile_ai`: Add default prim-based collision for drive wheels and caster wheels
    - Joints: Verify drive parameters, limits, and mimic joint configuration
    - Textures: Add textures and materials for realistic appearance
    - Sensors: Add camera at camera-specific frame with appropriate parameters
    - Paths: Ensure all mesh paths are relative
+   - End Effector link: Update ee_gripper_link, add tiny mass, change parent link from link_6 to robot_root for IsaacLab support
 
 5. Save USD:
 
