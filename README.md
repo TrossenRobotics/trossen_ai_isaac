@@ -4,9 +4,9 @@
 
 ## Overview
 
-This repository contains NVIDIA Isaac Sim assets and example scripts for Trossen AI robotic arms. It includes USD robot models, asset generation documentation, and demonstration scripts for manipulation tasks.
+This repository contains NVIDIA Isaac Sim and Isaac Lab integration for Trossen AI robotic arms. It includes USD robot models, inverse kinematics-based task examples, and Isaac Lab tasks for reinforcement learning and imitation learning.
 
-### What This Repository Offers
+#### What This Repository Offers
 
 - Isaac Sim USD models for Trossen AI robots:
   - WidowX AI (single arm base, follower, leader left, leader right)
@@ -15,11 +15,14 @@ This repository contains NVIDIA Isaac Sim assets and example scripts for Trossen
 - Robot bringup utilities for quick model visualization and testing
 - Differential inverse kinematics controller for Cartesian end-effector control
 - Example scripts for pick-and-place and target following tasks
+- Isaac Lab tasks for reinforcement learning (eg. reach, lift, cabinet)
+- Teleoperation interface for imitation learning data collection
 
-### Tested Environment
+#### Tested Environment
 
 - Ubuntu 22.04
 - Isaac Sim 5.1.0
+- Isaac Lab 2.3.0
 - Python 3.11
 
 ---
@@ -28,9 +31,9 @@ This repository contains NVIDIA Isaac Sim assets and example scripts for Trossen
 
 - [Overview](#overview)
 - [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Demo Scripts](#demo-scripts)
 - [Robot Assets](#robot-assets)
+- [Isaac Sim Demo Scripts](#isaac-sim-demo-scripts)
+- [Isaac Lab Demo Tasks](#isaac-lab-demo-tasks)
 - [Controller API](#controller-api)
 - [Related Links](#related-links)
 
@@ -38,62 +41,28 @@ This repository contains NVIDIA Isaac Sim assets and example scripts for Trossen
 
 ## Installation
 
-### Prerequisites
+#### Prerequisites
 
-1. Install Isaac Sim 5.1.0 following the [official installation guide](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/install/install.html)
+Install Isaac Lab 2.3.0 following the [official installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html). This will also install Isaac Sim 5.1.0.
 
-2. Verify Isaac Sim installation
-
-   ```bash
-   ~/isaacsim/isaac-sim.sh --version
-   ```
-
-### Clone Repository
+#### Clone Repository
 
 ```bash
-cd ~
 git clone https://github.com/TrossenRobotics/trossen_ai_isaac.git
 cd trossen_ai_isaac
 ```
 
----
-
-## Quick Start
-
-> **Note:** Commands below assume Isaac Sim is installed at `~/isaacsim/`. Adjust the path if your installation directory differs.
-
-Launch any demo script using Isaac Sim's Python interpreter:
+#### Install Trossen AI Extension (for Isaac Lab)
 
 ```bash
-# Visualize a robot model
-~/isaacsim/isaac-sim.sh scripts/robot_bringup.py wxai_base
-
-# Run pick-and-place demo
-~/isaacsim/python.sh scripts/wxai_pick_place.py
+~/IsaacLab/isaaclab.sh -p -m pip install -e source/trossen_ai
 ```
 
----
+Verify the environments are registered:
 
-## Demo Scripts
-
-| Demo | Robot | Command | Description |
-|------|-------|---------|-------------|
-| Robot Bringup | All | `~/isaacsim/isaac-sim.sh scripts/robot_bringup.py [robot_name]` | Load and visualize robot models |
-| Pick and Place | WidowX AI | `~/isaacsim/python.sh scripts/wxai_pick_place.py` | Single arm pick-and-place task |
-| Follow Target | WidowX AI | `~/isaacsim/python.sh scripts/wxai_follow_target.py` | Real-time end-effector target tracking |
-| Pick and Place | Stationary AI | `~/isaacsim/python.sh scripts/stationary_ai_pick_place.py` | Dual-arm coordinated handoff |
-| Pick and Place | Mobile AI | `~/isaacsim/python.sh scripts/mobile_ai_pick_place.py` | Mobile base + dual-arm manipulation |
-
-Available robot models for `robot_bringup.py`:
-
-| Robot Name | Description |
-|------------|-------------|
-| `wxai_base` | Single arm base configuration (default) |
-| `wxai_follower` | Single arm follower configuration |
-| `wxai_leader_left` | Left leader arm for teleoperation |
-| `wxai_leader_right` | Right leader arm for teleoperation |
-| `stationary_ai` | Dual-arm stationary platform |
-| `mobile_ai` | Dual-arm mobile manipulator |
+```bash
+~/IsaacLab/isaaclab.sh -p scripts/tools/list_envs.py
+```
 
 ---
 
@@ -114,9 +83,81 @@ assets/robots/
     └── wxai_leader_right.usd
 ```
 
-### Asset Generation
+#### Asset Generation
 
 All USD files are generated from URDF descriptions in [TrossenRobotics/trossen_arm_description](https://github.com/TrossenRobotics/trossen_arm_description). See [assets/robots/asset_generation.md](assets/robots/asset_generation.md) for detailed generation instructions.
+
+---
+
+## Isaac Sim Demo Scripts
+
+Note: Commands below assume Isaac Sim is installed at `~/isaacsim/`. Adjust the path if your installation directory differs.
+
+#### Robot Bringup
+
+Load and visualize any robot model:
+
+```bash
+~/isaacsim/isaac-sim.sh scripts/robot_bringup.py [robot_name]
+```
+
+Supported robots: `wxai_base` (default), `wxai_follower`, `wxai_leader_left`, `wxai_leader_right`, `stationary_ai`, `mobile_ai`
+
+#### Pick and Place Demo
+
+```bash
+~/isaacsim/python.sh scripts/wxai_pick_place.py
+~/isaacsim/python.sh scripts/stationary_ai_pick_place.py
+~/isaacsim/python.sh scripts/mobile_ai_pick_place.py
+```
+
+#### Follow Target Demo
+
+Real-time end-effector tracking using differential IK:
+
+```bash
+~/isaacsim/python.sh scripts/wxai_follow_target.py
+```
+
+---
+
+## Isaac Lab Demo Tasks
+
+**Note:** Commands below assume Isaac Lab is installed at `~/IsaacLab/`. Adjust the path if your installation directory differs.
+
+Available tasks:
+- `Isaac-Reach-WXAI-v0` - Move end-effector to target pose using joint position control
+- `Isaac-Reach-WXAI-IK-Rel-v0` - Reach task with relative IK delta actions
+- `Isaac-Reach-WXAI-IK-Abs-v0` - Reach task with absolute IK pose actions
+- `Isaac-Lift-Cube-WXAI-v0` - Pick up a cube and lift it to a target height
+- `Isaac-Open-Drawer-WXAI-v0` - Open a cabinet drawer by grasping and pulling
+
+#### Reinforcement Learning
+
+Train a policy using RSL-RL PPO:
+
+```bash
+~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py \
+    --task Isaac-Reach-WXAI-v0
+```
+
+Training logs and checkpoints are saved to `logs/rsl_rl/<task>/<timestamp>/`.
+
+Run a trained policy:
+
+```bash
+~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py \
+    --task Isaac-Reach-WXAI-IK-Rel-v0
+```
+
+#### Imitation Learning
+
+Teleoperation with a keyboard:
+
+```bash
+~/IsaacLab/isaaclab.sh -p scripts/teleoperation/teleop_se3_agent.py \
+    --task Isaac-Reach-WXAI-v0
+```
 
 ---
 
@@ -124,13 +165,13 @@ All USD files are generated from URDF descriptions in [TrossenRobotics/trossen_a
 
 The `TrossenAIController` class provides a unified interface for controlling all Trossen AI robots.
 
-### Key Features
+#### Key Features
 
 - Differential inverse kinematics for Cartesian end-effector control
 - Gripper control with open/close commands
 - Support for all robot types (WidowX AI, Stationary AI, Mobile AI)
 
-### Basic Usage
+#### Basic Usage
 
 ```python
 from controller import RobotType, TrossenAIController
@@ -166,5 +207,5 @@ robot.reset_to_default_pose()
 - [Trossen Arm Documentation](https://docs.trossenrobotics.com/trossen_arm/)
 - [Trossen Arm Description (URDF)](https://github.com/TrossenRobotics/trossen_arm_description)
 - [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac-sim)
-
----
+- [NVIDIA Isaac Lab](https://isaac-sim.github.io/IsaacLab)
+- [RSL-RL](https://github.com/leggedrobotics/rsl_rl)
