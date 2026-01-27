@@ -23,7 +23,7 @@ This repository contains NVIDIA Isaac Sim and Isaac Lab integration for Trossen 
 - Ubuntu 22.04
 - Isaac Sim 5.1.0
 - Isaac Lab 2.3.0
-- Python 3.11
+- NVIDIA GeForce RTX 5090
 
 ---
 
@@ -153,8 +153,9 @@ Run a trained policy:
 
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py \
-    --task Isaac-Reach-WXAI-IK-Rel-v0 \
-    --num_envs 16
+    --task Isaac-Reach-WXAI-v0 \
+    --num_envs 16 \
+    --checkpoint logs/rsl_rl/<task>/<timestamp>/<model>.pt
 ```
 
 #### Imitation Learning
