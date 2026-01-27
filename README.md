@@ -138,8 +138,14 @@ Train a policy using RSL-RL PPO:
 
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py \
-    --task Isaac-Reach-WXAI-v0
+    --task Isaac-Reach-WXAI-v0 \
+    --num_envs 1024 \
+    --headless
 ```
+
+**Training Options:**
+- --num_envs 1024: Number of parallel environments (adjust based on GPU memory)
+- --headless: Run without GUI for faster training
 
 Training logs and checkpoints are saved to `logs/rsl_rl/<task>/<timestamp>/`.
 
@@ -147,17 +153,24 @@ Run a trained policy:
 
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py \
-    --task Isaac-Reach-WXAI-IK-Rel-v0
+    --task Isaac-Reach-WXAI-IK-Rel-v0 \
+    --num_envs 16
 ```
 
 #### Imitation Learning
 
-Teleoperation with a keyboard:
+Teleoperation for data collection:
 
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/teleoperation/teleop_se3_agent.py \
-    --task Isaac-Reach-WXAI-v0
+    --task Isaac-Reach-WXAI-v0 \
+    --teleop_device keyboard
 ```
+
+**Teleop Device options:**
+- keyboard
+- spacemouse
+- gamepad
 
 ---
 
