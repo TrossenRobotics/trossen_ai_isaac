@@ -43,7 +43,7 @@ This repository contains NVIDIA Isaac Sim and Isaac Lab integration for Trossen 
 
 #### Prerequisites
 
-Install Isaac Lab 2.3.0 following the [official installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html). This will also install Isaac Sim 5.1.0.
+Install Isaac Lab 2.3.0 following the [official installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html). This will also install Isaac Sim 5.1.0. Recommended Installation Method: Binary + Source (binary download for Isaac Sim + source via git for Isaac Lab)
 
 #### Clone Repository
 
@@ -164,7 +164,7 @@ Teleoperation for data collection:
 
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/teleoperation/teleop_se3_agent.py \
-    --task Isaac-Reach-WXAI-v0 \
+    --task Isaac-Reach-WXAI-IK-Rel-v0 \
     --teleop_device keyboard
 ```
 
