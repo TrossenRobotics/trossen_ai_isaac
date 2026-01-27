@@ -26,7 +26,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""This sub-module contains the functions that are specific to the environment."""
+"""This sub-module contains the functions that are specific to the cabinet manipulation environment."""
 
 from isaaclab.envs.mdp import *  # noqa: F401, F403
 
