@@ -137,7 +137,7 @@ if version.parse(installed_version) < version.parse(RSL_RL_VERSION):
             "install",
             f"rsl-rl-lib=={RSL_RL_VERSION}",
         ]
-    logger.error(
+    print(
         f"Please install the correct version of RSL-RL.\nExisting version is: '{installed_version}'"
         f" and required version is: '{RSL_RL_VERSION}'.\nTo install the correct version, run:"
         f"\n\n\t{' '.join(cmd)}\n"
