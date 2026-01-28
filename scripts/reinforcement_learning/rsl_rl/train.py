@@ -85,7 +85,7 @@ parser.add_argument(
     help="Export IO descriptors.",
 )
 parser.add_argument(
-    "--ray-proc-id",
+    "--ray_proc_id",
     "-rid",
     type=int,
     default=None,
@@ -137,7 +137,7 @@ if version.parse(installed_version) < version.parse(RSL_RL_VERSION):
             "install",
             f"rsl-rl-lib=={RSL_RL_VERSION}",
         ]
-    print(
+    logger.error(
         f"Please install the correct version of RSL-RL.\nExisting version is: '{installed_version}'"
         f" and required version is: '{RSL_RL_VERSION}'.\nTo install the correct version, run:"
         f"\n\n\t{' '.join(cmd)}\n"
@@ -225,11 +225,11 @@ def main(
     # specify directory for logging experiments
     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
-    print(f"[INFO] Logging experiment in directory: {log_root_path}")
+    logger.info(f"Logging experiment in directory: {log_root_path}")
     # specify directory for logging runs: {time-stamp}_{run_name}
     log_dir = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     # The Ray Tune workflow extracts experiment name using the logging line below, hence, do not change it (see PR #2346, comment-2819298849)
-    print(f"Exact experiment name requested from command line: {log_dir}")
+    logger.info(f"Exact experiment name requested from command line: {log_dir}")
     if agent_cfg.run_name:
         log_dir += f"_{agent_cfg.run_name}"
     log_dir = os.path.join(log_root_path, log_dir)
@@ -268,7 +268,7 @@ def main(
             "video_length": args_cli.video_length,
             "disable_logger": True,
         }
-        print("[INFO] Recording videos during training.")
+        logger.info("Recording videos during training.")
         print_dict(video_kwargs, nesting=4)
         env = gym.wrappers.RecordVideo(env, **video_kwargs)
 
@@ -290,7 +290,7 @@ def main(
     runner.add_git_repo_to_log(__file__)
     # load the checkpoint
     if agent_cfg.resume or agent_cfg.algorithm.class_name == "Distillation":
-        print(f"[INFO]: Loading model checkpoint from: {resume_path}")
+        logger.info(f"Loading model checkpoint from: {resume_path}")
         # load previously trained model
         runner.load(resume_path)
 
