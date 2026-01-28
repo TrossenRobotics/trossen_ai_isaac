@@ -8,9 +8,9 @@ category = "isaaclab"
 readme  = "README.md"
 
 title = "TrossenAI"
-author = "Trossen Robotics, Inc."
-maintainer = "Trossen Robotics, Inc."
-description="TrossenAI Isaac Lab integration"
+author = "Trossen Robotics"
+maintainer = "Trossen Robotics"
+description="Trossen AI Isaac Lab integration"
 repository = "https://github.com/TrossenRobotics/trossen_ai_isaac"
 keywords = ["extension", "isaaclab"]
 
