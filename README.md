@@ -55,7 +55,7 @@ cd trossen_ai_isaac
 ### Install Trossen AI Extension (for Isaac Lab)
 
 ```bash
-~/IsaacLab/isaaclab.sh -p -m pip install -e source/trossen_ai
+~/IsaacLab/isaaclab.sh -p -m pip install -e source/trossen_ai_isaac
 ```
 
 Verify the environments are registered:
@@ -140,14 +140,28 @@ Train a policy using RSL-RL PPO:
 ~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py \
     --task Isaac-Reach-WXAI-v0 \
     --num_envs 1024 \
+    --max_iterations 4000 \
     --headless
 ```
 
 **Training Options:**
 - `--num_envs 1024`: Number of parallel environments (adjust based on GPU memory)
+- `--max_iterations 4000`: Number of Iterations steps (adjust as per training tasks)
 - `--headless`: Run without GUI for faster training
 
 Training logs and checkpoints are saved to `logs/rsl_rl/<task>/<timestamp>/`.
+
+Resume training from a checkpoint:
+
+```bash
+~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py \
+    --task Isaac-Reach-WXAI-v0 \
+    --num_envs 1024 \
+    --headless \
+    --resume \
+    --load_run <timestamp> \
+    --checkpoint <model>.pt
+```
 
 Run a trained policy:
 

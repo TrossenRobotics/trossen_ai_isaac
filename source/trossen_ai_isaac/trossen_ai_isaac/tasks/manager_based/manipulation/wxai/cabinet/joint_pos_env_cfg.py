@@ -39,7 +39,7 @@ from isaaclab_tasks.manager_based.manipulation.cabinet.cabinet_env_cfg import (
     CabinetEnvCfg,
 )
 
-from trossen_ai.tasks.manager_based.manipulation.assets import WXAI_BASE_CFG
+from trossen_ai_isaac.tasks.manager_based.manipulation.assets import WXAI_BASE_CFG
 
 
 @configclass

@@ -39,7 +39,7 @@ from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.manager_based.manipulation.lift.lift_env_cfg import LiftEnvCfg
 
-from trossen_ai.tasks.manager_based.manipulation.assets import WXAI_BASE_CFG
+from trossen_ai_isaac.tasks.manager_based.manipulation.assets import WXAI_BASE_CFG
 
 
 @configclass

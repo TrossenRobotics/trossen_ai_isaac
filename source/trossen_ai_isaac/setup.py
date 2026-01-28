@@ -47,8 +47,8 @@ INSTALL_REQUIRES = [
 
 # Installation operation
 setup(
-    name="trossen_ai",
-    packages=["trossen_ai"],
+    name="trossen_ai_isaac",
+    packages=["trossen_ai_isaac"],
     author=EXTENSION_TOML_DATA["package"]["author"],
     maintainer=EXTENSION_TOML_DATA["package"]["maintainer"],
     url=EXTENSION_TOML_DATA["package"]["repository"],

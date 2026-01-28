@@ -156,7 +156,7 @@ from datetime import datetime
 import gymnasium as gym
 import isaaclab_tasks  # noqa: F401
 import torch
-import trossen_ai.tasks  # noqa: F401
+import trossen_ai_isaac.tasks  # noqa: F401
 from isaaclab.envs import (
     DirectMARLEnv,
     DirectMARLEnvCfg,

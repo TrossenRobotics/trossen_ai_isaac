@@ -73,7 +73,7 @@ import isaaclab_tasks  # noqa: F401
 import torch
 
 # Import Trossen AI tasks to register custom environments
-import trossen_ai.tasks  # noqa: F401
+import trossen_ai_isaac.tasks  # noqa: F401
 from isaaclab.devices import (
     Se3Gamepad,
     Se3GamepadCfg,

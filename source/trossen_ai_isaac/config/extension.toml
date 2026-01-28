@@ -23,4 +23,4 @@ keywords = ["extension", "isaaclab"]
 # NOTE: Add additional dependencies here
 
 [[python.module]]
-name = "trossen_ai"
+name = "trossen_ai_isaac"

@@ -34,7 +34,7 @@ import isaaclab_tasks.manager_based.manipulation.reach.mdp as mdp
 from isaaclab.utils import configclass
 from isaaclab_tasks.manager_based.manipulation.reach.reach_env_cfg import ReachEnvCfg
 
-from trossen_ai.tasks.manager_based.manipulation.assets import WXAI_HIGH_PD_CFG
+from trossen_ai_isaac.tasks.manager_based.manipulation.assets import WXAI_HIGH_PD_CFG
 
 ##
 # Environment configuration
