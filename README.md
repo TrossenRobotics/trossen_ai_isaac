@@ -64,6 +64,21 @@ Verify the environments are registered:
 ~/IsaacLab/isaaclab.sh -p scripts/tools/list_envs.py
 ```
 
+You should see output similar to:
+
+```
+| 1  | Isaac-Open-Drawer-WXAI-v0      | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.cabinet.joint_pos_env_cfg:WXAICabinetEnvCfg           |
+| 2  | Isaac-Open-Drawer-WXAI-Play-v0 | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.cabinet.joint_pos_env_cfg:WXAICabinetEnvCfg_PLAY      |
+| 3  | Isaac-Lift-Cube-WXAI-v0        | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.lift.config.joint_pos_env_cfg:WXAICubeLiftEnvCfg      |
+| 4  | Isaac-Lift-Cube-WXAI-Play-v0   | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.lift.config.joint_pos_env_cfg:WXAICubeLiftEnvCfg_PLAY |
+| 5  | Isaac-Lift-Cube-WXAI-IK-Rel-v0 | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.lift.config.ik_rel_env_cfg:WXAICubeLiftEnvCfg         |
+| 6  | Isaac-Lift-Cube-WXAI-IK-Abs-v0 | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.lift.config.ik_abs_env_cfg:WXAICubeLiftEnvCfg         |
+| 7  | Isaac-Reach-WXAI-v0            | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.reach.config.joint_pos_env_cfg:WXAIReachEnvCfg        |
+| 8  | Isaac-Reach-WXAI-Play-v0       | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.reach.config.joint_pos_env_cfg:WXAIReachEnvCfg_PLAY   |
+| 9  | Isaac-Reach-WXAI-IK-Rel-v0     | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.reach.config.ik_rel_env_cfg:WXAIReachEnvCfg           |
+| 10 | Isaac-Reach-WXAI-IK-Abs-v0     | isaaclab.envs:ManagerBasedRLEnv | trossen_ai_isaac.tasks.manager_based.manipulation.wxai.reach.config.ik_abs_env_cfg:WXAIReachEnvCfg           |
+```
+
 ---
 
 ## Robot Assets
