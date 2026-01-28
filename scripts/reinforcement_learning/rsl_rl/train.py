@@ -32,9 +32,13 @@ Launch Isaac Sim Simulator first.
 """
 
 import argparse
+import logging
 import sys
 
 from isaaclab.app import AppLauncher
+
+# import logger
+logger = logging.getLogger(__name__)
 
 # local imports
 import cli_args  # isort: skip
@@ -137,7 +141,7 @@ if version.parse(installed_version) < version.parse(RSL_RL_VERSION):
             "install",
             f"rsl-rl-lib=={RSL_RL_VERSION}",
         ]
-    print(
+    logger.error(
         f"Please install the correct version of RSL-RL.\nExisting version is: '{installed_version}'"
         f" and required version is: '{RSL_RL_VERSION}'.\nTo install the correct version, run:"
         f"\n\n\t{' '.join(cmd)}\n"
@@ -146,13 +150,13 @@ if version.parse(installed_version) < version.parse(RSL_RL_VERSION):
 
 # Rest everything follows.
 
-import logging
 import os
 from datetime import datetime
 
 import gymnasium as gym
 import isaaclab_tasks  # noqa: F401
 import torch
+import trossen_ai.tasks  # noqa: F401
 from isaaclab.envs import (
     DirectMARLEnv,
     DirectMARLEnvCfg,
@@ -166,11 +170,6 @@ from isaaclab_rl.rsl_rl import RslRlBaseRunnerCfg, RslRlVecEnvWrapper
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
 from rsl_rl.runners import DistillationRunner, OnPolicyRunner
-
-# import logger
-logger = logging.getLogger(__name__)
-
-import trossen_ai.tasks  # noqa: F401
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
