@@ -6,7 +6,7 @@
 
 This repository contains NVIDIA Isaac Sim and Isaac Lab integration for Trossen AI robotic arms. It includes USD robot models, inverse kinematics-based task examples, and Isaac Lab tasks for reinforcement learning and imitation learning.
 
-#### What This Repository Offers
+### What This Repository Offers
 
 - Isaac Sim USD models for Trossen AI robots:
   - WidowX AI (single arm base, follower, leader left, leader right)
@@ -18,7 +18,7 @@ This repository contains NVIDIA Isaac Sim and Isaac Lab integration for Trossen 
 - Isaac Lab tasks for reinforcement learning (eg. reach, lift, cabinet)
 - Teleoperation interface for imitation learning data collection
 
-#### Tested Environment
+### Tested Environment
 
 - Ubuntu 22.04
 - Isaac Sim 5.1.0
@@ -41,18 +41,18 @@ This repository contains NVIDIA Isaac Sim and Isaac Lab integration for Trossen 
 
 ## Installation
 
-#### Prerequisites
+### Prerequisites
 
 Install Isaac Lab 2.3.0 following the [official installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html). This will also install Isaac Sim 5.1.0. Recommended Installation Method: Binary + Source (binary download for Isaac Sim + source via git for Isaac Lab)
 
-#### Clone Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/TrossenRobotics/trossen_ai_isaac.git
 cd trossen_ai_isaac
 ```
 
-#### Install Trossen AI Extension (for Isaac Lab)
+### Install Trossen AI Extension (for Isaac Lab)
 
 ```bash
 ~/IsaacLab/isaaclab.sh -p -m pip install -e source/trossen_ai
@@ -83,7 +83,7 @@ assets/robots/
     └── wxai_leader_right.usd
 ```
 
-#### Asset Generation
+### Asset Generation
 
 All USD files are generated from URDF descriptions in [TrossenRobotics/trossen_arm_description](https://github.com/TrossenRobotics/trossen_arm_description). See [assets/robots/asset_generation.md](assets/robots/asset_generation.md) for detailed generation instructions.
 
@@ -93,7 +93,7 @@ All USD files are generated from URDF descriptions in [TrossenRobotics/trossen_a
 
 Note: Commands below assume Isaac Sim is installed at `~/isaacsim/`. Adjust the path if your installation directory differs.
 
-#### Robot Bringup
+### Robot Bringup
 
 Load and visualize any robot model:
 
@@ -103,7 +103,7 @@ Load and visualize any robot model:
 
 Supported robots: `wxai_base` (default), `wxai_follower`, `wxai_leader_left`, `wxai_leader_right`, `stationary_ai`, `mobile_ai`
 
-#### Pick and Place Demo
+### Pick and Place Demo
 
 ```bash
 ~/isaacsim/python.sh scripts/wxai_pick_place.py
@@ -111,7 +111,7 @@ Supported robots: `wxai_base` (default), `wxai_follower`, `wxai_leader_left`, `w
 ~/isaacsim/python.sh scripts/mobile_ai_pick_place.py
 ```
 
-#### Follow Target Demo
+### Follow Target Demo
 
 Real-time end-effector tracking using differential IK:
 
@@ -132,7 +132,7 @@ Available tasks:
 - `Isaac-Lift-Cube-WXAI-v0` - Pick up a cube and lift it to a target height
 - `Isaac-Open-Drawer-WXAI-v0` - Open a cabinet drawer by grasping and pulling
 
-#### Reinforcement Learning
+### Reinforcement Learning
 
 Train a policy using RSL-RL PPO:
 
@@ -144,8 +144,8 @@ Train a policy using RSL-RL PPO:
 ```
 
 **Training Options:**
-- --num_envs 1024: Number of parallel environments (adjust based on GPU memory)
-- --headless: Run without GUI for faster training
+- `--num_envs 1024`: Number of parallel environments (adjust based on GPU memory)
+- `--headless`: Run without GUI for faster training
 
 Training logs and checkpoints are saved to `logs/rsl_rl/<task>/<timestamp>/`.
 
@@ -158,7 +158,7 @@ Run a trained policy:
     --checkpoint logs/rsl_rl/<task>/<timestamp>/<model>.pt
 ```
 
-#### Imitation Learning
+### Imitation Learning
 
 Teleoperation for data collection:
 
@@ -179,13 +179,13 @@ Teleoperation for data collection:
 
 The `TrossenAIController` class provides a unified interface for controlling all Trossen AI robots.
 
-#### Key Features
+### Key Features
 
 - Differential inverse kinematics for Cartesian end-effector control
 - Gripper control with open/close commands
 - Support for all robot types (WidowX AI, Stationary AI, Mobile AI)
 
-#### Basic Usage
+### Basic Usage
 
 ```python
 from controller import RobotType, TrossenAIController
