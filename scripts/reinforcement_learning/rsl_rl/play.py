@@ -32,17 +32,21 @@ Launch Isaac Sim Simulator first.
 """
 
 import argparse
+import logging
 import sys
 
 from isaaclab.app import AppLauncher
+
+# import logger
+logger = logging.getLogger(__name__)
 
 # local imports
 import cli_args  # isort: skip
 
 # add argparse arguments
-parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
+parser = argparse.ArgumentParser(description="Play a trained RL agent with RSL-RL.")
 parser.add_argument(
-    "--video", action="store_true", default=False, help="Record videos during training."
+    "--video", action="store_true", default=False, help="Record videos during playing."
 )
 parser.add_argument(
     "--video_length",
@@ -75,7 +79,7 @@ parser.add_argument(
     help="Use the pre-trained checkpoint from Nucleus.",
 )
 parser.add_argument(
-    "--real-time",
+    "--real_time",
     action="store_true",
     default=False,
     help="Run in real-time, if possible.",
@@ -153,13 +157,11 @@ def main(
     # specify directory for logging experiments
     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
-    print(f"[INFO] Loading experiment from directory: {log_root_path}")
+    logger.info(f"Loading experiment from directory: {log_root_path}")
     if args_cli.use_pretrained_checkpoint:
         resume_path = get_published_pretrained_checkpoint("rsl_rl", train_task_name)
         if not resume_path:
-            print(
-                "[INFO] Unfortunately a pre-trained checkpoint is currently unavailable for this task."
-            )
+            logger.info("A pre-trained checkpoint is not available for this task.")
             return
     elif args_cli.checkpoint:
         resume_path = retrieve_file_path(args_cli.checkpoint)
@@ -190,14 +192,14 @@ def main(
             "video_length": args_cli.video_length,
             "disable_logger": True,
         }
-        print("[INFO] Recording videos during training.")
+        logger.info("Recording videos during playing.")
         print_dict(video_kwargs, nesting=4)
         env = gym.wrappers.RecordVideo(env, **video_kwargs)
 
     # wrap around environment for rsl-rl
     env = RslRlVecEnvWrapper(env, clip_actions=agent_cfg.clip_actions)
 
-    print(f"[INFO]: Loading model checkpoint from: {resume_path}")
+    logger.info(f"Loading model checkpoint from: {resume_path}")
     # load previously trained model
     if agent_cfg.class_name == "OnPolicyRunner":
         runner = OnPolicyRunner(
