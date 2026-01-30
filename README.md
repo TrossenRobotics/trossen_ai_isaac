@@ -154,13 +154,13 @@ Train a policy using RSL-RL PPO:
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py \
     --task Isaac-Reach-WXAI-v0 \
-    --num_envs 1024 \
+    --num_envs 32 \
     --max_iterations 4000 \
     --headless
 ```
 
 **Training Options:**
-- `--num_envs 1024`: Number of parallel environments (adjust based on GPU memory)
+- `--num_envs 32`: Number of parallel environments (adjust based on GPU memory)
 - `--max_iterations 4000`: Number of Iterations steps (adjust as per training tasks)
 - `--headless`: Run without GUI for faster training
 
@@ -171,7 +171,7 @@ Resume training from a checkpoint:
 ```bash
 ~/IsaacLab/isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py \
     --task Isaac-Reach-WXAI-v0 \
-    --num_envs 1024 \
+    --num_envs 32 \
     --headless \
     --resume \
     --load_run <timestamp> \
