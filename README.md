@@ -202,6 +202,29 @@ Teleoperation for data collection:
 - spacemouse
 - gamepad
 
+### Leader Arm Teleoperation
+
+Control the simulated robot using a real Trossen WXAI leader arm. The `trossen_arm` package is installed automatically with the extension. If you need to install it separately (e.g. for the standalone Isaac Sim script):
+
+```bash
+~/isaacsim/python.sh -m pip install trossen_arm
+```
+
+**Standalone Isaac Sim:**
+
+```bash
+~/isaacsim/python.sh scripts/wxai_leader_to_sim.py
+```
+
+**Isaac Lab environment (joint-pos, IK-abs, IK-rel auto-detected from task name):**
+
+```bash
+~/IsaacLab/isaaclab.sh -p scripts/teleoperation/teleop_leader_arm.py \
+    --task Isaac-Lift-Cube-WXAI-v0
+```
+
+Pass `--leader_ip` to change the default arm address (`192.168.1.2`).
+
 ---
 
 ## Controller API

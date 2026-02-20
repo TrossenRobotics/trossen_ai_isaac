@@ -43,6 +43,7 @@ EXTENSION_TOML_DATA = toml.load(
 # Minimum dependencies required prior to installation
 INSTALL_REQUIRES = [
     "psutil",
+    "trossen_arm",
 ]
 
 # Installation operation
