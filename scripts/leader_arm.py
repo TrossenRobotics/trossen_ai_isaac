@@ -54,7 +54,6 @@ class LeaderArmHardware:
     def __init__(self, ip: str = "192.168.1.2"):
         self.ip = ip
         self.driver = None
-        self._connected = False
 
     def connect(self) -> None:
         """Connect to the leader arm, home it, and enable gravity compensation."""
@@ -66,7 +65,6 @@ class LeaderArmHardware:
             self.ip,
             False,
         )
-        self._connected = True
 
         self.driver.set_all_modes(trossen_arm.Mode.position)
         self.driver.set_all_positions(LEADER_HOME_POSITION, 2.0, True)
@@ -88,7 +86,7 @@ class LeaderArmHardware:
 
     def cleanup(self) -> None:
         """Return to home, then park at zero and disconnect."""
-        if not self._connected:
+        if self.driver is None:
             return
         try:
             self.driver.set_all_modes(trossen_arm.Mode.position)
