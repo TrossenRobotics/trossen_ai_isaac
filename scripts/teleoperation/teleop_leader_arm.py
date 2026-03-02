@@ -38,7 +38,6 @@ from __future__ import annotations
 
 import argparse
 import logging
-import time
 
 from isaaclab.app import AppLauncher
 
@@ -78,6 +77,9 @@ args_cli = parser.parse_args()
 app_launcher = AppLauncher(vars(args_cli))
 simulation_app = app_launcher.app
 
+import os  # noqa: E402
+import sys  # noqa: E402
+
 import gymnasium as gym
 import isaaclab_tasks  # noqa: F401
 import numpy as np
@@ -89,66 +91,18 @@ from isaaclab.managers import TerminationTermCfg as DoneTerm
 from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
 
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from leader_arm import NUM_ARM_JOINTS, LeaderArmHardware  # noqa: E402
+
 logger = logging.getLogger(__name__)
 
-NUM_ARM_JOINTS = 6
-LEADER_HOME_POSITION = np.array([0.0, np.pi / 2, np.pi / 2, 0.0, 0.0, 0.0, 0.0])
+# Action scales matching the environment action configs
+JOINT_POS_ACTION_SCALE = 0.5  # JointPositionActionCfg
+IK_REL_ACTION_SCALE = 0.01  # DifferentialInverseKinematicsActionCfg (relative)
+IK_ABS_ACTION_SCALE = 1.0  # DifferentialInverseKinematicsActionCfg (absolute)
 
-# Action scales from environment configs
-JOINT_POS_ACTION_SCALE = 0.5  # from JointPositionActionCfg
-IK_REL_ACTION_SCALE = 0.01  # from DifferentialInverseKinematicsActionCfg (relative)
-IK_ABS_ACTION_SCALE = 1.0  # from DifferentialInverseKinematicsActionCfg (absolute)
-
-import trossen_arm  # noqa: E402
-
-
-class LeaderArmHardware:
-    """Interface to the real Trossen WXAI leader arm."""
-
-    def __init__(self, ip: str = "192.168.1.2"):
-        self.ip = ip
-        self.driver = None
-        self._connected = False
-
-    def connect(self) -> None:
-        """Connect to leader arm, move to home, then enable gravity compensation."""
-        print(f"Connecting to leader arm at {self.ip}...")
-        self.driver = trossen_arm.TrossenArmDriver()
-        self.driver.configure(
-            trossen_arm.Model.wxai_v0,
-            trossen_arm.StandardEndEffector.wxai_v0_leader,
-            self.ip,
-            False,
-        )
-        self._connected = True
-
-        self.driver.set_all_modes(trossen_arm.Mode.position)
-        self.driver.set_all_positions(LEADER_HOME_POSITION, 2.0, True)
-
-        time.sleep(0.5)
-        self.driver.set_all_modes(trossen_arm.Mode.external_effort)
-        self.driver.set_all_external_efforts(
-            [0.0] * self.driver.get_num_joints(), 0.0, False
-        )
-
-    def get_state(self) -> tuple[np.ndarray, float]:
-        """Read arm positions (6 joints, rad) and gripper position (meters)."""
-        positions = self.driver.get_all_positions()
-        return np.array(positions[:NUM_ARM_JOINTS]), float(positions[NUM_ARM_JOINTS])
-
-    def cleanup(self) -> None:
-        """Park and disconnect the leader arm."""
-        if not self._connected:
-            return
-        try:
-            self.driver.set_all_modes(trossen_arm.Mode.position)
-            self.driver.set_all_positions(LEADER_HOME_POSITION, 2.0, True)
-            self.driver.set_all_positions(
-                np.zeros(self.driver.get_num_joints()), 2.0, True
-            )
-            self.driver.cleanup()
-        except Exception as e:
-            print(f"Warning during cleanup: {e}")
+# Tracks previous cartesian pose for IK relative delta computation
+_last_cartesian: dict = {}
 
 
 def detect_action_type(task_name: str) -> str:
@@ -164,7 +118,7 @@ def detect_action_type(task_name: str) -> str:
 
 def has_gripper_action(task_name: str) -> bool:
     """True if the task includes a gripper action dimension."""
-    return "Lift" in task_name or "Cabinet" in task_name
+    return any(keyword in task_name for keyword in ("Lift", "Cabinet"))
 
 
 def compute_joint_pos_action(
@@ -173,9 +127,11 @@ def compute_joint_pos_action(
     include_gripper: bool,
     gripper_threshold: float,
 ) -> np.ndarray:
-    """Map leader arm joints to a joint-position action.
+    """Convert leader arm joint positions to a joint-position environment action.
 
-    action = desired / JOINT_POS_ACTION_SCALE (defaults are zero).
+    The environment uses ``JointPositionActionCfg(scale=0.5, use_default_offset=True)``
+    which applies ``target = default + scale * action``.  Since the WXAI defaults are
+    all zeros this simplifies to ``action = desired / scale``.
     """
     arm_action = arm_positions / JOINT_POS_ACTION_SCALE
 
@@ -191,7 +147,12 @@ def compute_ik_abs_action(
     gripper_threshold: float,
     leader_interface,
 ) -> np.ndarray:
-    """Map leader arm FK pose to an IK-absolute action [x,y,z,rx,ry,rz]."""
+    """Convert leader arm FK pose to an IK-absolute environment action.
+
+    Queries the driver's forward kinematics for the end-effector cartesian
+    pose ``[x, y, z, rx, ry, rz]`` and divides by the action scale so the
+    environment's IK controller receives the desired absolute pose.
+    """
     robot_output = leader_interface.driver.get_robot_output()
     cartesian = np.array(robot_output.cartesian.positions)
     # cartesian = [x, y, z, rx, ry, rz]
@@ -209,7 +170,12 @@ def compute_ik_rel_action(
     gripper_threshold: float,
     leader_interface,
 ) -> np.ndarray:
-    """Compute IK-relative (delta) action from successive EE poses."""
+    """Convert successive leader EE poses into an IK-relative delta action.
+
+    Computes the difference between the current and previous cartesian pose
+    from the driver's FK, then divides by the action scale.  On the first
+    call the delta is zero (no previous pose to diff against).
+    """
     robot_output = leader_interface.driver.get_robot_output()
     cartesian = np.array(robot_output.cartesian.positions)
     delta = (cartesian - _last_cartesian.get("pos", cartesian)) / IK_REL_ACTION_SCALE
@@ -222,10 +188,6 @@ def compute_ik_rel_action(
         action = delta
 
     return action
-
-
-# Global state for IK relative mode
-_last_cartesian: dict = {}
 
 
 def main() -> None:

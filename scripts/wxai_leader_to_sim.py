@@ -39,9 +39,9 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import logging
 import os
 import sys
-import time
 
 parser = argparse.ArgumentParser(
     description="Control simulated WXAI arm using a real leader arm."
@@ -71,6 +71,9 @@ from isaacsim.storage.native import get_assets_root_path  # noqa: E402
 
 sys.path.append(os.path.dirname(__file__))
 from controller import RobotType, TrossenAIController  # noqa: E402
+from leader_arm import NUM_ARM_JOINTS, LeaderArmHardware  # noqa: E402
+
+logger = logging.getLogger(__name__)
 
 ROBOT_USD_PATH = "./assets/robots/wxai/wxai_base.usd"
 ROBOT_SCENE_PATH = "/World/wxai_robot"
@@ -79,56 +82,6 @@ GROUND_SCENE_PATH = "/World/ground"
 WXAI_ARM_DOF_INDICES = [0, 1, 2, 3, 4, 5]
 WXAI_GRIPPER_DOF_INDEX = 6
 WXAI_DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
-NUM_ARM_JOINTS = 6
-LEADER_HOME_POSITION = np.array([0.0, np.pi / 2, np.pi / 2, 0.0, 0.0, 0.0, 0.0])
-
-
-class LeaderArmHardware:
-    """Reads joint positions from a real Trossen WXAI leader arm."""
-
-    def __init__(self, ip: str = "192.168.1.2"):
-        import trossen_arm
-
-        self.trossen_arm = trossen_arm
-        self.ip = ip
-        self.driver = None
-        self._connected = False
-
-    def connect(self) -> None:
-        print(f"Connecting to leader arm at {self.ip}...")
-        self.driver = self.trossen_arm.TrossenArmDriver()
-        self.driver.configure(
-            self.trossen_arm.Model.wxai_v0,
-            self.trossen_arm.StandardEndEffector.wxai_v0_leader,
-            self.ip,
-            False,
-        )
-        self._connected = True
-
-        self.driver.set_all_modes(self.trossen_arm.Mode.position)
-        self.driver.set_all_positions(LEADER_HOME_POSITION, 2.0, True)
-        time.sleep(0.5)
-        self.driver.set_all_modes(self.trossen_arm.Mode.external_effort)
-        self.driver.set_all_external_efforts(
-            [0.0] * self.driver.get_num_joints(), 0.0, False
-        )
-
-    def get_state(self) -> tuple[np.ndarray, float]:
-        positions = self.driver.get_all_positions()
-        return np.array(positions[:NUM_ARM_JOINTS]), float(positions[NUM_ARM_JOINTS])
-
-    def cleanup(self) -> None:
-        if not self._connected:
-            return
-        try:
-            self.driver.set_all_modes(self.trossen_arm.Mode.position)
-            self.driver.set_all_positions(LEADER_HOME_POSITION, 2.0, True)
-            self.driver.set_all_positions(
-                np.zeros(self.driver.get_num_joints()), 2.0, True
-            )
-            self.driver.cleanup()
-        except Exception as e:
-            print(f"Warning during cleanup: {e}")
 
 
 def setup_scene() -> TrossenAIController:
