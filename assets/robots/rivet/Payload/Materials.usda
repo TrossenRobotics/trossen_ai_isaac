@@ -1,0 +1,671 @@
+#usda 1.0
+(
+    "Generated from trossen_arm_description rivet.urdf.xacro"
+    customLayerData = {
+        string creator = "URDF USD Converter v0.1.3"
+    }
+    defaultPrim = "rivet"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "rivet"
+{
+    def Scope "Materials"
+    {
+        def Material "tn__0439216_0474510_0501961_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0439216_0474510_0501961_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0301961_0301961_0301961_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0301961_0301961_0301961_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_12_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_12_vV1AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_13_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_13_vV1AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0615686_0811765_0929412_0000000_0000000_1_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0615686_0811765_0929412_0000000_0000000_1_gz0AJSb0>
+        )
+        {
+        }
+    }
+
+    over "Geometry"
+    {
+        over "base_footprint"
+        {
+            over "base_link"
+            {
+                over "base_link" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </rivet/Materials/tn__0439216_0474510_0501961_0000000_0000000_hw0AJSb0>
+                }
+
+                over "carriage_lift_link"
+                {
+                    over "carriage_lift_link" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </rivet/Materials/tn__0301961_0301961_0301961_0000000_0000000_hw0AJSb0>
+                    }
+
+                    over "camera"
+                    {
+                        over "camera" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0>
+                        }
+                    }
+
+                    over "follower_left_base_link"
+                    {
+                        over "base_link"
+                        {
+                            over "GeomSubset_001" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0>
+                            }
+
+                            over "GeomSubset_002" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0>
+                            }
+
+                            over "GeomSubset_003" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0>
+                            }
+
+                            over "GeomSubset_004" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0>
+                            }
+                        }
+
+                        over "follower_left_link_1"
+                        {
+                            over "link_1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0>
+                            }
+
+                            over "follower_left_link_2"
+                            {
+                                over "link_2"
+                                {
+                                    over "GeomSubset_001" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0>
+                                    }
+
+                                    over "GeomSubset_002" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0>
+                                    }
+                                }
+
+                                over "follower_left_link_3"
+                                {
+                                    over "link_3"
+                                    {
+                                        over "GeomSubset_001" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0>
+                                        }
+
+                                        over "GeomSubset_002" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0>
+                                        }
+
+                                        over "GeomSubset_003" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0>
+                                        }
+                                    }
+
+                                    over "follower_left_link_4"
+                                    {
+                                        over "link_4" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0>
+                                        }
+
+                                        over "follower_left_link_5"
+                                        {
+                                            over "link_5" (
+                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                            )
+                                            {
+                                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0>
+                                            }
+
+                                            over "follower_left_link_6"
+                                            {
+                                                over "link_6" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
+                                                }
+
+                                                over "follower_left_carriage_right"
+                                                {
+                                                    over "carriage_right" (
+                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                    )
+                                                    {
+                                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+                                                    }
+
+                                                    over "follower_left_gripper_right"
+                                                    {
+                                                        over "gripper_right"
+                                                        {
+                                                            over "GeomSubset_001" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0>
+                                                            }
+
+                                                            over "GeomSubset_002" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "follower_left_carriage_left"
+                                                {
+                                                    over "carriage_left" (
+                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                    )
+                                                    {
+                                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
+                                                    }
+
+                                                    over "follower_left_gripper_left"
+                                                    {
+                                                        over "gripper_left"
+                                                        {
+                                                            over "GeomSubset_001" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0>
+                                                            }
+
+                                                            over "GeomSubset_002" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "follower_left_camera_mount"
+                                                {
+                                                    over "camera_mount" (
+                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                    )
+                                                    {
+                                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_12_vV1AJSb0>
+                                                    }
+
+                                                    over "follower_left_camera"
+                                                    {
+                                                        over "camera" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_13_vV1AJSb0>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    over "follower_right_base_link"
+                    {
+                        over "base_link"
+                        {
+                            over "GeomSubset_001" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0>
+                            }
+
+                            over "GeomSubset_002" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0>
+                            }
+
+                            over "GeomSubset_003" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0>
+                            }
+
+                            over "GeomSubset_004" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0>
+                            }
+                        }
+
+                        over "follower_right_link_1"
+                        {
+                            over "link_1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0>
+                            }
+
+                            over "follower_right_link_2"
+                            {
+                                over "link_2"
+                                {
+                                    over "GeomSubset_001" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0>
+                                    }
+
+                                    over "GeomSubset_002" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0>
+                                    }
+                                }
+
+                                over "follower_right_link_3"
+                                {
+                                    over "link_3"
+                                    {
+                                        over "GeomSubset_001" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0>
+                                        }
+
+                                        over "GeomSubset_002" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0>
+                                        }
+
+                                        over "GeomSubset_003" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0>
+                                        }
+                                    }
+
+                                    over "follower_right_link_4"
+                                    {
+                                        over "link_4" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0>
+                                        }
+
+                                        over "follower_right_link_5"
+                                        {
+                                            over "link_5" (
+                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                            )
+                                            {
+                                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0>
+                                            }
+
+                                            over "follower_right_link_6"
+                                            {
+                                                over "link_6" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
+                                                }
+
+                                                over "follower_right_carriage_right"
+                                                {
+                                                    over "carriage_right" (
+                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                    )
+                                                    {
+                                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+                                                    }
+
+                                                    over "follower_right_gripper_right"
+                                                    {
+                                                        over "gripper_right"
+                                                        {
+                                                            over "GeomSubset_001" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0>
+                                                            }
+
+                                                            over "GeomSubset_002" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "follower_right_carriage_left"
+                                                {
+                                                    over "carriage_left" (
+                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                    )
+                                                    {
+                                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
+                                                    }
+
+                                                    over "follower_right_gripper_left"
+                                                    {
+                                                        over "gripper_left"
+                                                        {
+                                                            over "GeomSubset_001" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0>
+                                                            }
+
+                                                            over "GeomSubset_002" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "follower_right_camera_mount"
+                                                {
+                                                    over "camera_mount" (
+                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                    )
+                                                    {
+                                                        rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_12_vV1AJSb0>
+                                                    }
+
+                                                    over "follower_right_camera"
+                                                    {
+                                                        over "camera" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            rel material:binding = </rivet/Materials/tn__0262745_0282353_0301961_0000000_0000000_13_vV1AJSb0>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                over "swivel_1"
+                {
+                    over "swivel" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
+                    }
+
+                    over "wheel_1"
+                    {
+                        over "wheel" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_1_gz0AJSb0>
+                        }
+                    }
+                }
+
+                over "swivel_2"
+                {
+                    over "swivel" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
+                    }
+
+                    over "wheel_2"
+                    {
+                        over "wheel" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_1_gz0AJSb0>
+                        }
+                    }
+                }
+
+                over "swivel_3"
+                {
+                    over "swivel" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
+                    }
+
+                    over "wheel_3"
+                    {
+                        over "wheel" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_1_gz0AJSb0>
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
