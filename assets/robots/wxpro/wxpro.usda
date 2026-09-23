@@ -1,0 +1,303 @@
+#usda 1.0
+(
+    "Generated from trossen_arm_description wxpro.urdf.xacro"
+    customLayerData = {
+        string creator = "URDF USD Converter v0.1.3"
+    }
+    defaultPrim = "wxpro"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "wxpro" (
+    prepend apiSchemas = ["GeomModelAPI"]
+    assetInfo = {
+        string name = "wxpro"
+    }
+    kind = "component"
+    prepend payload = @./Payload/Contents.usda@
+)
+{
+    float3[] extentsHint = [(-0.282459, -0.055, 0), (0.26250002, 0.055, 0.316), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.282459, -0.055, 0), (0.26250002, 0.055, 0.316)]
+
+    over "Geometry"
+    {
+        over "base_link"
+        {
+            over "link_1"
+            {
+                over "link_2" (
+                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                )
+                {
+                    rel physics:filteredPairs = [
+                        </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4>,
+                        </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5>,
+                    ]
+
+                    over "link_3"
+                    {
+                        over "link_4" (
+                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                        )
+                        {
+                            rel physics:filteredPairs = </wxpro/Geometry/base_link/link_1/link_2>
+
+                            over "link_5" (
+                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                            )
+                            {
+                                rel physics:filteredPairs = </wxpro/Geometry/base_link/link_1/link_2>
+
+                                over "link_6" (
+                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                )
+                                {
+                                    rel physics:filteredPairs = [
+                                        </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_left/gripper_left>,
+                                        </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_right/gripper_right>,
+                                    ]
+
+                                    over "carriage_right" (
+                                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                    )
+                                    {
+                                        rel physics:filteredPairs = [
+                                            </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_left/gripper_left>,
+                                            </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_left>,
+                                        ]
+
+                                        over "gripper_right" (
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                        )
+                                        {
+                                            rel physics:filteredPairs = [
+                                                </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_left>,
+                                                </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6>,
+                                            ]
+
+                                            over "gripper_right_1"
+                                            {
+                                                uniform token physics:approximation = "convexDecomposition"
+                                            }
+                                        }
+
+                                        over "carriage_right_1"
+                                        {
+                                            uniform token physics:approximation = "convexDecomposition"
+                                        }
+
+                                        over "carriage_right" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0>
+                                        }
+                                    }
+
+                                    over "carriage_left" (
+                                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                    )
+                                    {
+                                        rel physics:filteredPairs = [
+                                            </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_right/gripper_right>,
+                                            </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_right>,
+                                        ]
+
+                                        over "gripper_left" (
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                        )
+                                        {
+                                            rel physics:filteredPairs = [
+                                                </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_right>,
+                                                </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6>,
+                                            ]
+
+                                            over "gripper_left_1"
+                                            {
+                                                uniform token physics:approximation = "convexDecomposition"
+                                            }
+                                        }
+
+                                        over "carriage_left_1"
+                                        {
+                                            uniform token physics:approximation = "convexDecomposition"
+                                        }
+
+                                        over "carriage_left" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0>
+                                        }
+                                    }
+
+                                    over "camera_mount"
+                                    {
+                                        over "camera"
+                                        {
+                                            over "camera_1"
+                                            {
+                                                uniform token physics:approximation = "convexDecomposition"
+                                            }
+
+                                            def Camera "Camera" (
+                                                prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+                                            )
+                                            {
+                                                float2 clippingRange = (0.01, 1000)
+                                                float exposure:fStop = 5
+                                                float exposure:responsivity = 1.1026709
+                                                float exposure:time = 0.02
+                                                float focalLength = 24
+                                                float horizontalAperture = 20.955
+                                                bool omni:kit:cameraLock = 1
+                                                float verticalAperture = 15.2908
+                                                quatf xformOp:orient = (0.579228, 0.40557978, -0.40557978, -0.579228)
+                                                float3 xformOp:scale = (0.1, 0.1, 0.1)
+                                                double3 xformOp:translate = (0.0078079645280280385, 0, 0.065)
+                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                            }
+                                        }
+
+                                        over "camera_mount_1"
+                                        {
+                                            uniform token physics:approximation = "convexDecomposition"
+                                        }
+                                    }
+
+                                    over "link_6_1"
+                                    {
+                                        uniform token physics:approximation = "convexDecomposition"
+                                    }
+                                }
+
+                                over "link_5_1"
+                                {
+                                    uniform token physics:approximation = "convexDecomposition"
+                                }
+                            }
+
+                            over "link_4_1"
+                            {
+                                uniform token physics:approximation = "convexDecomposition"
+                            }
+                        }
+
+                        over "link_3_1"
+                        {
+                            uniform token physics:approximation = "convexDecomposition"
+                        }
+                    }
+
+                    over "link_2_1"
+                    {
+                        uniform token physics:approximation = "convexDecomposition"
+                    }
+                }
+
+                over "link_1_1"
+                {
+                    uniform token physics:approximation = "convexDecomposition"
+                }
+            }
+
+            over "base_link_1"
+            {
+                uniform token physics:approximation = "convexDecomposition"
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        over "joint_0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 10
+            float drive:angular:physics:maxForce = 27
+            float drive:angular:physics:stiffness = 200
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 10
+            float drive:angular:physics:maxForce = 27
+            float drive:angular:physics:stiffness = 200
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 10
+            float drive:angular:physics:maxForce = 27
+            float drive:angular:physics:stiffness = 200
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 5
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 70
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 5
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 20
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_5" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 5
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 10
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "left_carriage_joint" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 50
+            float drive:linear:physics:maxForce = 400
+            float drive:linear:physics:stiffness = 1000
+            uniform token drive:linear:physics:type = "force"
+        }
+
+        over "right_carriage_joint" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 50
+            float drive:linear:physics:maxForce = 400
+            float drive:linear:physics:stiffness = 1000
+            uniform token drive:linear:physics:type = "force"
+        }
+    }
+}
+
+def PhysicsScene "PhysicsScene" (
+    prepend apiSchemas = ["NewtonSceneAPI", "PhysxSceneAPI"]
+    prepend payload = @./Payload/Contents.usda@</PhysicsScene>
+)
+{
+    uint physxScene:gpuFoundLostAggregatePairsCapacity = 2048
+}

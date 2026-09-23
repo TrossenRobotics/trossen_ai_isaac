@@ -1,0 +1,347 @@
+#usda 1.0
+(
+    "Generated from trossen_arm_description wxpro.urdf.xacro"
+    customLayerData = {
+        string creator = "URDF USD Converter v0.1.3"
+    }
+    defaultPrim = "wxpro"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "wxpro"
+{
+    def Scope "Materials"
+    {
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0647059_0647059_0647059_0000000_0000000_hw0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0647059_0647059_0647059_0000000_0000000_hw0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0647059_0647059_0647059_0000000_0000000_1_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0647059_0647059_0647059_0000000_0000000_1_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
+        )
+        {
+        }
+
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+        )
+        {
+        }
+    }
+
+    over "Geometry"
+    {
+        over "base_link"
+        {
+            over "base_link"
+            {
+                over "GeomSubset_001" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_hw0AJSb0>
+                }
+
+                over "GeomSubset_002" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </wxpro/Materials/tn__0372549_0654902_0239216_0000000_0000000_hw0AJSb0>
+                }
+
+                over "GeomSubset_003" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </wxpro/Materials/tn__0866667_0321569_0156863_0000000_0000000_hw0AJSb0>
+                }
+
+                over "GeomSubset_004" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </wxpro/Materials/tn__0917647_0917647_0917647_0000000_0000000_hw0AJSb0>
+                }
+            }
+
+            over "link_1"
+            {
+                over "link_1" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_1_gz0AJSb0>
+                }
+
+                over "link_2"
+                {
+                    over "link_2"
+                    {
+                        over "GeomSubset_001" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </wxpro/Materials/tn__0000000_0705882_1000000_0000000_0000000_hw0AJSb0>
+                        }
+
+                        over "GeomSubset_002" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_2_gz0AJSb0>
+                        }
+                    }
+
+                    over "link_3"
+                    {
+                        over "link_3"
+                        {
+                            over "GeomSubset_001" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </wxpro/Materials/tn__0000000_0705882_1000000_0000000_0000000_1_gz0AJSb0>
+                            }
+
+                            over "GeomSubset_002" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_3_gz0AJSb0>
+                            }
+
+                            over "GeomSubset_003" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </wxpro/Materials/tn__0901961_0901961_0901961_0000000_0000000_hw0AJSb0>
+                            }
+                        }
+
+                        over "link_4"
+                        {
+                            over "link_4" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_4_gz0AJSb0>
+                            }
+
+                            over "link_5"
+                            {
+                                over "link_5" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_5_gz0AJSb0>
+                                }
+
+                                over "link_6"
+                                {
+                                    over "link_6" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_6_gz0AJSb0>
+                                    }
+
+                                    over "carriage_right"
+                                    {
+                                        over "carriage_right" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </wxpro/Materials/tn__0647059_0647059_0647059_0000000_0000000_hw0AJSb0>
+                                        }
+
+                                        over "gripper_right"
+                                        {
+                                            over "gripper_right"
+                                            {
+                                                over "GeomSubset_001" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    rel material:binding = </wxpro/Materials/tn__0000000_0705882_1000000_0000000_0000000_3_gz0AJSb0>
+                                                }
+
+                                                over "GeomSubset_002" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    over "carriage_left"
+                                    {
+                                        over "carriage_left" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </wxpro/Materials/tn__0647059_0647059_0647059_0000000_0000000_1_gz0AJSb0>
+                                        }
+
+                                        over "gripper_left"
+                                        {
+                                            over "gripper_left"
+                                            {
+                                                over "GeomSubset_001" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    rel material:binding = </wxpro/Materials/tn__0000000_0705882_1000000_0000000_0000000_2_gz0AJSb0>
+                                                }
+
+                                                over "GeomSubset_002" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    over "camera_mount"
+                                    {
+                                        over "camera_mount" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
+                                        }
+
+                                        over "camera"
+                                        {
+                                            over "camera" (
+                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                            )
+                                            {
+                                                rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
