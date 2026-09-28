@@ -45,14 +45,14 @@ def Xform "rivet"
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                 }
 
-                def Xform "carriage_lift_link"
+                def Xform "lift_link"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (-0.000125, 0.165, 0.595105)
+                    double3 xformOp:translate = (0, 0.165, 0.181)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-                    def Mesh "carriage_lift_link" (
+                    def Mesh "lift_link" (
                         prepend references = @./GeometryLibrary.usdc@</Geometry/carriage_lift_link>
                     )
                     {
@@ -62,8 +62,8 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Mesh "carriage_lift_link_1" (
-                        displayName = "carriage_lift_link"
+                    def Mesh "lift_link_1" (
+                        displayName = "lift_link"
                         prepend references = @./GeometryLibrary.usdc@</Geometry/carriage_lift_link>
                     )
                     {
@@ -901,14 +901,14 @@ def Xform "rivet"
                     }
                 }
 
-                def Xform "swivel_1"
+                def Xform "b_pivot_link"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (0.000125, -0.24, 0.003)
+                    double3 xformOp:translate = (0, -0.24, 0.003)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-                    def Mesh "swivel" (
+                    def Mesh "pivot_link" (
                         prepend references = @./GeometryLibrary.usdc@</Geometry/swivel>
                     )
                     {
@@ -918,8 +918,8 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Mesh "swivel_1" (
-                        displayName = "swivel"
+                    def Mesh "pivot_link_1" (
+                        displayName = "pivot_link"
                         prepend references = @./GeometryLibrary.usdc@</Geometry/swivel>
                     )
                     {
@@ -930,7 +930,7 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Xform "wheel_1"
+                    def Xform "b_drive_link"
                     {
                         quatf xformOp:orient = (1, 0, 0, 0)
                         float3 xformOp:scale = (1, 1, 1)
@@ -961,14 +961,14 @@ def Xform "rivet"
                     }
                 }
 
-                def Xform "swivel_2"
+                def Xform "fr_pivot_link"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (-0.189875, 0.24, 0.003)
+                    double3 xformOp:translate = (0.19, 0.24, 0.003)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-                    def Mesh "swivel" (
+                    def Mesh "pivot_link" (
                         prepend references = @./GeometryLibrary.usdc@</Geometry/swivel>
                     )
                     {
@@ -978,8 +978,8 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Mesh "swivel_1" (
-                        displayName = "swivel"
+                    def Mesh "pivot_link_1" (
+                        displayName = "pivot_link"
                         prepend references = @./GeometryLibrary.usdc@</Geometry/swivel>
                     )
                     {
@@ -990,7 +990,7 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Xform "wheel_2"
+                    def Xform "fr_drive_link"
                     {
                         quatf xformOp:orient = (1, 0, 0, 0)
                         float3 xformOp:scale = (1, 1, 1)
@@ -1021,14 +1021,14 @@ def Xform "rivet"
                     }
                 }
 
-                def Xform "swivel_3"
+                def Xform "fl_pivot_link"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (0.190125, 0.24, 0.003)
+                    double3 xformOp:translate = (-0.19, 0.24, 0.003)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-                    def Mesh "swivel" (
+                    def Mesh "pivot_link" (
                         prepend references = @./GeometryLibrary.usdc@</Geometry/swivel>
                     )
                     {
@@ -1038,8 +1038,8 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Mesh "swivel_1" (
-                        displayName = "swivel"
+                    def Mesh "pivot_link_1" (
+                        displayName = "pivot_link"
                         prepend references = @./GeometryLibrary.usdc@</Geometry/swivel>
                     )
                     {
@@ -1050,7 +1050,7 @@ def Xform "rivet"
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                     }
 
-                    def Xform "wheel_3"
+                    def Xform "fl_drive_link"
                     {
                         quatf xformOp:orient = (1, 0, 0, 0)
                         float3 xformOp:scale = (1, 1, 1)
