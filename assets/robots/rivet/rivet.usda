@@ -19,7 +19,9 @@ def Xform "rivet" (
     prepend payload = @./Payload/Contents.usda@
 )
 {
-    float3[] extentsHint = [(-0.330125, -0.328982, -3.874302e-10), (0.32987502, 0.489, 1.4855), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.330125, -0.328982, -3.874302e-10), (0.32987502, 0.489, 1.4855)]
+    float3[] extentsHint = [(-0.328982, -0.32987502, -3.874302e-10), (0.489, 0.330125, 1.4855), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.328982, -0.32987502, -3.874302e-10), (0.489, 0.330125, 1.4855)]
+    quatf xformOp:orient = (0.7071068, 0, 0, -0.7071068)
+    uniform token[] xformOpOrder = ["xformOp:orient"]
 
     over "Geometry"
     {
@@ -30,13 +32,13 @@ def Xform "rivet" (
             )
             {
                 rel physics:filteredPairs = [
-                    </rivet/Geometry/base_footprint/base_link/swivel_1/wheel_1>,
-                    </rivet/Geometry/base_footprint/base_link/swivel_2/wheel_2>,
-                    </rivet/Geometry/base_footprint/base_link/swivel_3/wheel_3>,
-                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/camera>,
+                    </rivet/Geometry/base_footprint/base_link/b_pivot_link/b_drive_link>,
+                    </rivet/Geometry/base_footprint/base_link/fr_pivot_link/fr_drive_link>,
+                    </rivet/Geometry/base_footprint/base_link/fl_pivot_link/fl_drive_link>,
+                    </rivet/Geometry/base_footprint/base_link/lift_link/camera>,
                 ]
 
-                over "carriage_lift_link"
+                over "lift_link"
                 {
                     over "camera" (
                         prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
@@ -77,8 +79,8 @@ def Xform "rivet" (
                             )
                             {
                                 rel physics:filteredPairs = [
-                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4>,
-                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5>,
+                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4>,
+                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5>,
                                 ]
 
                                 over "follower_left_link_3"
@@ -87,21 +89,21 @@ def Xform "rivet" (
                                         prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                                     )
                                     {
-                                        rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2>
+                                        rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2>
 
                                         over "follower_left_link_5" (
                                             prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                                         )
                                         {
-                                            rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2>
+                                            rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2>
 
                                             over "follower_left_link_6" (
                                                 prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                                             )
                                             {
                                                 rel physics:filteredPairs = [
-                                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left/follower_left_gripper_left>,
-                                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
+                                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left/follower_left_gripper_left>,
+                                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
                                                 ]
 
                                                 over "follower_left_carriage_right" (
@@ -109,8 +111,8 @@ def Xform "rivet" (
                                                 )
                                                 {
                                                     rel physics:filteredPairs = [
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left/follower_left_gripper_left>,
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left/follower_left_gripper_left>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left>,
                                                     ]
 
                                                     over "follower_left_gripper_right" (
@@ -118,8 +120,8 @@ def Xform "rivet" (
                                                     )
                                                     {
                                                         rel physics:filteredPairs = [
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left>,
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
                                                         ]
 
                                                         over "gripper_right_1"
@@ -139,8 +141,8 @@ def Xform "rivet" (
                                                 )
                                                 {
                                                     rel physics:filteredPairs = [
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right>,
                                                     ]
 
                                                     over "follower_left_gripper_left" (
@@ -148,8 +150,8 @@ def Xform "rivet" (
                                                     )
                                                     {
                                                         rel physics:filteredPairs = [
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right>,
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
                                                         ]
 
                                                         over "gripper_left_1"
@@ -249,8 +251,8 @@ def Xform "rivet" (
                             )
                             {
                                 rel physics:filteredPairs = [
-                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4>,
-                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5>,
+                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4>,
+                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5>,
                                 ]
 
                                 over "follower_right_link_3"
@@ -259,21 +261,21 @@ def Xform "rivet" (
                                         prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                                     )
                                     {
-                                        rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>
+                                        rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>
 
                                         over "follower_right_link_5" (
                                             prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                                         )
                                         {
-                                            rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>
+                                            rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>
 
                                             over "follower_right_link_6" (
                                                 prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                                             )
                                             {
                                                 rel physics:filteredPairs = [
-                                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left/follower_right_gripper_left>,
-                                                    </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
+                                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left/follower_right_gripper_left>,
+                                                    </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
                                                 ]
 
                                                 over "follower_right_carriage_right" (
@@ -281,8 +283,8 @@ def Xform "rivet" (
                                                 )
                                                 {
                                                     rel physics:filteredPairs = [
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left/follower_right_gripper_left>,
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left/follower_right_gripper_left>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left>,
                                                     ]
 
                                                     over "follower_right_gripper_right" (
@@ -290,8 +292,8 @@ def Xform "rivet" (
                                                     )
                                                     {
                                                         rel physics:filteredPairs = [
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left>,
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
                                                         ]
 
                                                         over "gripper_right_1"
@@ -311,8 +313,8 @@ def Xform "rivet" (
                                                 )
                                                 {
                                                     rel physics:filteredPairs = [
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
-                                                        </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
+                                                        </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right>,
                                                     ]
 
                                                     over "follower_right_gripper_left" (
@@ -320,8 +322,8 @@ def Xform "rivet" (
                                                     )
                                                     {
                                                         rel physics:filteredPairs = [
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right>,
-                                                            </rivet/Geometry/base_footprint/base_link/carriage_lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
                                                         ]
 
                                                         over "gripper_left_1"
@@ -412,15 +414,15 @@ def Xform "rivet" (
                         }
                     }
 
-                    over "carriage_lift_link_1"
+                    over "lift_link_1"
                     {
                         uniform token physics:approximation = "convexDecomposition"
                     }
                 }
 
-                over "swivel_1"
+                over "b_pivot_link"
                 {
-                    over "wheel_1" (
+                    over "b_drive_link" (
                         prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                     )
                     {
@@ -451,12 +453,12 @@ def Xform "rivet" (
                         }
                     }
 
-                    over "swivel_1"
+                    over "pivot_link_1"
                     {
                         uniform token physics:approximation = "convexDecomposition"
                     }
 
-                    over "swivel" (
+                    over "pivot_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
@@ -464,9 +466,9 @@ def Xform "rivet" (
                     }
                 }
 
-                over "swivel_2"
+                over "fr_pivot_link"
                 {
-                    over "wheel_2" (
+                    over "fr_drive_link" (
                         prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                     )
                     {
@@ -497,12 +499,12 @@ def Xform "rivet" (
                         }
                     }
 
-                    over "swivel_1"
+                    over "pivot_link_1"
                     {
                         uniform token physics:approximation = "convexDecomposition"
                     }
 
-                    over "swivel" (
+                    over "pivot_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
@@ -510,9 +512,9 @@ def Xform "rivet" (
                     }
                 }
 
-                over "swivel_3"
+                over "fl_pivot_link"
                 {
-                    over "wheel_3" (
+                    over "fl_drive_link" (
                         prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
                     )
                     {
@@ -543,12 +545,12 @@ def Xform "rivet" (
                         }
                     }
 
-                    over "swivel_1"
+                    over "pivot_link_1"
                     {
                         uniform token physics:approximation = "convexDecomposition"
                     }
 
-                    over "swivel" (
+                    over "pivot_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
@@ -733,7 +735,7 @@ def Xform "rivet" (
             uniform token drive:linear:physics:type = "force"
         }
 
-        over "carriage_lift_joint" (
+        over "lift" (
             prepend apiSchemas = ["PhysicsDriveAPI:linear"]
         )
         {
@@ -743,7 +745,7 @@ def Xform "rivet" (
             uniform token drive:linear:physics:type = "force"
         }
 
-        over "swivel_steer_1" (
+        over "b_pivot" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
@@ -756,7 +758,7 @@ def Xform "rivet" (
             custom float physxJoint:maxJointVelocity = 359.99997
         }
 
-        over "swivel_drive_1" (
+        over "b_drive" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
@@ -767,7 +769,7 @@ def Xform "rivet" (
             custom float physxJoint:maxJointVelocity = 1070.9492
         }
 
-        over "swivel_steer_2" (
+        over "fr_pivot" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
@@ -780,7 +782,7 @@ def Xform "rivet" (
             custom float physxJoint:maxJointVelocity = 359.99997
         }
 
-        over "swivel_drive_2" (
+        over "fr_drive" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
@@ -791,7 +793,7 @@ def Xform "rivet" (
             custom float physxJoint:maxJointVelocity = 1070.9492
         }
 
-        over "swivel_steer_3" (
+        over "fl_pivot" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
@@ -804,7 +806,7 @@ def Xform "rivet" (
             custom float physxJoint:maxJointVelocity = 359.99997
         }
 
-        over "swivel_drive_3" (
+        over "fl_drive" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {

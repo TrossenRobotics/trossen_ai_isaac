@@ -184,9 +184,9 @@ def Xform "rivet"
                     rel material:binding = </rivet/Materials/tn__0439216_0474510_0501961_0000000_0000000_hw0AJSb0>
                 }
 
-                over "carriage_lift_link"
+                over "lift_link"
                 {
-                    over "carriage_lift_link" (
+                    over "lift_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
@@ -606,16 +606,16 @@ def Xform "rivet"
                     }
                 }
 
-                over "swivel_1"
+                over "b_pivot_link"
                 {
-                    over "swivel" (
+                    over "pivot_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
                         rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
                     }
 
-                    over "wheel_1"
+                    over "b_drive_link"
                     {
                         over "wheel" (
                             prepend apiSchemas = ["MaterialBindingAPI"]
@@ -626,16 +626,16 @@ def Xform "rivet"
                     }
                 }
 
-                over "swivel_2"
+                over "fr_pivot_link"
                 {
-                    over "swivel" (
+                    over "pivot_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
                         rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
                     }
 
-                    over "wheel_2"
+                    over "fr_drive_link"
                     {
                         over "wheel" (
                             prepend apiSchemas = ["MaterialBindingAPI"]
@@ -646,16 +646,16 @@ def Xform "rivet"
                     }
                 }
 
-                over "swivel_3"
+                over "fl_pivot_link"
                 {
-                    over "swivel" (
+                    over "pivot_link" (
                         prepend apiSchemas = ["MaterialBindingAPI"]
                     )
                     {
                         rel material:binding = </rivet/Materials/tn__0615686_0811765_0929412_0000000_0000000_hw0AJSb0>
                     }
 
-                    over "wheel_3"
+                    over "fl_drive_link"
                     {
                         over "wheel" (
                             prepend apiSchemas = ["MaterialBindingAPI"]
