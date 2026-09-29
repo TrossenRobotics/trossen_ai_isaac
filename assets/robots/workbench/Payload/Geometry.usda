@@ -70,9 +70,9 @@ def Xform "workbench"
 
             def Xform "follower_left_base_link"
             {
-                quatf xformOp:orient = (0.70710677, 0, 0, 0.70710677)
+                quatf xformOp:orient = (1, 0, 0, 0)
                 float3 xformOp:scale = (1, 1, 1)
-                double3 xformOp:translate = (-0.274, 0.062, 0.006)
+                double3 xformOp:translate = (0.062, 0.274, 0.006)
                 uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                 def Mesh "base_link" (
@@ -468,9 +468,9 @@ def Xform "workbench"
 
             def Xform "follower_right_base_link"
             {
-                quatf xformOp:orient = (0.70710677, 0, 0, 0.70710677)
+                quatf xformOp:orient = (1, 0, 0, 0)
                 float3 xformOp:scale = (1, 1, 1)
-                double3 xformOp:translate = (0.274, 0.062, 0.006)
+                double3 xformOp:translate = (0.062, -0.274, 0.006)
                 uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                 def Mesh "base_link" (

@@ -38,9 +38,9 @@ def Xform "workbench"
         {
             rel physics:body0 = </workbench/Geometry/workbench_base_link>
             rel physics:body1 = </workbench/Geometry/workbench_base_link/follower_left_base_link>
-            point3f physics:localPos0 = (-0.274, 0.062, 0.006)
+            point3f physics:localPos0 = (0.062, 0.274, 0.006)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0.70710677, 0, 0, 0.70710677)
+            quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
@@ -211,9 +211,9 @@ def Xform "workbench"
         {
             rel physics:body0 = </workbench/Geometry/workbench_base_link>
             rel physics:body1 = </workbench/Geometry/workbench_base_link/follower_right_base_link>
-            point3f physics:localPos0 = (0.274, 0.062, 0.006)
+            point3f physics:localPos0 = (0.062, -0.274, 0.006)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0.70710677, 0, 0, 0.70710677)
+            quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
