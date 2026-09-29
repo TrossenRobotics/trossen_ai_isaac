@@ -20,8 +20,6 @@ def Xform "workbench" (
 )
 {
     float3[] extentsHint = [(-0.220459, -0.394925, -6.07153e-18), (0.3245, 0.394925, 0.34416), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.220459, -0.394925, -6.07153e-18), (0.3245, 0.394925, 0.34416)]
-    quatf xformOp:orient = (0.7071068, 0, 0, -0.7071068)
-    uniform token[] xformOpOrder = ["xformOp:orient"]
 
     over "Geometry"
     {
@@ -55,9 +53,9 @@ def Xform "workbench" (
                     float horizontalAperture = 20.955
                     bool omni:kit:cameraLock = 1
                     float verticalAperture = 15.2908
-                    quatf xformOp:orient = (0.88701, 0.47175, 0, 0)
+                    quatf xformOp:orient = (0.6272108, 0.32650671, -0.32650671, -0.6272108)
                     float3 xformOp:scale = (0.1, 0.1, 0.1)
-                    double3 xformOp:translate = (0, 0.115, 0.313)
+                    double3 xformOp:translate = (0.115, 0, 0.313)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                 }
             }
