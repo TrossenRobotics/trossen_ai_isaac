@@ -29,11 +29,11 @@ def Xform "rivet"
             uniform token physics:axis = "Z"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/lift_link>
-            point3f physics:localPos0 = (0, 0.165, 0.181)
+            point3f physics:localPos0 = (0.165, 0, 0.181)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
-            float physics:lowerLimit = 0.0
+            float physics:lowerLimit = 0
             float physics:upperLimit = 0.858
             custom float urdf:limit:effort = 1
             custom float urdf:limit:velocity = 1
@@ -43,9 +43,9 @@ def Xform "rivet"
         {
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link/lift_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/lift_link/camera>
-            point3f physics:localPos0 = (0, 0.0786917, 0.351299)
+            point3f physics:localPos0 = (0.0786917, 0, 0.351299)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0.97629607, -0.21643934, 0, 0)
+            quatf physics:localRot0 = (0.97629607, 0, 0.21643946, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
@@ -54,7 +54,7 @@ def Xform "rivet"
             uniform token physics:axis = "Z"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/b_pivot_link>
-            point3f physics:localPos0 = (0, -0.24, 0.003)
+            point3f physics:localPos0 = (-0.24, 0, 0.003)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
@@ -62,13 +62,13 @@ def Xform "rivet"
 
         def PhysicsRevoluteJoint "b_drive"
         {
-            uniform token physics:axis = "X"
+            uniform token physics:axis = "Y"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link/b_pivot_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/b_pivot_link/b_drive_link>
             point3f physics:localPos0 = (0, 0, -0.078)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0, 0, -1, 0)
-            quatf physics:localRot1 = (0, 0, -1, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
         def PhysicsRevoluteJoint "fr_pivot"
@@ -76,7 +76,7 @@ def Xform "rivet"
             uniform token physics:axis = "Z"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/fr_pivot_link>
-            point3f physics:localPos0 = (0.19, 0.24, 0.003)
+            point3f physics:localPos0 = (0.24, -0.19, 0.003)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
@@ -84,13 +84,13 @@ def Xform "rivet"
 
         def PhysicsRevoluteJoint "fr_drive"
         {
-            uniform token physics:axis = "X"
+            uniform token physics:axis = "Y"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link/fr_pivot_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/fr_pivot_link/fr_drive_link>
             point3f physics:localPos0 = (0, 0, -0.078)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0, 0, -1, 0)
-            quatf physics:localRot1 = (0, 0, -1, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
         def PhysicsRevoluteJoint "fl_pivot"
@@ -98,7 +98,7 @@ def Xform "rivet"
             uniform token physics:axis = "Z"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/fl_pivot_link>
-            point3f physics:localPos0 = (-0.19, 0.24, 0.003)
+            point3f physics:localPos0 = (0.24, 0.19, 0.003)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
@@ -106,22 +106,22 @@ def Xform "rivet"
 
         def PhysicsRevoluteJoint "fl_drive"
         {
-            uniform token physics:axis = "X"
+            uniform token physics:axis = "Y"
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link/fl_pivot_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/fl_pivot_link/fl_drive_link>
             point3f physics:localPos0 = (0, 0, -0.078)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0, 0, -1, 0)
-            quatf physics:localRot1 = (0, 0, -1, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
         def PhysicsFixedJoint "follower_left_mount_joint"
         {
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link/lift_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link>
-            point3f physics:localPos0 = (-0.275, 0.0615, 0.031)
+            point3f physics:localPos0 = (0.0615, 0.275, 0.031)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0.70710677, 0, 0, 0.70710677)
+            quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
@@ -292,9 +292,9 @@ def Xform "rivet"
         {
             rel physics:body0 = </rivet/Geometry/base_footprint/base_link/lift_link>
             rel physics:body1 = </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link>
-            point3f physics:localPos0 = (0.275, 0.0615, 0.031)
+            point3f physics:localPos0 = (0.0615, -0.275, 0.031)
             point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (0.70710677, 0, 0, 0.70710677)
+            quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
@@ -470,10 +470,10 @@ def Xform "rivet"
                 prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsArticulationRootAPI", "NewtonArticulationRootAPI", "PhysicsMassAPI"]
             )
             {
-                point3f physics:centerOfMass = (-0.00387668, -0.0332838, 0.198466)
-                float3 physics:diagonalInertia = (2.8562639, 5.8585855, 6.3287906)
+                point3f physics:centerOfMass = (-0.0332838, 0.00387668, 0.198466)
+                float3 physics:diagonalInertia = (2.8562639, 5.8585854, 6.3287907)
                 float physics:mass = 73.7606
-                quatf physics:principalAxes = (0.70497994, -0.06156718, -0.703742, 0.06292818)
+                quatf physics:principalAxes = (0.54299307, -0.54115534, -0.45408618, -0.45399916)
 
                 over "base_link_1" (
                     prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -486,10 +486,10 @@ def Xform "rivet"
                     prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
                 )
                 {
-                    point3f physics:centerOfMass = (0, 0.0543177, 0.0192157)
+                    point3f physics:centerOfMass = (0.0543177, 0, 0.0192157)
                     float3 physics:diagonalInertia = (0.0103103, 0.095236115, 0.102191985)
                     float physics:mass = 2.69782
-                    quatf physics:principalAxes = (0.71898353, -0.6950271, 0, 0)
+                    quatf physics:principalAxes = (0.5083981, -0.4914584, -0.4914584, 0.5083981)
 
                     over "lift_link_1" (
                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -502,10 +502,10 @@ def Xform "rivet"
                         prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
                     )
                     {
-                        point3f physics:centerOfMass = (0, 0.0181899, 0)
+                        point3f physics:centerOfMass = (0.0181899, 0, 0)
                         float3 physics:diagonalInertia = (0.0000174033, 0.0000756992, 0.0000778027)
                         float physics:mass = 0.0982026
-                        quatf physics:principalAxes = (1, 0, 0, 0)
+                        quatf physics:principalAxes = (0.70710677, 0, 0, -0.70710677)
 
                         over "camera_1" (
                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -520,9 +520,9 @@ def Xform "rivet"
                     )
                     {
                         point3f physics:centerOfMass = (-0.00615208, 0.00004245, 0.05031879)
-                        float3 physics:diagonalInertia = (0.0015936626, 0.0017163692, 0.0019461782)
+                        float3 physics:diagonalInertia = (0.0015936625, 0.0017163692, 0.0019461781)
                         float physics:mass = 1.0189099
-                        quatf physics:principalAxes = (0.70727415, 0.7047199, 0.034933137, -0.043735688)
+                        quatf physics:principalAxes = (0.70727414, 0.7047199, 0.03493314, -0.043735687)
 
                         over "base_link_1" (
                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -538,7 +538,7 @@ def Xform "rivet"
                             point3f physics:centerOfMass = (0.00269514, -0.00016097, 0.01933509)
                             float3 physics:diagonalInertia = (0.00019034663, 0.0003031303, 0.0003888631)
                             float physics:mass = 0.2518651
-                            quatf physics:principalAxes = (0.63440211, -0.30273334, -0.30665369, 0.6417554)
+                            quatf physics:principalAxes = (0.6344021, -0.30273333, -0.30665368, 0.6417554)
 
                             over "link_1_1" (
                                 prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -554,7 +554,7 @@ def Xform "rivet"
                                 point3f physics:centerOfMass = (-0.1012236, -0.00183082, 0.00500847)
                                 float3 physics:diagonalInertia = (0.0012161192, 0.025725098, 0.025769532)
                                 float physics:mass = 1.7332379
-                                quatf physics:principalAxes = (0.99636032, 0.083547845, 0.016084308, -0.0052121604)
+                                quatf physics:principalAxes = (0.9963603, 0.083547845, 0.016084308, -0.0052121603)
 
                                 over "link_2_1" (
                                     prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -570,7 +570,7 @@ def Xform "rivet"
                                     point3f physics:centerOfMass = (0.15078963, -0.00011014, 0.055404)
                                     float3 physics:diagonalInertia = (0.00077493273, 0.010036354, 0.010060463)
                                     float physics:mass = 0.9507323
-                                    quatf physics:principalAxes = (0.07204707, -0.9967476, -0.0023400919, -0.036027334)
+                                    quatf physics:principalAxes = (0.07204707, -0.9967476, -0.0023400919, -0.036027335)
 
                                     over "link_3_1" (
                                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -586,7 +586,7 @@ def Xform "rivet"
                                         point3f physics:centerOfMass = (0.05224276, -0.00099433, 0.05517984)
                                         float3 physics:diagonalInertia = (0.00029405614, 0.0006639959, 0.00079335796)
                                         float physics:mass = 0.44927257
-                                        quatf physics:principalAxes = (0.92559741, -0.010664298, -0.37612499, 0.041057214)
+                                        quatf physics:principalAxes = (0.9255974, -0.010664298, -0.37612498, 0.041057214)
 
                                         over "link_4_1" (
                                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -618,7 +618,7 @@ def Xform "rivet"
                                                 point3f physics:centerOfMass = (0.06129266, -0.00002029, -0.00026366)
                                                 float3 physics:diagonalInertia = (0.00046957284, 0.0012717295, 0.0013036777)
                                                 float physics:mass = 0.84380466
-                                                quatf physics:principalAxes = (0.99991577, 0.0097126025, -0.008573101, 0.00078195162)
+                                                quatf physics:principalAxes = (0.9999158, 0.009712603, -0.008573101, 0.00078195165)
 
                                                 over "link_6_1" (
                                                     prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -632,9 +632,9 @@ def Xform "rivet"
                                                 )
                                                 {
                                                     point3f physics:centerOfMass = (0.01255019, 0.00449652, 0.00963255)
-                                                    float3 physics:diagonalInertia = (0.0000051417919, 0.000026378997, 0.000031108611)
+                                                    float3 physics:diagonalInertia = (0.000005141792, 0.000026378997, 0.00003110861)
                                                     float physics:mass = 0.06140653
-                                                    quatf physics:principalAxes = (0.70253707, 0.67616676, -0.14974015, 0.16376224)
+                                                    quatf physics:principalAxes = (0.70253706, 0.6761668, -0.14974014, 0.16376224)
 
                                                     over "carriage_right_1" (
                                                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -650,7 +650,7 @@ def Xform "rivet"
                                                         point3f physics:centerOfMass = (0.00275423, 0.00000726, 0.0205991)
                                                         float3 physics:diagonalInertia = (0.000003887292, 0.00002044, 0.000021542708)
                                                         float physics:mass = 0.03751074
-                                                        quatf physics:principalAxes = (0.77304512, 0, -0.63435104, 0)
+                                                        quatf physics:principalAxes = (0.7730451, 0, -0.634351, 0)
 
                                                         over "gripper_right_1" (
                                                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -666,9 +666,9 @@ def Xform "rivet"
                                                 )
                                                 {
                                                     point3f physics:centerOfMass = (0.01255019, 0.00449652, 0.00963255)
-                                                    float3 physics:diagonalInertia = (0.0000051417919, 0.000026378997, 0.000031108611)
+                                                    float3 physics:diagonalInertia = (0.000005141792, 0.000026378997, 0.00003110861)
                                                     float physics:mass = 0.06140653
-                                                    quatf physics:principalAxes = (0.70253707, 0.67616676, -0.14974015, 0.16376224)
+                                                    quatf physics:principalAxes = (0.70253706, 0.6761668, -0.14974014, 0.16376224)
 
                                                     over "carriage_left_1" (
                                                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -684,7 +684,7 @@ def Xform "rivet"
                                                         point3f physics:centerOfMass = (0.00275423, 0.00000726, 0.0205991)
                                                         float3 physics:diagonalInertia = (0.000003887292, 0.00002044, 0.000021542708)
                                                         float physics:mass = 0.03751074
-                                                        quatf physics:principalAxes = (0.77304512, 0, -0.63435104, 0)
+                                                        quatf physics:principalAxes = (0.7730451, 0, -0.634351, 0)
 
                                                         over "gripper_left_1" (
                                                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -745,9 +745,9 @@ def Xform "rivet"
                     )
                     {
                         point3f physics:centerOfMass = (-0.00615208, 0.00004245, 0.05031879)
-                        float3 physics:diagonalInertia = (0.0015936626, 0.0017163692, 0.0019461782)
+                        float3 physics:diagonalInertia = (0.0015936625, 0.0017163692, 0.0019461781)
                         float physics:mass = 1.0189099
-                        quatf physics:principalAxes = (0.70727415, 0.7047199, 0.034933137, -0.043735688)
+                        quatf physics:principalAxes = (0.70727414, 0.7047199, 0.03493314, -0.043735687)
 
                         over "base_link_1" (
                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -763,7 +763,7 @@ def Xform "rivet"
                             point3f physics:centerOfMass = (0.00269514, -0.00016097, 0.01933509)
                             float3 physics:diagonalInertia = (0.00019034663, 0.0003031303, 0.0003888631)
                             float physics:mass = 0.2518651
-                            quatf physics:principalAxes = (0.63440211, -0.30273334, -0.30665369, 0.6417554)
+                            quatf physics:principalAxes = (0.6344021, -0.30273333, -0.30665368, 0.6417554)
 
                             over "link_1_1" (
                                 prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -779,7 +779,7 @@ def Xform "rivet"
                                 point3f physics:centerOfMass = (-0.1012236, -0.00183082, 0.00500847)
                                 float3 physics:diagonalInertia = (0.0012161192, 0.025725098, 0.025769532)
                                 float physics:mass = 1.7332379
-                                quatf physics:principalAxes = (0.99636032, 0.083547845, 0.016084308, -0.0052121604)
+                                quatf physics:principalAxes = (0.9963603, 0.083547845, 0.016084308, -0.0052121603)
 
                                 over "link_2_1" (
                                     prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -795,7 +795,7 @@ def Xform "rivet"
                                     point3f physics:centerOfMass = (0.15078963, -0.00011014, 0.055404)
                                     float3 physics:diagonalInertia = (0.00077493273, 0.010036354, 0.010060463)
                                     float physics:mass = 0.9507323
-                                    quatf physics:principalAxes = (0.07204707, -0.9967476, -0.0023400919, -0.036027334)
+                                    quatf physics:principalAxes = (0.07204707, -0.9967476, -0.0023400919, -0.036027335)
 
                                     over "link_3_1" (
                                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -811,7 +811,7 @@ def Xform "rivet"
                                         point3f physics:centerOfMass = (0.05224276, -0.00099433, 0.05517984)
                                         float3 physics:diagonalInertia = (0.00029405614, 0.0006639959, 0.00079335796)
                                         float physics:mass = 0.44927257
-                                        quatf physics:principalAxes = (0.92559741, -0.010664298, -0.37612499, 0.041057214)
+                                        quatf physics:principalAxes = (0.9255974, -0.010664298, -0.37612498, 0.041057214)
 
                                         over "link_4_1" (
                                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -843,7 +843,7 @@ def Xform "rivet"
                                                 point3f physics:centerOfMass = (0.06129266, -0.00002029, -0.00026366)
                                                 float3 physics:diagonalInertia = (0.00046957284, 0.0012717295, 0.0013036777)
                                                 float physics:mass = 0.84380466
-                                                quatf physics:principalAxes = (0.99991577, 0.0097126025, -0.008573101, 0.00078195162)
+                                                quatf physics:principalAxes = (0.9999158, 0.009712603, -0.008573101, 0.00078195165)
 
                                                 over "link_6_1" (
                                                     prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -857,9 +857,9 @@ def Xform "rivet"
                                                 )
                                                 {
                                                     point3f physics:centerOfMass = (0.01255019, 0.00449652, 0.00963255)
-                                                    float3 physics:diagonalInertia = (0.0000051417919, 0.000026378997, 0.000031108611)
+                                                    float3 physics:diagonalInertia = (0.000005141792, 0.000026378997, 0.00003110861)
                                                     float physics:mass = 0.06140653
-                                                    quatf physics:principalAxes = (0.70253707, 0.67616676, -0.14974015, 0.16376224)
+                                                    quatf physics:principalAxes = (0.70253706, 0.6761668, -0.14974014, 0.16376224)
 
                                                     over "carriage_right_1" (
                                                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -875,7 +875,7 @@ def Xform "rivet"
                                                         point3f physics:centerOfMass = (0.00275423, 0.00000726, 0.0205991)
                                                         float3 physics:diagonalInertia = (0.000003887292, 0.00002044, 0.000021542708)
                                                         float physics:mass = 0.03751074
-                                                        quatf physics:principalAxes = (0.77304512, 0, -0.63435104, 0)
+                                                        quatf physics:principalAxes = (0.7730451, 0, -0.634351, 0)
 
                                                         over "gripper_right_1" (
                                                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -891,9 +891,9 @@ def Xform "rivet"
                                                 )
                                                 {
                                                     point3f physics:centerOfMass = (0.01255019, 0.00449652, 0.00963255)
-                                                    float3 physics:diagonalInertia = (0.0000051417919, 0.000026378997, 0.000031108611)
+                                                    float3 physics:diagonalInertia = (0.000005141792, 0.000026378997, 0.00003110861)
                                                     float physics:mass = 0.06140653
-                                                    quatf physics:principalAxes = (0.70253707, 0.67616676, -0.14974015, 0.16376224)
+                                                    quatf physics:principalAxes = (0.70253706, 0.6761668, -0.14974014, 0.16376224)
 
                                                     over "carriage_left_1" (
                                                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -909,7 +909,7 @@ def Xform "rivet"
                                                         point3f physics:centerOfMass = (0.00275423, 0.00000726, 0.0205991)
                                                         float3 physics:diagonalInertia = (0.000003887292, 0.00002044, 0.000021542708)
                                                         float physics:mass = 0.03751074
-                                                        quatf physics:principalAxes = (0.77304512, 0, -0.63435104, 0)
+                                                        quatf physics:principalAxes = (0.7730451, 0, -0.634351, 0)
 
                                                         over "gripper_left_1" (
                                                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -973,7 +973,7 @@ def Xform "rivet"
                     point3f physics:centerOfMass = (0, 0, -0.0395608)
                     float3 physics:diagonalInertia = (0.000923685, 0.00117765, 0.00137238)
                     float physics:mass = 0.619024
-                    quatf physics:principalAxes = (-0.70710677, 0.70710677, 0, 0)
+                    quatf physics:principalAxes = (0.5, 0.5, 0.5, 0.5)
 
                     over "pivot_link_1" (
                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -989,7 +989,7 @@ def Xform "rivet"
                         point3f physics:centerOfMass = (0, 0, 0)
                         float3 physics:diagonalInertia = (0.000294662, 0.000294662, 0.000500429)
                         float physics:mass = 0.330766
-                        quatf physics:principalAxes = (0.5, 0.5, 0.5, 0.5)
+                        quatf physics:principalAxes = (-0, 0, 0.70710677, 0.70710677)
 
                         over "wheel_1" (
                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -1007,7 +1007,7 @@ def Xform "rivet"
                     point3f physics:centerOfMass = (0, 0, -0.0395608)
                     float3 physics:diagonalInertia = (0.000923685, 0.00117765, 0.00137238)
                     float physics:mass = 0.619024
-                    quatf physics:principalAxes = (-0.70710677, 0.70710677, 0, 0)
+                    quatf physics:principalAxes = (0.5, 0.5, 0.5, 0.5)
 
                     over "pivot_link_1" (
                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -1023,7 +1023,7 @@ def Xform "rivet"
                         point3f physics:centerOfMass = (0, 0, 0)
                         float3 physics:diagonalInertia = (0.000294662, 0.000294662, 0.000500429)
                         float physics:mass = 0.330766
-                        quatf physics:principalAxes = (0.5, 0.5, 0.5, 0.5)
+                        quatf physics:principalAxes = (-0, 0, 0.70710677, 0.70710677)
 
                         over "wheel_1" (
                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -1041,7 +1041,7 @@ def Xform "rivet"
                     point3f physics:centerOfMass = (0, 0, -0.0395608)
                     float3 physics:diagonalInertia = (0.000923685, 0.00117765, 0.00137238)
                     float physics:mass = 0.619024
-                    quatf physics:principalAxes = (-0.70710677, 0.70710677, 0, 0)
+                    quatf physics:principalAxes = (0.5, 0.5, 0.5, 0.5)
 
                     over "pivot_link_1" (
                         prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
@@ -1057,7 +1057,7 @@ def Xform "rivet"
                         point3f physics:centerOfMass = (0, 0, 0)
                         float3 physics:diagonalInertia = (0.000294662, 0.000294662, 0.000500429)
                         float physics:mass = 0.330766
-                        quatf physics:principalAxes = (0.5, 0.5, 0.5, 0.5)
+                        quatf physics:principalAxes = (-0, 0, 0.70710677, 0.70710677)
 
                         over "wheel_1" (
                             prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI"]
