@@ -49,7 +49,7 @@ def Xform "rivet"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (0, 0.165, 0.181)
+                    double3 xformOp:translate = (0.165, 0, 0.181)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                     def Mesh "lift_link" (
@@ -76,9 +76,9 @@ def Xform "rivet"
 
                     def Xform "camera"
                     {
-                        quatf xformOp:orient = (0.97629607, -0.21643934, 0, 0)
+                        quatf xformOp:orient = (0.97629607, 0, 0.21643946, 0)
                         float3 xformOp:scale = (1, 1, 1)
-                        double3 xformOp:translate = (0, 0.0786917, 0.351299)
+                        double3 xformOp:translate = (0.0786917, 0, 0.351299)
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                         def Mesh "camera" (
@@ -106,9 +106,9 @@ def Xform "rivet"
 
                     def Xform "follower_left_base_link"
                     {
-                        quatf xformOp:orient = (0.70710677, 0, 0, 0.70710677)
+                        quatf xformOp:orient = (1, 0, 0, 0)
                         float3 xformOp:scale = (1, 1, 1)
-                        double3 xformOp:translate = (-0.275, 0.0615, 0.031)
+                        double3 xformOp:translate = (0.0615, 0.275, 0.031)
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                         def Mesh "base_link" (
@@ -504,9 +504,9 @@ def Xform "rivet"
 
                     def Xform "follower_right_base_link"
                     {
-                        quatf xformOp:orient = (0.70710677, 0, 0, 0.70710677)
+                        quatf xformOp:orient = (1, 0, 0, 0)
                         float3 xformOp:scale = (1, 1, 1)
-                        double3 xformOp:translate = (0.275, 0.0615, 0.031)
+                        double3 xformOp:translate = (0.0615, -0.275, 0.031)
                         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                         def Mesh "base_link" (
@@ -905,7 +905,7 @@ def Xform "rivet"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (0, -0.24, 0.003)
+                    double3 xformOp:translate = (-0.24, 0, 0.003)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                     def Mesh "pivot_link" (
@@ -965,7 +965,7 @@ def Xform "rivet"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (0.19, 0.24, 0.003)
+                    double3 xformOp:translate = (0.24, -0.19, 0.003)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                     def Mesh "pivot_link" (
@@ -1025,7 +1025,7 @@ def Xform "rivet"
                 {
                     quatf xformOp:orient = (1, 0, 0, 0)
                     float3 xformOp:scale = (1, 1, 1)
-                    double3 xformOp:translate = (-0.19, 0.24, 0.003)
+                    double3 xformOp:translate = (0.24, 0.19, 0.003)
                     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
                     def Mesh "pivot_link" (

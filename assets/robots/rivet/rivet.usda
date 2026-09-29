@@ -20,8 +20,6 @@ def Xform "rivet" (
 )
 {
     float3[] extentsHint = [(-0.328982, -0.32987502, -3.874302e-10), (0.489, 0.330125, 1.4855), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.328982, -0.32987502, -3.874302e-10), (0.489, 0.330125, 1.4855)]
-    quatf xformOp:orient = (0.7071068, 0, 0, -0.7071068)
-    uniform token[] xformOpOrder = ["xformOp:orient"]
 
     over "Geometry"
     {
@@ -63,9 +61,9 @@ def Xform "rivet" (
                             float horizontalAperture = 20.955
                             bool omni:kit:cameraLock = 1
                             float verticalAperture = 15.2908
-                            quatf xformOp:orient = (0.73135, 0.682, 0, 0)
+                            quatf xformOp:orient = (0.51714254, 0.48224847, -0.48224847, -0.51714254)
                             float3 xformOp:scale = (0.1, 0.1, 0.1)
-                            double3 xformOp:translate = (0, 0.038, 0)
+                            double3 xformOp:translate = (0.038, 0, 0)
                             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
                         }
                     }
@@ -446,7 +444,7 @@ def Xform "rivet" (
                             prepend apiSchemas = ["PhysicsCollisionAPI"]
                         )
                         {
-                            uniform token axis = "X"
+                            uniform token axis = "Y"
                             double height = 0.041
                             double radius = 0.0535
                             token visibility = "invisible"
@@ -492,7 +490,7 @@ def Xform "rivet" (
                             prepend apiSchemas = ["PhysicsCollisionAPI"]
                         )
                         {
-                            uniform token axis = "X"
+                            uniform token axis = "Y"
                             double height = 0.041
                             double radius = 0.0535
                             token visibility = "invisible"
@@ -538,7 +536,7 @@ def Xform "rivet" (
                             prepend apiSchemas = ["PhysicsCollisionAPI"]
                         )
                         {
-                            uniform token axis = "X"
+                            uniform token axis = "Y"
                             double height = 0.041
                             double radius = 0.0535
                             token visibility = "invisible"
@@ -753,8 +751,6 @@ def Xform "rivet" (
             float drive:angular:physics:maxForce = 10
             float drive:angular:physics:stiffness = 50
             uniform token drive:angular:physics:type = "force"
-            float physics:lowerLimit = -180
-            float physics:upperLimit = 180
             custom float physxJoint:maxJointVelocity = 359.99997
         }
 
@@ -777,8 +773,6 @@ def Xform "rivet" (
             float drive:angular:physics:maxForce = 10
             float drive:angular:physics:stiffness = 50
             uniform token drive:angular:physics:type = "force"
-            float physics:lowerLimit = -180
-            float physics:upperLimit = 180
             custom float physxJoint:maxJointVelocity = 359.99997
         }
 
@@ -801,8 +795,6 @@ def Xform "rivet" (
             float drive:angular:physics:maxForce = 10
             float drive:angular:physics:stiffness = 50
             uniform token drive:angular:physics:type = "force"
-            float physics:lowerLimit = -180
-            float physics:upperLimit = 180
             custom float physxJoint:maxJointVelocity = 359.99997
         }
 
