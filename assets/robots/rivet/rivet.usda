@@ -150,6 +150,7 @@ def Xform "rivet" (
                                                         rel physics:filteredPairs = [
                                                             </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right>,
                                                             </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
                                                         ]
 
                                                         over "gripper_left_1"
@@ -322,6 +323,7 @@ def Xform "rivet" (
                                                         rel physics:filteredPairs = [
                                                             </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right>,
                                                             </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
+                                                            </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
                                                         ]
 
                                                         over "gripper_left_1"
