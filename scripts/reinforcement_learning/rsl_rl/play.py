@@ -119,7 +119,6 @@ from isaaclab.envs import (
 )
 from isaaclab.utils.assets import retrieve_file_path
 from isaaclab.utils.dict import print_dict
-from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
 from isaaclab_rl.rsl_rl import (
     RslRlBaseRunnerCfg,
     RslRlVecEnvWrapper,
@@ -129,6 +128,15 @@ from isaaclab_rl.rsl_rl import (
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
 from rsl_rl.runners import DistillationRunner, OnPolicyRunner
+
+try:
+    # Isaac Lab >= 2.3.2
+    from isaaclab_rl.utils.pretrained_checkpoint import (
+        get_published_pretrained_checkpoint,
+    )
+except ImportError:
+    # Isaac Lab <= 2.3.1
+    from isaaclab.utils.pretrained_checkpoint import get_published_pretrained_checkpoint
 
 
 @hydra_task_config(args_cli.task, args_cli.agent)
