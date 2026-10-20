@@ -2,7 +2,7 @@
 (
     "Generated from trossen_arm_description rivet.urdf.xacro"
     customLayerData = {
-        string creator = "URDF USD Converter v0.1.3"
+        string creator = "URDF USD Converter v0.3.2"
     }
     defaultPrim = "rivet"
     kilogramsPerUnit = 1
@@ -19,55 +19,25 @@ def Xform "rivet" (
     prepend payload = @./Payload/Contents.usda@
 )
 {
-    float3[] extentsHint = [(-0.328982, -0.32987502, -3.874302e-10), (0.489, 0.330125, 1.4855), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.328982, -0.32987502, -3.874302e-10), (0.489, 0.330125, 1.4855)]
+    float3[] extentsHint = [(-0.328982, -0.33, 0.000058799596), (0.49, 0.33, 1.4855), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.328982, -0.33, 0.000058799596), (0.49, 0.33, 1.4855)]
 
     over "Geometry"
     {
         over "base_footprint"
         {
             over "base_link" (
-                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxArticulationAPI"]
             )
             {
                 rel physics:filteredPairs = [
                     </rivet/Geometry/base_footprint/base_link/b_pivot_link/b_drive_link>,
                     </rivet/Geometry/base_footprint/base_link/fr_pivot_link/fr_drive_link>,
                     </rivet/Geometry/base_footprint/base_link/fl_pivot_link/fl_drive_link>,
-                    </rivet/Geometry/base_footprint/base_link/lift_link/camera>,
                 ]
+                float physxArticulation:sleepThreshold = 0
 
                 over "lift_link"
                 {
-                    over "camera" (
-                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
-                    )
-                    {
-                        rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link>
-
-                        over "camera_1"
-                        {
-                            uniform token physics:approximation = "convexDecomposition"
-                        }
-
-                        def Camera "Camera" (
-                            prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
-                        )
-                        {
-                            float2 clippingRange = (0.01, 1000)
-                            float exposure:fStop = 5
-                            float exposure:responsivity = 1.1026709
-                            float exposure:time = 0.02
-                            float focalLength = 24
-                            float horizontalAperture = 20.955
-                            bool omni:kit:cameraLock = 1
-                            float verticalAperture = 15.2908
-                            quatf xformOp:orient = (0.51714254, 0.48224847, -0.48224847, -0.51714254)
-                            float3 xformOp:scale = (0.1, 0.1, 0.1)
-                            double3 xformOp:translate = (0.038, 0, 0)
-                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-                        }
-                    }
-
                     over "follower_left_base_link"
                     {
                         over "follower_left_link_1"
@@ -165,33 +135,11 @@ def Xform "rivet" (
                                                     }
                                                 }
 
-                                                over "follower_left_camera_mount"
+                                                over "follower_left_camera_mount" (
+                                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                                )
                                                 {
-                                                    over "follower_left_camera"
-                                                    {
-                                                        over "camera_1"
-                                                        {
-                                                            uniform token physics:approximation = "convexDecomposition"
-                                                        }
-
-                                                        def Camera "Camera" (
-                                                            prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
-                                                        )
-                                                        {
-                                                            float2 clippingRange = (0.01, 1000)
-                                                            float exposure:fStop = 5
-                                                            float exposure:responsivity = 1.1026709
-                                                            float exposure:time = 0.02
-                                                            float focalLength = 24
-                                                            float horizontalAperture = 20.955
-                                                            bool omni:kit:cameraLock = 1
-                                                            float verticalAperture = 15.2908
-                                                            quatf xformOp:orient = (0.579228, 0.40557978, -0.40557978, -0.579228)
-                                                            float3 xformOp:scale = (0.1, 0.1, 0.1)
-                                                            double3 xformOp:translate = (0.0078079645280280385, 0, 0.065)
-                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-                                                        }
-                                                    }
+                                                    prepend rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/lift_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_wrist_camera_link/follower_left_wrist_camera_center>
 
                                                     over "camera_mount_1"
                                                     {
@@ -202,6 +150,42 @@ def Xform "rivet" (
                                                 over "link_6_1"
                                                 {
                                                     uniform token physics:approximation = "convexDecomposition"
+                                                }
+
+                                                over "follower_left_wrist_camera_link"
+                                                {
+                                                    over "follower_left_wrist_camera_center"
+                                                    {
+                                                        over "zedxnano_1"
+                                                        {
+                                                            uniform token physics:approximation = "convexDecomposition"
+                                                        }
+
+                                                        over "follower_left_wrist_left_camera_frame"
+                                                        {
+                                                            over "follower_left_wrist_left_camera_frame_optical"
+                                                            {
+                                                                def Camera "Camera" (
+                                                                    prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+                                                                )
+                                                                {
+                                                                    float2 clippingRange = (0.03, 1000)
+                                                                    float exposure:fStop = 5
+                                                                    float exposure:responsivity = 1.1026709
+                                                                    float exposure:time = 0.02
+                                                                    float focalLength = 24
+                                                                    float horizontalAperture = 20.955
+                                                                    bool omni:kit:cameraLock = 1
+                                                                    float verticalAperture = 15.2908
+                                                                    token visibility = "invisible"
+                                                                    quatf xformOp:orient = (0, 1, 0, 0)
+                                                                    float3 xformOp:scale = (0.1, 0.1, 0.1)
+                                                                    double3 xformOp:translate = (0, 0, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
 
@@ -338,33 +322,11 @@ def Xform "rivet" (
                                                     }
                                                 }
 
-                                                over "follower_right_camera_mount"
+                                                over "follower_right_camera_mount" (
+                                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                                )
                                                 {
-                                                    over "follower_right_camera"
-                                                    {
-                                                        over "camera_1"
-                                                        {
-                                                            uniform token physics:approximation = "convexDecomposition"
-                                                        }
-
-                                                        def Camera "Camera" (
-                                                            prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
-                                                        )
-                                                        {
-                                                            float2 clippingRange = (0.01, 1000)
-                                                            float exposure:fStop = 5
-                                                            float exposure:responsivity = 1.1026709
-                                                            float exposure:time = 0.02
-                                                            float focalLength = 24
-                                                            float horizontalAperture = 20.955
-                                                            bool omni:kit:cameraLock = 1
-                                                            float verticalAperture = 15.2908
-                                                            quatf xformOp:orient = (0.579228, 0.40557978, -0.40557978, -0.579228)
-                                                            float3 xformOp:scale = (0.1, 0.1, 0.1)
-                                                            double3 xformOp:translate = (0.0078079645280280385, 0, 0.065)
-                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-                                                        }
-                                                    }
+                                                    prepend rel physics:filteredPairs = </rivet/Geometry/base_footprint/base_link/lift_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_wrist_camera_link/follower_right_wrist_camera_center>
 
                                                     over "camera_mount_1"
                                                     {
@@ -375,6 +337,42 @@ def Xform "rivet" (
                                                 over "link_6_1"
                                                 {
                                                     uniform token physics:approximation = "convexDecomposition"
+                                                }
+
+                                                over "follower_right_wrist_camera_link"
+                                                {
+                                                    over "follower_right_wrist_camera_center"
+                                                    {
+                                                        over "zedxnano_1"
+                                                        {
+                                                            uniform token physics:approximation = "convexDecomposition"
+                                                        }
+
+                                                        over "follower_right_wrist_left_camera_frame"
+                                                        {
+                                                            over "follower_right_wrist_left_camera_frame_optical"
+                                                            {
+                                                                def Camera "Camera" (
+                                                                    prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+                                                                )
+                                                                {
+                                                                    float2 clippingRange = (0.03, 1000)
+                                                                    float exposure:fStop = 5
+                                                                    float exposure:responsivity = 1.1026709
+                                                                    float exposure:time = 0.02
+                                                                    float focalLength = 24
+                                                                    float horizontalAperture = 20.955
+                                                                    bool omni:kit:cameraLock = 1
+                                                                    float verticalAperture = 15.2908
+                                                                    token visibility = "invisible"
+                                                                    quatf xformOp:orient = (0, 1, 0, 0)
+                                                                    float3 xformOp:scale = (0.1, 0.1, 0.1)
+                                                                    double3 xformOp:translate = (0, 0, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
 
@@ -417,6 +415,42 @@ def Xform "rivet" (
                     over "lift_link_1"
                     {
                         uniform token physics:approximation = "convexDecomposition"
+                    }
+
+                    over "cam_high_camera_link"
+                    {
+                        over "cam_high_camera_center"
+                        {
+                            over "zedxm_1"
+                            {
+                                uniform token physics:approximation = "convexDecomposition"
+                            }
+
+                            over "cam_high_left_camera_frame"
+                            {
+                                over "cam_high_left_camera_frame_optical"
+                                {
+                                    def Camera "Camera" (
+                                        prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+                                    )
+                                    {
+                                        float2 clippingRange = (0.03, 1000)
+                                        float exposure:fStop = 5
+                                        float exposure:responsivity = 1.1026709
+                                        float exposure:time = 0.02
+                                        float focalLength = 24
+                                        float horizontalAperture = 20.955
+                                        bool omni:kit:cameraLock = 1
+                                        float verticalAperture = 15.2908
+                                        token visibility = "invisible"
+                                        quatf xformOp:orient = (0, 1, 0, 0)
+                                        float3 xformOp:scale = (0.1, 0.1, 0.1)
+                                        double3 xformOp:translate = (0, 0, 0)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -579,9 +613,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10
+            float drive:angular:physics:damping = 0.174533
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 200
+            float drive:angular:physics:stiffness = 3.490659
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -589,9 +623,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10
-            float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 200
+            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:maxForce = 97
+            float drive:angular:physics:stiffness = 3.490659
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -599,9 +633,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10
+            float drive:angular:physics:damping = 0.174533
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 200
+            float drive:angular:physics:stiffness = 3.490659
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -609,9 +643,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 70
+            float drive:angular:physics:stiffness = 1.22173
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -619,9 +653,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 20
+            float drive:angular:physics:stiffness = 0.349066
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -629,9 +663,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 10
+            float drive:angular:physics:stiffness = 0.174533
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -659,9 +693,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10
+            float drive:angular:physics:damping = 0.174533
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 200
+            float drive:angular:physics:stiffness = 3.490659
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -669,9 +703,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10
-            float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 200
+            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:maxForce = 97
+            float drive:angular:physics:stiffness = 3.490659
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -679,9 +713,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10
+            float drive:angular:physics:damping = 0.174533
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 200
+            float drive:angular:physics:stiffness = 3.490659
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -689,9 +723,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 70
+            float drive:angular:physics:stiffness = 1.22173
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -699,9 +733,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 20
+            float drive:angular:physics:stiffness = 0.349066
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -709,9 +743,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 10
+            float drive:angular:physics:stiffness = 0.174533
             uniform token drive:angular:physics:type = "force"
         }
 
@@ -749,9 +783,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 50
+            float drive:angular:physics:stiffness = 0.872665
             uniform token drive:angular:physics:type = "force"
             custom float physxJoint:maxJointVelocity = 359.99997
         }
@@ -760,7 +794,7 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 1000
+            float drive:angular:physics:damping = 17.453293
             float drive:angular:physics:maxForce = 4
             float drive:angular:physics:stiffness = 0
             uniform token drive:angular:physics:type = "force"
@@ -771,9 +805,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 50
+            float drive:angular:physics:stiffness = 0.872665
             uniform token drive:angular:physics:type = "force"
             custom float physxJoint:maxJointVelocity = 359.99997
         }
@@ -782,7 +816,7 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 1000
+            float drive:angular:physics:damping = 17.453293
             float drive:angular:physics:maxForce = 4
             float drive:angular:physics:stiffness = 0
             uniform token drive:angular:physics:type = "force"
@@ -793,9 +827,9 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 5
+            float drive:angular:physics:damping = 0.087266
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 50
+            float drive:angular:physics:stiffness = 0.872665
             uniform token drive:angular:physics:type = "force"
             custom float physxJoint:maxJointVelocity = 359.99997
         }
@@ -804,7 +838,7 @@ def Xform "rivet" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 1000
+            float drive:angular:physics:damping = 17.453293
             float drive:angular:physics:maxForce = 4
             float drive:angular:physics:stiffness = 0
             uniform token drive:angular:physics:type = "force"
