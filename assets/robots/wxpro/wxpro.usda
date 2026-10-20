@@ -116,6 +116,7 @@ def Xform "wxpro" (
                                             rel physics:filteredPairs = [
                                                 </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_right>,
                                                 </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6>,
+                                                </wxpro/Geometry/base_link/link_1/link_2/link_3/link_4/link_5/link_6/carriage_right/gripper_right>,
                                             ]
 
                                             over "gripper_left_1"
@@ -179,6 +180,7 @@ def Xform "wxpro" (
                                                         float horizontalAperture = 20.955
                                                         bool omni:kit:cameraLock = 1
                                                         float verticalAperture = 15.2908
+                                                        token visibility = "invisible"
                                                         quatf xformOp:orient = (0, 1, 0, 0)
                                                         float3 xformOp:scale = (0.1, 0.1, 0.1)
                                                         double3 xformOp:translate = (0, 0, 0)
