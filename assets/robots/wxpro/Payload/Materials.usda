@@ -2,7 +2,7 @@
 (
     "Generated from trossen_arm_description wxpro.urdf.xacro"
     customLayerData = {
-        string creator = "URDF USD Converter v0.1.3"
+        string creator = "URDF USD Converter v0.3.2"
     }
     defaultPrim = "wxpro"
     kilogramsPerUnit = 1
@@ -92,8 +92,8 @@ def Xform "wxpro"
         {
         }
 
-        def Material "tn__0647059_0647059_0647059_0000000_0000000_hw0AJSb0" (
-            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0647059_0647059_0647059_0000000_0000000_hw0AJSb0>
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
         )
         {
         }
@@ -104,14 +104,14 @@ def Xform "wxpro"
         {
         }
 
-        def Material "tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0" (
-            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
         )
         {
         }
 
-        def Material "tn__0647059_0647059_0647059_0000000_0000000_1_gz0AJSb0" (
-            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0647059_0647059_0647059_0000000_0000000_1_gz0AJSb0>
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
         )
         {
         }
@@ -122,20 +122,20 @@ def Xform "wxpro"
         {
         }
 
-        def Material "tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0" (
-            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
-        )
-        {
-        }
-
         def Material "tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0" (
             prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
         )
         {
         }
 
-        def Material "tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0" (
-            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+        def Material "tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0>
+        )
+        {
+        }
+
+        def Material "zed_camera_mat" (
+            prepend references = @./MaterialsLibrary.usdc@</Materials/zed_camera_mat>
         )
         {
         }
@@ -263,7 +263,7 @@ def Xform "wxpro"
                                             prepend apiSchemas = ["MaterialBindingAPI"]
                                         )
                                         {
-                                            rel material:binding = </wxpro/Materials/tn__0647059_0647059_0647059_0000000_0000000_hw0AJSb0>
+                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
                                         }
 
                                         over "gripper_right"
@@ -281,7 +281,7 @@ def Xform "wxpro"
                                                     prepend apiSchemas = ["MaterialBindingAPI"]
                                                 )
                                                 {
-                                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
+                                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
                                                 }
                                             }
                                         }
@@ -293,7 +293,7 @@ def Xform "wxpro"
                                             prepend apiSchemas = ["MaterialBindingAPI"]
                                         )
                                         {
-                                            rel material:binding = </wxpro/Materials/tn__0647059_0647059_0647059_0000000_0000000_1_gz0AJSb0>
+                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_8_gz0AJSb0>
                                         }
 
                                         over "gripper_left"
@@ -311,7 +311,7 @@ def Xform "wxpro"
                                                     prepend apiSchemas = ["MaterialBindingAPI"]
                                                 )
                                                 {
-                                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_7_gz0AJSb0>
+                                                    rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
                                                 }
                                             }
                                         }
@@ -323,16 +323,19 @@ def Xform "wxpro"
                                             prepend apiSchemas = ["MaterialBindingAPI"]
                                         )
                                         {
-                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_9_gz0AJSb0>
+                                            rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_11_vV1AJSb0>
                                         }
+                                    }
 
-                                        over "camera"
+                                    over "wrist_camera_link"
+                                    {
+                                        over "wrist_camera_center"
                                         {
-                                            over "camera" (
+                                            over "zedxnano" (
                                                 prepend apiSchemas = ["MaterialBindingAPI"]
                                             )
                                             {
-                                                rel material:binding = </wxpro/Materials/tn__0262745_0282353_0301961_0000000_0000000_10_vV1AJSb0>
+                                                rel material:binding = </wxpro/Materials/zed_camera_mat>
                                             }
                                         }
                                     }
