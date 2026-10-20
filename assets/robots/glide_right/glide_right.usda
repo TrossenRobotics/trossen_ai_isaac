@@ -1,0 +1,175 @@
+#usda 1.0
+(
+    "Generated from trossen_arm_description glide_right.urdf.xacro"
+    customLayerData = {
+        string creator = "URDF USD Converter v0.3.2"
+    }
+    defaultPrim = "glide_right"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "glide_right" (
+    prepend apiSchemas = ["GeomModelAPI"]
+    assetInfo = {
+        string name = "glide_right"
+    }
+    kind = "component"
+    prepend payload = @./Payload/Contents.usda@
+)
+{
+    float3[] extentsHint = [(-0.2664238, -0.0965, -0.014608926), (0.18179359, 0.13772433, 0.2393801), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.2664238, -0.0965, -0.014608926), (0.18179359, 0.13772433, 0.2393801)]
+
+    over "Geometry"
+    {
+        over "base_link" (
+            prepend apiSchemas = ["PhysxArticulationAPI"]
+        )
+        {
+            float physxArticulation:sleepThreshold = 0
+
+            over "link_1"
+            {
+                over "link_2"
+                {
+                    over "link_3"
+                    {
+                        over "link_4"
+                        {
+                            over "link_5"
+                            {
+                                over "link_6"
+                                {
+                                    over "trigger"
+                                    {
+                                        over "trigger_1"
+                                        {
+                                            uniform token physics:approximation = "convexDecomposition"
+                                        }
+                                    }
+
+                                    over "link_6_1"
+                                    {
+                                        uniform token physics:approximation = "convexDecomposition"
+                                    }
+                                }
+
+                                over "link_5_1"
+                                {
+                                    uniform token physics:approximation = "convexDecomposition"
+                                }
+                            }
+
+                            over "link_4_1"
+                            {
+                                uniform token physics:approximation = "convexDecomposition"
+                            }
+                        }
+
+                        over "link_3_1"
+                        {
+                            uniform token physics:approximation = "convexDecomposition"
+                        }
+                    }
+
+                    over "link_2_1"
+                    {
+                        uniform token physics:approximation = "convexDecomposition"
+                    }
+                }
+
+                over "link_1_1"
+                {
+                    uniform token physics:approximation = "convexDecomposition"
+                }
+            }
+
+            over "base_link_1"
+            {
+                uniform token physics:approximation = "convexDecomposition"
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        over "joint_0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.017453
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 0.349066
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.017453
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 0.349066
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.017453
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 0.349066
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.008727
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 0.174533
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.008727
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 0.087266
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_5" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.008727
+            float drive:angular:physics:maxForce = 7
+            float drive:angular:physics:stiffness = 0.087266
+            uniform token drive:angular:physics:type = "force"
+        }
+
+        over "joint_6" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.001745
+            float drive:angular:physics:maxForce = 1.8
+            float drive:angular:physics:stiffness = 0.034907
+            uniform token drive:angular:physics:type = "force"
+        }
+    }
+}
+
+def PhysicsScene "PhysicsScene" (
+    prepend apiSchemas = ["PhysxSceneAPI"]
+    prepend payload = @./Payload/Contents.usda@</PhysicsScene>
+)
+{
+    uint physxScene:gpuFoundLostAggregatePairsCapacity = 2048
+}
