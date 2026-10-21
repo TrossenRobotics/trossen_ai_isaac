@@ -176,10 +176,37 @@ def Xform "wxheavy" (
                                                         float exposure:fStop = 5
                                                         float exposure:responsivity = 1.1026709
                                                         float exposure:time = 0.02
-                                                        float focalLength = 24
-                                                        float horizontalAperture = 20.955
+                                                        float focalLength = 2.2248
+                                                        float horizontalAperture = 5.76
                                                         bool omni:kit:cameraLock = 1
-                                                        float verticalAperture = 15.2908
+                                                        uniform token stereoRole = "left"
+                                                        float verticalAperture = 3.6
+                                                        token visibility = "invisible"
+                                                        quatf xformOp:orient = (0, 1, 0, 0)
+                                                        float3 xformOp:scale = (0.1, 0.1, 0.1)
+                                                        double3 xformOp:translate = (0, 0, 0)
+                                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                                    }
+                                                }
+                                            }
+
+                                            over "wrist_right_camera_frame"
+                                            {
+                                                over "wrist_right_camera_frame_optical"
+                                                {
+                                                    def Camera "Camera" (
+                                                        prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+                                                    )
+                                                    {
+                                                        float2 clippingRange = (0.03, 1000)
+                                                        float exposure:fStop = 5
+                                                        float exposure:responsivity = 1.1026709
+                                                        float exposure:time = 0.02
+                                                        float focalLength = 2.2248
+                                                        float horizontalAperture = 5.76
+                                                        bool omni:kit:cameraLock = 1
+                                                        uniform token stereoRole = "right"
+                                                        float verticalAperture = 3.6
                                                         token visibility = "invisible"
                                                         quatf xformOp:orient = (0, 1, 0, 0)
                                                         float3 xformOp:scale = (0.1, 0.1, 0.1)
