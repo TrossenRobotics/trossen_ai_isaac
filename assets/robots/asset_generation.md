@@ -89,6 +89,8 @@ cd ~/trossen_ai_isaac/robots
    - Check console for errors (missing meshes, articulation issues)
 
 Note: All USD files use parameters matching real-world hardware specifications as of November 25, 2025, using Isaac Sim 5.1.0.
+TODO(abhismirai42): update this file for new assets generation steps.
+TODO(abhismirai42): update new assets link prim path (nested to flat)
 
 ## Changelog
 
