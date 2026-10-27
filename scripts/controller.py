@@ -33,6 +33,7 @@ This module provides a controller for Trossen AI robots with
 differential inverse kinematics and gripper control.
 Supports:
 - WidowX AI
+- WidowX Pro
 - Stationary AI
 - Mobile AI
 """
@@ -53,6 +54,7 @@ class RobotType(Enum):
     """Supported robot types."""
 
     WXAI = "wxai"
+    WXPRO = "wxpro"
     STATIONARY_AI = "stationary_ai"
     MOBILE_AI = "mobile_ai"
 
@@ -81,6 +83,7 @@ class TrossenAIController(Articulation):
 
     Supported robots:
     - WidowX AI: 8 DOFs (6 arm joints + 2 gripper fingers)
+    - WidowX Pro: 8 DOFs (6 arm joints + 2 gripper fingers)
     - Stationary AI: 16 DOFs (6 + 6 left and right arm joints, 2 + 2 left and right gripper fingers)
     - Mobile AI: 26 DOFs (4 + 4 caster wheels + caster swivel, 1 + 1 left and right wheels joints, 6 + 6 left and right arm joints, 2 + 2 gripper fingers)
     """
@@ -95,18 +98,20 @@ class TrossenAIController(Articulation):
         arm_dof_indices: list[int] | None = None,
         gripper_dof_index: int | None = None,
         default_dof_positions: list[float] | None = None,
+        ee_offset: np.ndarray | None = None,
     ):
         """Initialize Trossen AI robot controller.
 
         Args:
             robot_path: USD scene path for the robot that already exists in the scene.
-            robot_type: Type of robot (WXAI, STATIONARY_AI, or MOBILE_AI). Default: RobotType.WXAI
+            robot_type: Type of robot (WXAI, WXPRO, STATIONARY_AI, or MOBILE_AI). Default: RobotType.WXAI
             end_effector_link: End effector link. If None, defaults to 'link_6'.
             ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0). Default: 0.5
             ik_damping: Damping factor for singularity robustness (0.0-0.1). Default: 0.03
             arm_dof_indices: DOF indices for the arm joints. Required.
             gripper_dof_index: DOF index for the gripper. Required.
             default_dof_positions: Default joint configuration for reset. Required.
+            ee_offset: End effector offset from link_6 in meters [x, y, z]. Default: EE_OFFSET.
         """
         super().__init__(robot_path)
 
@@ -131,11 +136,14 @@ class TrossenAIController(Articulation):
             self.end_effector_link = end_effector_link
             link_name = end_effector_link.paths[0].split("/")[-1]
         else:
-            self.end_effector_link = RigidPrim(f"{robot_path}/{END_EFFECTOR_LINK_NAME}")
             link_name = END_EFFECTOR_LINK_NAME
+            # Link path from the articulation, links may be flat or nested under the robot prim
+            self.end_effector_link = RigidPrim(
+                self.link_paths[0][self.get_link_indices(link_name).list()[0]]
+            )
 
         self.end_effector_link_index = self.get_link_indices(link_name).list()[0]
-        self.ee_offset = EE_OFFSET
+        self.ee_offset = EE_OFFSET if ee_offset is None else np.asarray(ee_offset)
 
         self.ik_scale = ik_scale
         self.ik_damping = ik_damping
@@ -263,7 +271,7 @@ class TrossenAIController(Articulation):
         )
         jacobian_full = jacobian_matrices[:, link_idx, :, :]
 
-        if self.robot_type == RobotType.WXAI:
+        if self.robot_type == RobotType.WXAI or self.robot_type == RobotType.WXPRO:
             jacobian_end_effector = jacobian_full[:, :, :NUM_ARM_JOINTS_WXAI]
         elif self.robot_type == RobotType.STATIONARY_AI:
             jacobian_end_effector = jacobian_full[:, :, self.arm_dof_indices]
@@ -286,7 +294,7 @@ class TrossenAIController(Articulation):
             goal_orientation=orientation,
         )
 
-        if self.robot_type == RobotType.WXAI:
+        if self.robot_type == RobotType.WXAI or self.robot_type == RobotType.WXPRO:
             dof_position_targets = (
                 current_dof_positions[:, :NUM_ARM_JOINTS_WXAI] + delta_dof_positions
             )
