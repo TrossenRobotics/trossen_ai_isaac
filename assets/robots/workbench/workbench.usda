@@ -24,7 +24,8 @@ def Xform "workbench" (
     over "Geometry"
     {
         over "base_link" (
-            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxArticulationAPI"]
+            delete apiSchemas = ["PhysicsArticulationRootAPI", "NewtonArticulationRootAPI"]
+            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
         )
         {
             rel physics:filteredPairs = [
@@ -33,18 +34,22 @@ def Xform "workbench" (
                 </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1>,
                 </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>,
             ]
-            float physxArticulation:sleepThreshold = 0
 
-            over "follower_left_base_link"
+            over "follower_left_base_link" (
+                prepend apiSchemas = ["PhysxRigidBodyAPI"]
+            )
             {
+                bool physxRigidBody:disableGravity = 1
+
                 over "follower_left_link_1" (
-                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                    prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                 )
                 {
                     rel physics:filteredPairs = </workbench/Geometry/base_link>
+                    bool physxRigidBody:disableGravity = 1
 
                     over "follower_left_link_2" (
-                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                        prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                     )
                     {
                         rel physics:filteredPairs = [
@@ -52,47 +57,57 @@ def Xform "workbench" (
                             </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4>,
                             </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5>,
                         ]
+                        bool physxRigidBody:disableGravity = 1
 
-                        over "follower_left_link_3"
+                        over "follower_left_link_3" (
+                            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+                        )
                         {
+                            bool physxRigidBody:disableGravity = 1
+
                             over "follower_left_link_4" (
-                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                             )
                             {
                                 rel physics:filteredPairs = </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2>
+                                bool physxRigidBody:disableGravity = 1
 
                                 over "follower_left_link_5" (
-                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                 )
                                 {
                                     rel physics:filteredPairs = </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2>
+                                    bool physxRigidBody:disableGravity = 1
 
                                     over "follower_left_link_6" (
-                                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                        prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                     )
                                     {
                                         rel physics:filteredPairs = [
                                             </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left/follower_left_gripper_left>,
                                             </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
                                         ]
+                                        bool physxRigidBody:disableGravity = 1
 
                                         over "follower_left_carriage_right" (
-                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                         )
                                         {
                                             rel physics:filteredPairs = [
                                                 </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left/follower_left_gripper_left>,
                                                 </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left>,
                                             ]
+                                            bool physxRigidBody:disableGravity = 1
 
                                             over "follower_left_gripper_right" (
-                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                             )
                                             {
                                                 rel physics:filteredPairs = [
                                                     </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_left>,
                                                     </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
                                                 ]
+                                                bool physxRigidBody:disableGravity = 1
 
                                                 over "gripper_right_1"
                                                 {
@@ -114,16 +129,17 @@ def Xform "workbench" (
                                         }
 
                                         over "follower_left_carriage_left" (
-                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                         )
                                         {
                                             rel physics:filteredPairs = [
                                                 </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
                                                 </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right>,
                                             ]
+                                            bool physxRigidBody:disableGravity = 1
 
                                             over "follower_left_gripper_left" (
-                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                             )
                                             {
                                                 rel physics:filteredPairs = [
@@ -131,6 +147,7 @@ def Xform "workbench" (
                                                     </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6>,
                                                     </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_carriage_right/follower_left_gripper_right>,
                                                 ]
+                                                bool physxRigidBody:disableGravity = 1
 
                                                 over "gripper_left_1"
                                                 {
@@ -152,10 +169,11 @@ def Xform "workbench" (
                                         }
 
                                         over "follower_left_camera_mount" (
-                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                         )
                                         {
                                             prepend rel physics:filteredPairs = </workbench/Geometry/base_link/follower_left_base_link/follower_left_link_1/follower_left_link_2/follower_left_link_3/follower_left_link_4/follower_left_link_5/follower_left_link_6/follower_left_wrist_camera_link/follower_left_wrist_camera_center>
+                                            bool physxRigidBody:disableGravity = 1
 
                                             over "camera_mount_1"
                                             {
@@ -170,8 +188,12 @@ def Xform "workbench" (
 
                                         over "follower_left_wrist_camera_link"
                                         {
-                                            over "follower_left_wrist_camera_center"
+                                            over "follower_left_wrist_camera_center" (
+                                                prepend apiSchemas = ["PhysxRigidBodyAPI"]
+                                            )
                                             {
+                                                bool physxRigidBody:disableGravity = 1
+
                                                 over "zedxnano_1"
                                                 {
                                                     uniform token physics:approximation = "convexDecomposition"
@@ -268,16 +290,21 @@ def Xform "workbench" (
                 }
             }
 
-            over "follower_right_base_link"
+            over "follower_right_base_link" (
+                prepend apiSchemas = ["PhysxRigidBodyAPI"]
+            )
             {
+                bool physxRigidBody:disableGravity = 1
+
                 over "follower_right_link_1" (
-                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                    prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                 )
                 {
                     rel physics:filteredPairs = </workbench/Geometry/base_link>
+                    bool physxRigidBody:disableGravity = 1
 
                     over "follower_right_link_2" (
-                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                        prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                     )
                     {
                         rel physics:filteredPairs = [
@@ -285,47 +312,57 @@ def Xform "workbench" (
                             </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4>,
                             </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5>,
                         ]
+                        bool physxRigidBody:disableGravity = 1
 
-                        over "follower_right_link_3"
+                        over "follower_right_link_3" (
+                            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+                        )
                         {
+                            bool physxRigidBody:disableGravity = 1
+
                             over "follower_right_link_4" (
-                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                             )
                             {
                                 rel physics:filteredPairs = </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>
+                                bool physxRigidBody:disableGravity = 1
 
                                 over "follower_right_link_5" (
-                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                    prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                 )
                                 {
                                     rel physics:filteredPairs = </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2>
+                                    bool physxRigidBody:disableGravity = 1
 
                                     over "follower_right_link_6" (
-                                        prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                        prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                     )
                                     {
                                         rel physics:filteredPairs = [
                                             </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left/follower_right_gripper_left>,
                                             </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
                                         ]
+                                        bool physxRigidBody:disableGravity = 1
 
                                         over "follower_right_carriage_right" (
-                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                         )
                                         {
                                             rel physics:filteredPairs = [
                                                 </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left/follower_right_gripper_left>,
                                                 </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left>,
                                             ]
+                                            bool physxRigidBody:disableGravity = 1
 
                                             over "follower_right_gripper_right" (
-                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                             )
                                             {
                                                 rel physics:filteredPairs = [
                                                     </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_left>,
                                                     </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
                                                 ]
+                                                bool physxRigidBody:disableGravity = 1
 
                                                 over "gripper_right_1"
                                                 {
@@ -347,16 +384,17 @@ def Xform "workbench" (
                                         }
 
                                         over "follower_right_carriage_left" (
-                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                         )
                                         {
                                             rel physics:filteredPairs = [
                                                 </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
                                                 </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right>,
                                             ]
+                                            bool physxRigidBody:disableGravity = 1
 
                                             over "follower_right_gripper_left" (
-                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                                prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                             )
                                             {
                                                 rel physics:filteredPairs = [
@@ -364,6 +402,7 @@ def Xform "workbench" (
                                                     </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6>,
                                                     </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_carriage_right/follower_right_gripper_right>,
                                                 ]
+                                                bool physxRigidBody:disableGravity = 1
 
                                                 over "gripper_left_1"
                                                 {
@@ -385,10 +424,11 @@ def Xform "workbench" (
                                         }
 
                                         over "follower_right_camera_mount" (
-                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI"]
+                                            prepend apiSchemas = ["PhysicsFilteredPairsAPI", "PhysxRigidBodyAPI"]
                                         )
                                         {
                                             prepend rel physics:filteredPairs = </workbench/Geometry/base_link/follower_right_base_link/follower_right_link_1/follower_right_link_2/follower_right_link_3/follower_right_link_4/follower_right_link_5/follower_right_link_6/follower_right_wrist_camera_link/follower_right_wrist_camera_center>
+                                            bool physxRigidBody:disableGravity = 1
 
                                             over "camera_mount_1"
                                             {
@@ -403,8 +443,12 @@ def Xform "workbench" (
 
                                         over "follower_right_wrist_camera_link"
                                         {
-                                            over "follower_right_wrist_camera_center"
+                                            over "follower_right_wrist_camera_center" (
+                                                prepend apiSchemas = ["PhysxRigidBodyAPI"]
+                                            )
                                             {
+                                                bool physxRigidBody:disableGravity = 1
+
                                                 over "zedxnano_1"
                                                 {
                                                     uniform token physics:approximation = "convexDecomposition"
@@ -574,163 +618,180 @@ def Xform "workbench" (
     over "Physics"
     {
         over "follower_left_joint_0" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:damping = 0.139626
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 3.490659
+            float drive:angular:physics:stiffness = 2.234021
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.032
         }
 
         over "follower_left_joint_1" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:damping = 1.117011
             float drive:angular:physics:maxForce = 97
-            float drive:angular:physics:stiffness = 3.490659
+            float drive:angular:physics:stiffness = 35.744343
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.2
         }
 
         over "follower_left_joint_2" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:damping = 0.139626
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 3.490659
+            float drive:angular:physics:stiffness = 2.234021
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.032
         }
 
         over "follower_left_joint_3" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.017453
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 1.22173
+            float drive:angular:physics:stiffness = 1.396263
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.0018
         }
 
         over "follower_left_joint_4" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.017453
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 0.349066
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.0018
         }
 
         over "follower_left_joint_5" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.017453
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 0.174533
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.0018
         }
 
         over "follower_left_left_carriage_joint" (
-            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+            prepend apiSchemas = ["PhysicsDriveAPI:linear", "PhysxJointAxisAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 50
             float drive:linear:physics:maxForce = 400
             float drive:linear:physics:stiffness = 1000
             uniform token drive:linear:physics:type = "force"
+            float physxJointAxis:linear:armature = 0.1
         }
 
         over "follower_left_right_carriage_joint" (
-            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+            delete apiSchemas = ["PhysicsDriveAPI:linear"]
+            prepend apiSchemas = ["PhysxJointAxisAPI:linear"]
         )
         {
-            float drive:linear:physics:damping = 50
-            float drive:linear:physics:maxForce = 400
-            float drive:linear:physics:stiffness = 1000
-            uniform token drive:linear:physics:type = "force"
+            float physxJointAxis:linear:armature = 0.1
         }
 
         over "follower_right_joint_0" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:damping = 0.139626
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 3.490659
+            float drive:angular:physics:stiffness = 2.234021
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.032
         }
 
         over "follower_right_joint_1" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:damping = 1.117011
             float drive:angular:physics:maxForce = 97
-            float drive:angular:physics:stiffness = 3.490659
+            float drive:angular:physics:stiffness = 35.744343
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.2
         }
 
         over "follower_right_joint_2" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.174533
+            float drive:angular:physics:damping = 0.139626
             float drive:angular:physics:maxForce = 27
-            float drive:angular:physics:stiffness = 3.490659
+            float drive:angular:physics:stiffness = 2.234021
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.032
         }
 
         over "follower_right_joint_3" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.017453
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 1.22173
+            float drive:angular:physics:stiffness = 1.396263
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.0018
         }
 
         over "follower_right_joint_4" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.017453
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 0.349066
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.0018
         }
 
         over "follower_right_joint_5" (
-            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysxJointAxisAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.017453
             float drive:angular:physics:maxForce = 7
-            float drive:angular:physics:stiffness = 0.174533
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
+            float physxJointAxis:angular:armature = 0.0018
         }
 
         over "follower_right_left_carriage_joint" (
-            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+            prepend apiSchemas = ["PhysicsDriveAPI:linear", "PhysxJointAxisAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 50
             float drive:linear:physics:maxForce = 400
             float drive:linear:physics:stiffness = 1000
             uniform token drive:linear:physics:type = "force"
+            float physxJointAxis:linear:armature = 0.1
         }
 
         over "follower_right_right_carriage_joint" (
-            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+            delete apiSchemas = ["PhysicsDriveAPI:linear"]
+            prepend apiSchemas = ["PhysxJointAxisAPI:linear"]
         )
         {
-            float drive:linear:physics:damping = 50
-            float drive:linear:physics:maxForce = 400
-            float drive:linear:physics:stiffness = 1000
-            uniform token drive:linear:physics:type = "force"
+            float physxJointAxis:linear:armature = 0.1
+        }
+
+        over "root_joint" (
+            prepend apiSchemas = ["PhysicsArticulationRootAPI", "NewtonArticulationRootAPI", "PhysxArticulationAPI"]
+        )
+        {
+            float physxArticulation:sleepThreshold = 0
         }
     }
 }
