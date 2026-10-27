@@ -120,18 +120,22 @@ Supported robots: `wxai_base` (default), `wxai_follower`, `wxai_leader_left`, `w
 
 ### Pick and Place Demo
 
+`pick_place.py` runs the WidowX AI or WidowX Pro (`--robot` defaults to `wxpro`):
+
 ```bash
-~/isaacsim/python.sh scripts/wxai_pick_place.py
+~/isaacsim/python.sh scripts/pick_place.py --robot wxai
+~/isaacsim/python.sh scripts/pick_place.py --robot wxpro
 ~/isaacsim/python.sh scripts/stationary_ai_pick_place.py
 ~/isaacsim/python.sh scripts/mobile_ai_pick_place.py
 ```
 
 ### Follow Target Demo
 
-Real-time end-effector tracking using differential IK:
+Real-time end-effector tracking using differential IK (`--robot` defaults to `wxpro`):
 
 ```bash
-~/isaacsim/python.sh scripts/wxai_follow_target.py
+~/isaacsim/python.sh scripts/follow_target.py --robot wxai
+~/isaacsim/python.sh scripts/follow_target.py --robot wxpro
 ```
 
 ---
@@ -235,7 +239,7 @@ The `TrossenAIController` class provides a unified interface for controlling all
 
 - Differential inverse kinematics for Cartesian end-effector control
 - Gripper control with open/close commands
-- Support for all robot types (WidowX AI, Stationary AI, Mobile AI)
+- Support for all robot types (WidowX AI, WidowX Pro, Stationary AI, Mobile AI)
 
 ### Basic Usage
 

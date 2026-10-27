@@ -27,16 +27,18 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 """
-WidowX AI Pick-and-Place Demonstration.
+Pick-and-Place Demonstration.
 
-This script demonstrates pick-and-place manipulation task using the WidowX AI robot.
+This script demonstrates pick-and-place manipulation task using the WidowX AI or WidowX Pro robot.
 
 Usage:
-    ~/isaacsim/python.sh scripts/wxai_pick_place.py
+    ~/isaacsim/python.sh scripts/pick_place.py --robot wxai
+    ~/isaacsim/python.sh scripts/pick_place.py --robot wxpro
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 
@@ -67,28 +69,49 @@ DEFAULT_EVENTS_DT = [80, 50, 10, 50, 80, 50, 10, 50, 80]
 
 # Trajectory parameters
 CLEARANCE_HEIGHT = 0.15  # Height clearance above objects in meters
-APPROACH_OFFSET = np.array([0.0, 0.0, 0.03])  # Vertical offset for approach in meters
+APPROACH_OFFSET = np.array(
+    [0.0, 0.0, -0.02]
+)  # Fingertip offset from the cube center in meters
 DOWNWARD_ORIENTATION = np.array(
     [[0.7071068, 0.0, 0.7071068, 0.0]]
 )  # Downward-facing quaternion [w, x, y, z]
 
 # Scene configuration
-ROBOT_USD_PATH = "./assets/robots/wxai/wxai_base.usd"
-ROBOT_SCENE_PATH = "/World/wxai_robot"
+ROBOT_SCENE_PATH = "/World/robot"
 GROUND_SCENE_PATH = "/World/ground"
 CUBE_SCENE_PATH = "/World/Cube"
 
+# Supported robots
+ROBOTS = {
+    "wxai": {
+        "usd_path": "./assets/robots/wxai/wxai_base.usd",
+        "gripper_dof_index": 6,
+        "ee_offset": np.array([0.156062, 0.0, 0.0]),
+    },
+    "wxpro": {
+        "usd_path": "./assets/robots/wxpro/wxpro.usd",
+        # left_carriage_joint (DOF order: right_carriage_joint, left_carriage_joint); the right finger mimics it
+        "gripper_dof_index": 7,
+        "ee_offset": np.array([0.218, 0.0, 0.0]),
+    },
+}
+DEFAULT_ROBOT = "wxpro"
+
 # Robot controller configuration
-WXAI_ARM_DOF_INDICES = [0, 1, 2, 3, 4, 5]
-WXAI_GRIPPER_DOF_INDEX = 6
-WXAI_DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+ARM_DOF_INDICES = [0, 1, 2, 3, 4, 5]
+DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+
+# IK configuration
+IK_SCALE = 1.0
+IK_DAMPING = 0.03
 
 
-class WXAIPickPlace:
+class PickPlace:
     """Pick-and-place task with trajectory-based motion control."""
 
     def __init__(
         self,
+        robot: str = DEFAULT_ROBOT,
         events_dt: list[int] | None = None,
         cube_initial_position: np.ndarray | None = None,
         cube_initial_orientation: np.ndarray | None = None,
@@ -98,12 +121,18 @@ class WXAIPickPlace:
         """Initialize pick-and-place task.
 
         Args:
+            robot: Robot name, one of ROBOTS.
             events_dt: List of time deltas for events in the task sequence.
             cube_initial_position: Initial position [x, y, z] of the cube in meters.
             cube_initial_orientation: Initial orientation quaternion [w, x, y, z] of the cube.
             cube_size: Size of the cube [width, height, depth] in meters.
             target_position: Target position [x, y, z] for placing the cube in meters.
         """
+        if robot not in ROBOTS:
+            raise ValueError(f"Unknown robot '{robot}', expected one of {list(ROBOTS)}")
+        self.robot_name = robot
+        self.robot_config = ROBOTS[robot]
+
         self.cube_size = cube_size if cube_size is not None else DEFAULT_CUBE_SIZE
         self.cube_initial_position = (
             cube_initial_position
@@ -136,16 +165,19 @@ class WXAIPickPlace:
 
         # Spawn robot in scene
         stage_utils.add_reference_to_stage(
-            usd_path=ROBOT_USD_PATH,
+            usd_path=self.robot_config["usd_path"],
             path=ROBOT_SCENE_PATH,
         )
 
         self.robot = TrossenAIController(
             robot_path=ROBOT_SCENE_PATH,
-            robot_type=RobotType.WXAI,
-            arm_dof_indices=WXAI_ARM_DOF_INDICES,
-            gripper_dof_index=WXAI_GRIPPER_DOF_INDEX,
-            default_dof_positions=WXAI_DEFAULT_DOF_POSITIONS,
+            robot_type=RobotType(self.robot_name),
+            ik_scale=IK_SCALE,
+            ik_damping=IK_DAMPING,
+            arm_dof_indices=ARM_DOF_INDICES,
+            gripper_dof_index=self.robot_config["gripper_dof_index"],
+            default_dof_positions=DEFAULT_DOF_POSITIONS,
+            ee_offset=self.robot_config["ee_offset"],
         )
 
         stage_utils.add_reference_to_stage(
@@ -340,10 +372,20 @@ class WXAIPickPlace:
 
 
 def main():
-    print("WidowX AI Pick-and-Place Demo")
+    parser = argparse.ArgumentParser(description="Scripted pick-and-place of a cube.")
+    parser.add_argument(
+        "--robot",
+        type=str,
+        choices=list(ROBOTS),
+        default=DEFAULT_ROBOT,
+        help="Robot to run.",
+    )
+    args = parser.parse_args()
+
+    print(f"{args.robot} Pick-and-Place Demo")
     simulation_app.update()
 
-    pick_place = WXAIPickPlace()
+    pick_place = PickPlace(robot=args.robot)
     pick_place.setup_scene()
 
     omni.timeline.get_timeline_interface().play()

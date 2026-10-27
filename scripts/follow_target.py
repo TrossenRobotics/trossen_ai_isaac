@@ -27,17 +27,19 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 """
-WidowX AI Follow Target Demonstration.
+Follow Target Demonstration.
 
-This script demonstrates continuous target tracking where the robot's end
-effector follows a manually movable target cube.
+This script demonstrates continuous target tracking where the end effector of the
+WidowX AI or WidowX Pro robot follows a manually movable target cube.
 
 Usage:
-    ~/isaacsim/python.sh scripts/wxai_follow_target.py
+    ~/isaacsim/python.sh scripts/follow_target.py --robot wxai
+    ~/isaacsim/python.sh scripts/follow_target.py --robot wxpro
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 
@@ -59,23 +61,41 @@ sys.path.append(os.path.dirname(__file__))
 from controller import RobotType, TrossenAIController  # noqa: E402
 
 # Default target configuration
-DEFAULT_TARGET_POSITION = np.array([0.3, 0.0, 0.2])
+DEFAULT_TARGET_POSITION = np.array([0.35, 0.0, 0.3])
 DEFAULT_TARGET_ORIENTATION = np.array([1, 0, 0, 0])
 DEFAULT_TARGET_SIZE = np.array([0.0515, 0.0515, 0.0515])
 
 # Scene configuration
-ROBOT_USD_PATH = "./assets/robots/wxai/wxai_base.usd"
-ROBOT_SCENE_PATH = "/World/wxai_robot"
+ROBOT_SCENE_PATH = "/World/robot"
 GROUND_SCENE_PATH = "/World/ground"
 TARGET_SCENE_PATH = "/World/TargetCube"
 
+# Supported robots
+ROBOTS = {
+    "wxai": {
+        "usd_path": "./assets/robots/wxai/wxai_base.usd",
+        "gripper_dof_index": 6,
+        "ee_offset": np.array([0.156062, 0.0, 0.0]),
+    },
+    "wxpro": {
+        "usd_path": "./assets/robots/wxpro/wxpro.usd",
+        # left_carriage_joint (DOF order: right_carriage_joint, left_carriage_joint); the right finger mimics it
+        "gripper_dof_index": 7,
+        "ee_offset": np.array([0.218, 0.0, 0.0]),
+    },
+}
+DEFAULT_ROBOT = "wxpro"
+
 # Robot controller configuration
-WXAI_ARM_DOF_INDICES = [0, 1, 2, 3, 4, 5]
-WXAI_GRIPPER_DOF_INDEX = 6
-WXAI_DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+ARM_DOF_INDICES = [0, 1, 2, 3, 4, 5]
+DEFAULT_DOF_POSITIONS = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.044, 0.044]
+
+# IK configuration
+IK_SCALE = 1.0
+IK_DAMPING = 0.03
 
 
-class WXAIFollowTarget:
+class FollowTarget:
     """Real-time target tracking demonstration.
 
     Continuously tracks a movable target cube's pose, commanding the robot's
@@ -84,11 +104,24 @@ class WXAIFollowTarget:
 
     def __init__(
         self,
+        robot: str = DEFAULT_ROBOT,
         target_initial_position: np.ndarray | None = None,
         target_initial_orientation: np.ndarray | None = None,
         target_size: np.ndarray | None = None,
     ):
-        """Initialize target tracking task."""
+        """Initialize target tracking task.
+
+        Args:
+            robot: Robot name, one of ROBOTS.
+            target_initial_position: Initial position [x, y, z] of the target in meters.
+            target_initial_orientation: Initial orientation quaternion [w, x, y, z] of the target.
+            target_size: Target cube size [x, y, z] in meters.
+        """
+        if robot not in ROBOTS:
+            raise ValueError(f"Unknown robot '{robot}', expected one of {list(ROBOTS)}")
+        self.robot_name = robot
+        self.robot_config = ROBOTS[robot]
+
         self.target_initial_position = (
             target_initial_position
             if target_initial_position is not None
@@ -112,16 +145,19 @@ class WXAIFollowTarget:
 
         # Spawn robot in scene
         stage_utils.add_reference_to_stage(
-            usd_path=ROBOT_USD_PATH,
+            usd_path=self.robot_config["usd_path"],
             path=ROBOT_SCENE_PATH,
         )
 
         self.robot = TrossenAIController(
             robot_path=ROBOT_SCENE_PATH,
-            robot_type=RobotType.WXAI,
-            arm_dof_indices=WXAI_ARM_DOF_INDICES,
-            gripper_dof_index=WXAI_GRIPPER_DOF_INDEX,
-            default_dof_positions=WXAI_DEFAULT_DOF_POSITIONS,
+            robot_type=RobotType(self.robot_name),
+            ik_scale=IK_SCALE,
+            ik_damping=IK_DAMPING,
+            arm_dof_indices=ARM_DOF_INDICES,
+            gripper_dof_index=self.robot_config["gripper_dof_index"],
+            default_dof_positions=DEFAULT_DOF_POSITIONS,
+            ee_offset=self.robot_config["ee_offset"],
         )
 
         stage_utils.add_reference_to_stage(
@@ -185,9 +221,21 @@ class WXAIFollowTarget:
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Follow a movable target cube with the end effector."
+    )
+    parser.add_argument(
+        "--robot",
+        type=str,
+        choices=list(ROBOTS),
+        default=DEFAULT_ROBOT,
+        help="Robot to run.",
+    )
+    args = parser.parse_args()
+
     simulation_app.update()
 
-    follow_target = WXAIFollowTarget()
+    follow_target = FollowTarget(robot=args.robot)
     follow_target.setup_scene()
 
     omni.timeline.get_timeline_interface().play()
