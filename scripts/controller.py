@@ -36,6 +36,7 @@ Supports:
 - WidowX Pro
 - Stationary AI
 - Mobile AI
+- Rivet
 """
 
 from enum import Enum
@@ -57,6 +58,7 @@ class RobotType(Enum):
     WXPRO = "wxpro"
     STATIONARY_AI = "stationary_ai"
     MOBILE_AI = "mobile_ai"
+    RIVET = "rivet"
 
 
 # Robot configuration constants (WXAI defaults)
@@ -86,6 +88,7 @@ class TrossenAIController(Articulation):
     - WidowX Pro: 8 DOFs (6 arm joints + 2 gripper fingers)
     - Stationary AI: 16 DOFs (6 + 6 left and right arm joints, 2 + 2 left and right gripper fingers)
     - Mobile AI: 26 DOFs (4 + 4 caster wheels + caster swivel, 1 + 1 left and right wheels joints, 6 + 6 left and right arm joints, 2 + 2 gripper fingers)
+    - Rivet: 23 DOFs (1 lift, 3 + 3 swerve pivot and drive joints, 6 + 6 left and right arm joints, 2 + 2 gripper fingers)
     """
 
     def __init__(
@@ -104,7 +107,7 @@ class TrossenAIController(Articulation):
 
         Args:
             robot_path: USD scene path for the robot that already exists in the scene.
-            robot_type: Type of robot (WXAI, WXPRO, STATIONARY_AI, or MOBILE_AI). Default: RobotType.WXAI
+            robot_type: Type of robot (WXAI, WXPRO, STATIONARY_AI, MOBILE_AI, or RIVET). Default: RobotType.WXAI
             end_effector_link: End effector link. If None, defaults to 'link_6'.
             ik_scale: Scaling factor for IK joint velocity commands (0.0-1.0). Default: 0.5
             ik_damping: Damping factor for singularity robustness (0.0-0.1). Default: 0.03
@@ -267,6 +270,7 @@ class TrossenAIController(Articulation):
         link_idx = (
             self.end_effector_link_index
             if self.robot_type == RobotType.MOBILE_AI
+            or self.robot_type == RobotType.RIVET
             else self.end_effector_link_index - 1
         )
         jacobian_full = jacobian_matrices[:, link_idx, :, :]
@@ -275,7 +279,9 @@ class TrossenAIController(Articulation):
             jacobian_end_effector = jacobian_full[:, :, :NUM_ARM_JOINTS_WXAI]
         elif self.robot_type == RobotType.STATIONARY_AI:
             jacobian_end_effector = jacobian_full[:, :, self.arm_dof_indices]
-        elif self.robot_type == RobotType.MOBILE_AI:
+        elif (
+            self.robot_type == RobotType.MOBILE_AI or self.robot_type == RobotType.RIVET
+        ):
             # Mobile base adds 6 floating base DOFs before arm joints in Jacobian
             jacobian_indices = [idx + 6 for idx in self.arm_dof_indices]
             jacobian_end_effector = jacobian_full[:, :, jacobian_indices]
@@ -301,7 +307,11 @@ class TrossenAIController(Articulation):
             self.set_dof_position_targets(
                 dof_position_targets, dof_indices=list(range(NUM_ARM_JOINTS_WXAI))
             )
-        elif self.robot_type in (RobotType.STATIONARY_AI, RobotType.MOBILE_AI):
+        elif self.robot_type in (
+            RobotType.STATIONARY_AI,
+            RobotType.MOBILE_AI,
+            RobotType.RIVET,
+        ):
             dof_position_targets = (
                 current_dof_positions[:, self.arm_dof_indices] + delta_dof_positions
             )
