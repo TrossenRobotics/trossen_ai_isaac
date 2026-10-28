@@ -36,8 +36,12 @@ def Xform "rivet" (
                 ]
                 float physxArticulation:sleepThreshold = 0
 
-                over "lift_link"
+                over "lift_link" (
+                    prepend apiSchemas = ["PhysxRigidBodyAPI"]
+                )
                 {
+                    bool physxRigidBody:disableGravity = 1
+
                     over "follower_left_base_link" (
                         prepend apiSchemas = ["PhysxRigidBodyAPI"]
                     )
@@ -523,8 +527,12 @@ def Xform "rivet" (
 
                     over "cam_high_camera_link"
                     {
-                        over "cam_high_camera_center"
+                        over "cam_high_camera_center" (
+                            prepend apiSchemas = ["PhysxRigidBodyAPI"]
+                        )
                         {
+                            bool physxRigidBody:disableGravity = 1
+
                             over "zedxm_1"
                             {
                                 uniform token physics:approximation = "convexDecomposition"
@@ -911,79 +919,91 @@ def Xform "rivet" (
         }
 
         over "lift" (
-            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+            prepend apiSchemas = ["PhysicsDriveAPI:linear", "PhysxJointAxisAPI:linear"]
         )
         {
-            float drive:linear:physics:damping = 200
-            float drive:linear:physics:maxForce = 500
-            float drive:linear:physics:stiffness = 2000
+            float drive:linear:physics:damping = 3670
+            float drive:linear:physics:maxForce = 2845
+            float drive:linear:physics:stiffness = 29400
             uniform token drive:linear:physics:type = "force"
+            float newton:velocityLimit = 0.3
+            float physxJointAxis:linear:armature = 58.4
+            custom float urdf:limit:effort = 2845
         }
 
         over "b_pivot" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.034907
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 0.872665
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
-            custom float physxJoint:maxJointVelocity = 359.99997
+            float newton:velocityLimit = 2578.31
+            custom float physxJoint:maxJointVelocity = 2578.31
         }
 
         over "b_drive" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 17.453293
-            float drive:angular:physics:maxForce = 4
+            float drive:angular:physics:damping = 0.017453
+            float drive:angular:physics:maxForce = 6
             float drive:angular:physics:stiffness = 0
             uniform token drive:angular:physics:type = "force"
-            custom float physxJoint:maxJointVelocity = 1070.9492
+            float newton:velocityLimit = 2349.127
+            custom float physxJoint:maxJointVelocity = 2349.127
+            custom float urdf:limit:effort = 6
         }
 
         over "fr_pivot" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.034907
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 0.872665
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
-            custom float physxJoint:maxJointVelocity = 359.99997
+            float newton:velocityLimit = 2578.31
+            custom float physxJoint:maxJointVelocity = 2578.31
         }
 
         over "fr_drive" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 17.453293
-            float drive:angular:physics:maxForce = 4
+            float drive:angular:physics:damping = 0.017453
+            float drive:angular:physics:maxForce = 6
             float drive:angular:physics:stiffness = 0
             uniform token drive:angular:physics:type = "force"
-            custom float physxJoint:maxJointVelocity = 1070.9492
+            float newton:velocityLimit = 2349.127
+            custom float physxJoint:maxJointVelocity = 2349.127
+            custom float urdf:limit:effort = 6
         }
 
         over "fl_pivot" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 0.087266
+            float drive:angular:physics:damping = 0.034907
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 0.872665
+            float drive:angular:physics:stiffness = 0.698132
             uniform token drive:angular:physics:type = "force"
-            custom float physxJoint:maxJointVelocity = 359.99997
+            float newton:velocityLimit = 2578.31
+            custom float physxJoint:maxJointVelocity = 2578.31
         }
 
         over "fl_drive" (
             prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 17.453293
-            float drive:angular:physics:maxForce = 4
+            float drive:angular:physics:damping = 0.017453
+            float drive:angular:physics:maxForce = 6
             float drive:angular:physics:stiffness = 0
             uniform token drive:angular:physics:type = "force"
-            custom float physxJoint:maxJointVelocity = 1070.9492
+            float newton:velocityLimit = 2349.127
+            custom float physxJoint:maxJointVelocity = 2349.127
+            custom float urdf:limit:effort = 6
         }
 
         over "base_footprint_joint" (
