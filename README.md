@@ -127,6 +127,7 @@ Supported robots: `wxai_base` (default), `wxai_follower`, `wxai_leader_left`, `w
 ~/isaacsim/python.sh scripts/pick_place.py --robot wxpro
 ~/isaacsim/python.sh scripts/stationary_ai_pick_place.py
 ~/isaacsim/python.sh scripts/mobile_ai_pick_place.py
+~/isaacsim/python.sh scripts/rivet_pick_place.py
 ```
 
 ### Follow Target Demo
