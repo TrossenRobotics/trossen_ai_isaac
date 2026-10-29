@@ -67,10 +67,11 @@ from controller import RobotType, TrossenAIController  # noqa: E402
 
 # Default configuration constants
 DEFAULT_CUBE_SIZE = np.array([0.05, 0.05, 0.05])
-DEFAULT_CUBE_POSITION = np.array([0.3, 0.7, 0.04])
+DEFAULT_CUBE_MASS = 0.05
+DEFAULT_CUBE_POSITION = np.array([0.3, 0.7, 0.024])
 DEFAULT_CUBE_ORIENTATION = np.array([1, 0, 0, 0])
-DEFAULT_INTERMEDIATE_POSITION = np.array([0.0, 0.7, 0.04])
-DEFAULT_TARGET_POSITION = np.array([-0.3, 0.7, 0.04])
+DEFAULT_INTERMEDIATE_POSITION = np.array([0.0, 0.7, 0.024])
+DEFAULT_TARGET_POSITION = np.array([-0.3, 0.7, 0.024])
 LEFT_ARM_HOME_POSITION = np.array([0.3, 0.7, 0.33])
 RIGHT_ARM_HOME_POSITION = np.array([-0.3, 0.7, 0.33])
 
@@ -93,6 +94,7 @@ ROBOT_ORIENTATION = np.array(
     [0.7071068, 0.0, 0.0, -0.7071068]
 )  # -90° around Z [w, x, y, z]
 ENVIRONMENT_SCENE_PATH = "/World/Environment"
+TABLE_SCENE_PATH = f"{ENVIRONMENT_SCENE_PATH}/table_low_327/table_low"
 CUBE_SCENE_PATH = "/World/Cube"
 CAMERA_EYE_POSITION = [-3.0, 3.0, 2.5]
 CAMERA_TARGET_POSITION = [0.0, 0.5, 0.0]
@@ -103,8 +105,8 @@ GPU_FOUND_LOST_AGGREGATE_PAIRS_CAPACITY = 4096
 # Mobile base movement
 BASE_TARGET_POSITION = np.array([0.0, 1.2])
 BASE_SPEED = 0.3  # m/s
-BASE_DECELERATION = 1.0  # m/s^2
-BASE_POSITION_THRESHOLD = 0.005  # m
+BASE_DECELERATION = 0.2  # m/s^2
+BASE_POSITION_THRESHOLD = 0.02  # m
 BASE_VELOCITY_THRESHOLD = 0.002  # m/s
 
 # Lift movement
@@ -209,6 +211,10 @@ class RivetPickPlace:
             path=ENVIRONMENT_SCENE_PATH,
         )
 
+        # Collide with the exact table mesh (default collision mesh is bit incorrect)
+        table = stage_utils.get_current_stage().GetPrimAtPath(TABLE_SCENE_PATH)
+        UsdPhysics.MeshCollisionAPI(table).GetApproximationAttr().Set("none")
+
         # Spawn robot in scene at specified position and orientation
         stage_utils.add_reference_to_stage(
             usd_path=ROBOT_USD_PATH,
@@ -261,7 +267,7 @@ class RivetPickPlace:
         )
 
         GeomPrim(paths=cube_shape.paths, apply_collision_apis=True)
-        self.cube = RigidPrim(paths=cube_shape.paths)
+        self.cube = RigidPrim(paths=cube_shape.paths, masses=[DEFAULT_CUBE_MASS])
         cube_shape.apply_visual_materials(visual_material)
 
         for prim in stage_utils.get_current_stage().Traverse():
@@ -450,7 +456,7 @@ class RivetPickPlace:
         Phase 7: Lift to clearance height
         Phase 8: Return to home position
         """
-        pick_pos = self.intermediate_position
+        pick_pos = self.cube.get_world_poses()[0].numpy().flatten()
         place_pos = self.target_position
 
         _, current_ee_pos, current_ee_ori = self.robot_right.get_current_state()
