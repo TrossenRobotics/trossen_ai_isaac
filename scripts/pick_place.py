@@ -61,6 +61,7 @@ from controller import RobotType, TrossenAIController  # noqa: E402
 
 # Default configuration constants
 DEFAULT_CUBE_SIZE = np.array([0.05, 0.05, 0.05])
+DEFAULT_CUBE_MASS = 0.05
 DEFAULT_CUBE_POSITION = np.array([0.35, -0.15, 0.03])
 DEFAULT_CUBE_ORIENTATION = np.array([1, 0, 0, 0])
 DEFAULT_TARGET_POSITION = np.array([0.35, 0.15, 0.03])
@@ -199,7 +200,7 @@ class PickPlace:
         )
 
         GeomPrim(paths=cube_shape.paths, apply_collision_apis=True)
-        self.cube = RigidPrim(paths=cube_shape.paths)
+        self.cube = RigidPrim(paths=cube_shape.paths, masses=[DEFAULT_CUBE_MASS])
         cube_shape.apply_visual_materials(visual_material)
 
     def forward(self) -> bool:

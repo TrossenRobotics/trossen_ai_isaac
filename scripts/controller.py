@@ -75,7 +75,7 @@ DEFAULT_IK_DAMPING = 0.03  # Damping for singularity robustness
 
 # Gripper position limits in meters
 GRIPPER_OPEN_POSITION = 0.044
-GRIPPER_CLOSED_POSITION = 0.022  # Gripper closed around the cube
+GRIPPER_CLOSED_POSITION = 0.015  # Gripper closed around the cube
 
 
 class TrossenAIController(Articulation):
